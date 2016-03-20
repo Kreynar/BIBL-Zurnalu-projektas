@@ -3,7 +3,14 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Lietuvos mokslo žurnalai' });
+});
+
+
+
+/* GET @@@authentificavimo puslapis. */
+router.get('/prisijungimas', function(req, res, next) {
+  res.render('prisijungimas', { title: 'Lietuvos mokslo žurnalai' });
 });
 
 module.exports = router;
