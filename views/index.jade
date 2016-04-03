@@ -54,4 +54,23 @@ block content
             td elit
 
   div
+    .table-responsive
+    table.table.table-striped
+      thead: tr: th Zurnalu sarasas #{masyvasZurnaluDocumentu}
+      - console.log('@@@in index.jade: ', masyvasZurnaluDocumentu, 'in index.jade@@@')
+      tbody
+        - for (var objektasDocumentoZurnalo in masyvasZurnaluDocumentu) {
+          tr
+            - for (var stringPavadinimasPropercio in objektasDocumentoZurnalo) {
+              //td= objektasDocumentZurnalo[stringPavadinimasPropercio]
+              td= stringPavadinimasPropercio
+            - }
+        - }
+
+
+  div
     a(href='/prisijungimas') Prisijungti
+
+
+
+// cia siaip komentara testinimui pridedu
