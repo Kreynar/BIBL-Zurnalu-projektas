@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="39ccb0e1-dc02-4ee5-a716-d24d43224f07" name="Default" comment="w/e">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data/WiredTiger.wt" afterPath="$PROJECT_DIR$/data/WiredTiger.wt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data/collection-0--5250408953390147829.wt" afterPath="$PROJECT_DIR$/data/collection-0--5250408953390147829.wt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data/index-1--5250408953390147829.wt" afterPath="$PROJECT_DIR$/data/index-1--5250408953390147829.wt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data/sizeStorer.wt" afterPath="$PROJECT_DIR$/data/sizeStorer.wt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data/WiredTiger.turtle" afterPath="$PROJECT_DIR$/data/WiredTiger.turtle" />
     </list>
     <ignored path="untitled1.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -421,7 +416,7 @@
       <workItem from="1459537098596" duration="2206000" />
       <workItem from="1459580386759" duration="18432000" />
       <workItem from="1459742648990" duration="5152000" />
-      <workItem from="1459750857050" duration="23244000" />
+      <workItem from="1459750857050" duration="24196000" />
     </task>
     <task id="LOCAL-00001" summary="pridejau Lenteles css">
       <created>1456419251676</created>
@@ -476,7 +471,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="85494000" />
+    <option name="totallyTimeSpent" value="86446000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
