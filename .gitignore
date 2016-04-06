@@ -1,2 +1,4 @@
+# The rules in your .gitignore file only apply to untracked files!
+
 data/
 #/data
