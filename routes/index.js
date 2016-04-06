@@ -33,6 +33,12 @@ var getPavadinimaFieldo = function(numerisFieldo) {
 
 var kiekisStulpeliuRodomu = masyvasDvimatisPavadinimuStulpeliuIrAtitinkamuFieldu.length;
 
+var pavadinimasSvetaines = 'Lietuvos mokslo žurnalai';
+
+var pristatymasSvetaines = 'Sveiki atvykę į Lietuvos mokslo žurnalų internetinę svetainę!' +
+    ' Čia galite rasti visų mokslo bendruomenės žurnalų sąrašą bei sužinoti, kokiose duomenų' +
+    ' bazėse talpinamas pilnas šių žurnalų turinys.';
+
 
 
 /* GET home page. */
@@ -61,6 +67,8 @@ router.get('/', function(req, res, next) {
         else {
           console.log('masyvasZurnaluDocumentu1: ', masyvasDocumentuZurnalu, '@@@');
           res.render('index', {
+            pavadinimasSvetaines: pavadinimasSvetaines,
+            pristatymasSvetaines: pristatymasSvetaines,
             masyvasDocumentuZurnalu: masyvasDocumentuZurnalu,
             getPavadinimaStulpelio: getPavadinimaStulpelio,
             getPavadinimaFieldo: getPavadinimaFieldo,
