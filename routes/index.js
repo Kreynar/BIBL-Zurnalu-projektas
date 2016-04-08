@@ -33,11 +33,18 @@ var getPavadinimaFieldo = function(numerisFieldo) {
 
 var kiekisStulpeliuRodomu = masyvasDvimatisPavadinimuStulpeliuIrAtitinkamuFieldu.length;
 
-var pavadinimasSvetaines = 'Lietuvos mokslo žurnalai';
+var pavadinimasSvetaines = 'Lietuvos mokslo žurnalų sąrašas';
 
 var pristatymasSvetaines = 'Sveiki atvykę į Lietuvos mokslo žurnalų internetinę svetainę!' +
     ' Čia galite rasti visų mokslo bendruomenės žurnalų sąrašą bei sužinoti, kokiose duomenų' +
     ' bazėse talpinamas pilnas šių žurnalų turinys.';
+
+var masyvasRaidziuAbecelesLietuviskos = [
+  'A', 'Ą', 'B', 'C', 'Č', 'D', 'E', 'Ę', 'Ė','F'
+  ,'G','H', 'I', 'Į', 'Y', 'J', 'K', 'L', 'M'
+  ,'N', 'O', 'P', 'R', 'S', 'Š', 'T', 'U', 'Ų', 'Ū', 'V', 'Z', 'Ž'
+    ];
+
 
 
 
@@ -72,7 +79,8 @@ router.get('/', function(req, res, next) {
             masyvasDocumentuZurnalu: masyvasDocumentuZurnalu,
             getPavadinimaStulpelio: getPavadinimaStulpelio,
             getPavadinimaFieldo: getPavadinimaFieldo,
-            kiekisStulpeliuRodomu: kiekisStulpeliuRodomu
+            kiekisStulpeliuRodomu: kiekisStulpeliuRodomu,
+            masyvasRaidziuAbecelesLietuviskos:masyvasRaidziuAbecelesLietuviskos
           });
           db.close(function() {
             console.log('Tiketina, kad ivykdyta db.close()')
