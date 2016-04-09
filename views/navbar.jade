@@ -1,0 +1,32 @@
+// Created by Martynas on 4/9/2016.
+
+.navbar.navbar-inverse.navbar-static-top
+  .container
+    .navbar-header
+      button.navbar-toggle.collapsed(type='button' data-toggle='collapse' data-target='#navbar' aria-expanded='false' aria-controls='navbar')
+        span (not sure, ismegint)Toggle navigation
+        span.icon-bar (not sure, ismegint)kazkas kito
+      a.navbar-brand(href='/'): b(style='color:white')= pavadinimasSvetaines
+    #navbar.navbar-collapse.collapse
+      form.navbar-form.navbar-right
+        .form-group(style='margin-right:5px')
+          input.form-control(type='text' placeholder='El. paštas')
+        .form-group(style='margin-right:5px')
+          input.form-control(type='password' placeholder='Slaptažodis')
+        .checkbox(style='margin-right:5px')
+          label(style="color:white")
+            input(type='checkbox' value='prisimintiVartotoja' name='checkboxPrisimintiVartotoja')
+            | Prisiminti
+            button.btn.btn-success(type='submit') Prisijungti
+
+
+
+
+
+
+
+
+
+
+
+

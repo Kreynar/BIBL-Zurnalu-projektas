@@ -1,0 +1,38 @@
+// Created by Martynas on 4/9/2016.
+
+
+
+link(rel='stylesheet', href='/stylesheets/lenteleZurnaluSaraso.css')
+#lenteleZurnaluSaraso.table-responsivetable.table.table-striped
+  thead
+    - console.log('@@@in index.jade: ', 'in index.jade@@@')
+    tr
+      - for (var i = 0; i < kiekisStulpeliuRodomu; i++) {
+        th= getPavadinimaStulpelio(i)
+      - }
+  tbody
+    - console.log('444444', masyvasDocumentuZurnalu)
+    - for (var numerisEilutesIrElemento = 0; numerisEilutesIrElemento < masyvasDocumentuZurnalu.length; numerisEilutesIrElemento++) {
+      tr
+        - console.log('22222', numerisEilutesIrElemento);
+        - var objektasDocumentZurnalo = masyvasDocumentuZurnalu[numerisEilutesIrElemento];
+        - var rasta = false;
+        - for (var numerisStulpelio = 0; numerisStulpelio < kiekisStulpeliuRodomu; numerisStulpelio++) {
+          - console.log('77777777777', objektasDocumentZurnalo);
+          - console.log('88888888888', getPavadinimaFieldo(numerisStulpelio));
+          - console.log('99999999999', getPavadinimaStulpelio(numerisStulpelio));
+          - console.log('AAAAAAAAAAA', objektasDocumentZurnalo.hasOwnProperty(getPavadinimaFieldo(numerisStulpelio)));
+          - if (numerisStulpelio == 0) {
+            td= numerisEilutesIrElemento
+          - }
+          - else if (objektasDocumentZurnalo.hasOwnProperty(getPavadinimaFieldo(numerisStulpelio))) {
+            //td RADO
+            td= objektasDocumentZurnalo[getPavadinimaFieldo(numerisStulpelio)]
+            //- rasta = true;
+            //- break;
+          - }
+          - else {
+            td -
+          - }
+        - }
+    - }

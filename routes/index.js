@@ -80,7 +80,7 @@ router.get('/', function(req, res, next) {
             getPavadinimaStulpelio: getPavadinimaStulpelio,
             getPavadinimaFieldo: getPavadinimaFieldo,
             kiekisStulpeliuRodomu: kiekisStulpeliuRodomu,
-            masyvasRaidziuAbecelesLietuviskos:masyvasRaidziuAbecelesLietuviskos
+            masyvasRaidziuAbecelesLietuviskos: masyvasRaidziuAbecelesLietuviskos
           });
           db.close(function() {
             console.log('Tiketina, kad ivykdyta db.close()')
@@ -89,6 +89,19 @@ router.get('/', function(req, res, next) {
       });
 
     }
+  });
+});
+
+
+router.get('/naujasirasas', function(req, res) {
+  res.render('naujasirasas', {
+    // pavadinimasSvetaines: pavadinimasSvetaines,
+    // pristatymasSvetaines: pristatymasSvetaines,
+    // masyvasDocumentuZurnalu: masyvasDocumentuZurnalu,
+    // getPavadinimaStulpelio: getPavadinimaStulpelio,
+    // getPavadinimaFieldo: getPavadinimaFieldo,
+    // kiekisStulpeliuRodomu: kiekisStulpeliuRodomu,
+    // masyvasRaidziuAbecelesLietuviskos: masyvasRaidziuAbecelesLietuviskos
   });
 });
 

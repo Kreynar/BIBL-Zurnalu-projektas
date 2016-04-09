@@ -1,0 +1,25 @@
+
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(http-equiv="X-UA-Compatible" content="IE=edge")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    //The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags
+
+    meta(name='description', content='Lietuvos mokslo žurnalų sąrašo svetainė')
+    meta(name='author', content='Martynas Girčys, LMAVB')
+
+    link(rel='stylesheet', href='/bootstrap-3.3.6-dist/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+
+    block STYLES_ADDITIONAL
+
+body
+  include navbar.jade
+  block CONTENT
+  include footer.jade
+  script(src='https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
+  script(src='/bootstrap-3.3.6-dist/js/bootstrap.min.js')
+  block SCRIPTS_ADDITIONAL
+
