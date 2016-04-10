@@ -4,6 +4,12 @@ var router = express.Router();
 var mongodb = require('mongodb');
 
 
+
+/*
+  Duomenu bazes adresas.
+ */
+var urlOfDatabase = 'mongodb://localhost:27017/mongoDBZurnaluProjekto';
+
 /*
   Sito masyvo elementu pavadinimus gali tekti pakeisti, jei keisis duomenu bazeje
   field'u pavadinimai (arba bus nauju fieldu, kuriuos reikes atvaizduoti
@@ -51,10 +57,8 @@ var masyvasRaidziuAbecelesLietuviskos = [
 /* GET home page. */
 router.get('/', function(req, res, next) {
   var MongoClient = mongodb.MongoClient;
-  // var urlManoSukurtosMongoDuombazes = 'mongodb://localhost:27017/mongoDBZurnaluProjekto';
-  var urlManoSukurtosMongoDuombazes = 'mongodb://localhost:27017/mongoDBZurnaluProjekto';
   // res.render('index', { title: 'Lietuvos mokslo žurnalai' });
-  MongoClient.connect(urlManoSukurtosMongoDuombazes, function(err, db) {
+  MongoClient.connect(urlOfDatabase, function(err, db) {
     if (err) {
       console.log('Erroras meginant connectintis prie mongoDBZurnaluProjekto:', err);
     }
@@ -87,7 +91,6 @@ router.get('/', function(req, res, next) {
           });
         }
       });
-
     }
   });
 });
@@ -103,10 +106,42 @@ router.get('/naujasirasas', function(req, res) {
 });
 
 router.post('/naujasirasasposted', function(req, res) {
+  var MongoClient = mongodb.MongoClient;
+  MongoClient.connect(urlOfDatabase, function(err, db) {
+    if (err) {
+      console.log(err);
+    }
+    else {
+      var documentNaujoZurnalo = {};
+      var pavadinimasStulpelio = '';
+      var pavadinimasFieldo = '';
+      console.log('118@@@@@@', req.body.pavadinimas1, '@@@@@@@@118');
+      for (var numerisFieldoIrStulpelio = 1; numerisFieldoIrStulpelio < kiekisStulpeliuRodomu; numerisFieldoIrStulpelio++) {
+        documentNaujoZurnalo[getPavadinimaFieldo(numerisFieldoIrStulpelio)] = req.body[getPavadinimaFieldo(numerisFieldoIrStulpelio)];
+      }
+      console.log('121@@@@@@', documentNaujoZurnalo, '@@@@@@@@121');
+      var collectionZurnalai = db.collection('zurnalai');
+      collectionZurnalai.insert([documentNaujoZurnalo], function(err, result) {
+        if (err) {
+          console.log(err);
+        }
+        else {
+          res.redirect('/');
+        }
+        db.close();
+      });
+    }
+  });
+});
 
-  
-
-
+router.get('/*', function(req, res) {
+  var path = req.path;
+  path = path.replace(/\//g, '');
+  for (var numerisRaidesAbeceleje = 0; numerisRaidesAbeceleje < masyvasRaidziuAbecelesLietuviskos.length; numerisRaidesAbeceleje++) {
+    if (masyvasRaidziuAbecelesLietuviskos[numerisRaidesAbeceleje] == path) {
+      
+    }
+  }
 });
 
 
