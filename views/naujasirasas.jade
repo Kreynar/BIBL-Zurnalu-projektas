@@ -3,17 +3,23 @@
 extends main_layout.jade
 
 block CONTENT
-
-  .container-viewport.col-sm-offset-1
-    form.form-horizontal.col-sm-offset-1.col-sm-5
-      - for (var numerisStulpelioIrFieldo = 1; numerisStulpelioIrFieldo < kiekisStulpeliuRodomu; numerisStulpelioIrFieldo++) {
-        .form-group
-          label.col-sm-2.control-label(for=getPavadinimaFieldo(numerisStulpelioIrFieldo)) #{getPavadinimaStulpelio(numerisStulpelioIrFieldo)}:
-          .col-sm-10
-            textarea.form-control(type='text' id=getPavadinimaFieldo(numerisStulpelioIrFieldo))
-      - }
-      .col-sm-offset-2
-        button(type='submit').btn.btn-success Pridėti naują žurnalą
+  #paneleNaujoIraso.panel.panel-default(style='padding:10px')
+    .container-fluid
+      h1.col-sm-offset-5 Naujas įrašas
+      br
+      form.form-horizontal.col-sm-offset-1.col-sm-8(name='naujasirasas' method='post' action='/naujasirasasposted')
+        - for (var numerisStulpelioIrFieldo = 1; numerisStulpelioIrFieldo < kiekisStulpeliuRodomu; numerisStulpelioIrFieldo++) {
+          .form-group
+            label.col-sm-2.control-label(for=getPavadinimaFieldo(numerisStulpelioIrFieldo)) #{getPavadinimaStulpelio(numerisStulpelioIrFieldo)}:
+            .col-sm-10
+              textarea.form-control(type='text' id=getPavadinimaFieldo(numerisStulpelioIrFieldo))
+        - }
+        .col-sm-offset-2
+          .form-group
+            .col-sm-6
+              button(type='submit').btn.btn-success.form-control Įrašyti
+            .col-sm-6
+              a(href='/').btn.btn-default.form-control Atsisakyti
 
 
 

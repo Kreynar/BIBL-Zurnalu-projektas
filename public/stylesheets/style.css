@@ -1,7 +1,6 @@
 body {
-  padding: 20px 50px;
+  padding: 20px 50px 100px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  /*padding-bottom: 0;*/
 
 }
 
@@ -14,11 +13,11 @@ a {
  */
 
 /* Move down content because we have a fixed navbar that is 50px tall */
-body {
-  /*padding-top: 50px;*/
-  /*padding-bottom: 0;*/
-  /*background-color: red;*/
-}
+/*body {*/
+  /*!*padding-top: 50px;*!*/
+  /*!*padding-bottom: 0;*!*/
+  /*!*background-color: red;*!*/
+/*}*/
 
 
 /*

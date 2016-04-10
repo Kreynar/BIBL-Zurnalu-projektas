@@ -5,7 +5,9 @@
 
 .blog-footer {
 
-  position:fixed;
+  position:static;
+  bottom:0;
+  overflow:visible;
 
   /*position:absolute;*/
   /*bottom:0;*/

@@ -102,6 +102,13 @@ router.get('/naujasirasas', function(req, res) {
   });
 });
 
+router.post('/naujasirasasposted', function(req, res) {
+
+  
+
+
+});
+
 
 
 /* GET @@@authentificavimo puslapis. */
