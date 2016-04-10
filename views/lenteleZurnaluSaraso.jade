@@ -2,8 +2,7 @@
 
 
 
-link(rel='stylesheet', href='/stylesheets/lenteleZurnaluSaraso.css')
-#lenteleZurnaluSaraso.table-responsivetable.table.table-striped
+table#lenteleZurnaluSaraso.table-responsivetable.table.table-striped
   thead
     - console.log('@@@in index.jade: ', 'in index.jade@@@')
     tr
@@ -18,7 +17,7 @@ link(rel='stylesheet', href='/stylesheets/lenteleZurnaluSaraso.css')
         - var objektasDocumentZurnalo = masyvasDocumentuZurnalu[numerisEilutesIrElemento];
         - var rasta = false;
         - for (var numerisStulpelio = 0; numerisStulpelio < kiekisStulpeliuRodomu; numerisStulpelio++) {
-          - console.log('77777777777', objektasDocumentZurnalo);
+          //- console.log('77777777777', objektasDocumentZurnalo);
           - console.log('88888888888', getPavadinimaFieldo(numerisStulpelio));
           - console.log('99999999999', getPavadinimaStulpelio(numerisStulpelio));
           - console.log('AAAAAAAAAAA', objektasDocumentZurnalo.hasOwnProperty(getPavadinimaFieldo(numerisStulpelio)));

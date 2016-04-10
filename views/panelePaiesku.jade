@@ -1,21 +1,25 @@
 // Created by Martynas on 4/9/2016.
 
-#panelePaiesku.panel.panel-default
-  #panelePagalAbecelePaieskos.panel.panel-defaul
-    .panel-body(align='center')
-      span(style='font-size:20px; margin-right:20px'): b Pasirinkite:
-      .btn-group(role='group' aria-label='grupeMygtukuPagalAbecelePaieskos')
-        a(href='/'): .btn.btn-default(type='button'): b Visi
-        each raide in masyvasRaidziuAbecelesLietuviskos
-          a(href=raide)
-            .btn.btn-default(type='button')= raide
-  #panelePagalFrazePaieskos.panel.panel-default
-    .panel-body
-      form.row
-        label.col-sm-3(style='font-size:20px; text-align:right;' for='inputPaieskaPagalFraze'): b Įrašykite ieškomą tekstą:
-        .col-sm-6
-          textarea#inputPaieskaPagalFraze.form-control(type='text' style='')
-        button.btn.btn-default.col-sm-1(type='submit') Ieškoti
+#panelePaiesku.panel.panel-default(style='padding:10px')
+  .container-fluid
+    #panelePagalAbecelePaieskos.panel.panel-defaul
+      .panel-body(align='center')
+        span(style='font-size:20px; margin-right:20px'): b Pasirinkite:
+        .btn-group(role='group' aria-label='grupeMygtukuPagalAbecelePaieskos')
+          a(href='/'): .btn.btn-default(type='button'): b Visi
+          each raide in masyvasRaidziuAbecelesLietuviskos
+            a(href=raide)
+              .btn.btn-default(type='button')= raide
+    #panelePagalFrazePaieskos.panel.panel-default
+      .panel-body
+        form.row
+          label.col-sm-3(style='font-size:20px; text-align:right;' for='inputPaieskaPagalFraze'): b Įrašykite ieškomą tekstą:
+          .col-sm-6
+            textarea#inputPaieskaPagalFraze.form-control(type='text' style='')
+          button.btn.btn-default.col-sm-1(type='submit') Ieškoti
+    #mygtukasNaujasIrasas
+        a(href='/naujasirasas')
+          .btn.btn-success.col-sm-offset-1.col-sm-10(type='button') Pridėti mokslo žurnalą
 
 
 

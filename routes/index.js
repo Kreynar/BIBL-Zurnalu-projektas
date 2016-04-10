@@ -95,13 +95,10 @@ router.get('/', function(req, res, next) {
 
 router.get('/naujasirasas', function(req, res) {
   res.render('naujasirasas', {
-    // pavadinimasSvetaines: pavadinimasSvetaines,
-    // pristatymasSvetaines: pristatymasSvetaines,
-    // masyvasDocumentuZurnalu: masyvasDocumentuZurnalu,
-    // getPavadinimaStulpelio: getPavadinimaStulpelio,
-    // getPavadinimaFieldo: getPavadinimaFieldo,
-    // kiekisStulpeliuRodomu: kiekisStulpeliuRodomu,
-    // masyvasRaidziuAbecelesLietuviskos: masyvasRaidziuAbecelesLietuviskos
+    pavadinimasSvetaines: pavadinimasSvetaines,
+    getPavadinimaStulpelio: getPavadinimaStulpelio,
+    getPavadinimaFieldo: getPavadinimaFieldo,
+    kiekisStulpeliuRodomu: kiekisStulpeliuRodomu
   });
 });
 
