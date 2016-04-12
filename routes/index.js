@@ -8,45 +8,6 @@ var variables = require('../routes/variables.js');
 
 
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  var MongoClient = mongodb.MongoClient;
-  // res.render('index', { title: 'Lietuvos mokslo žurnalai' });
-  MongoClient.connect(variables.urlOfDatabase, function(err, db) {
-    if (err) {
-      console.log('Erroras meginant connectintis prie mongoDBZurnaluProjekto:', err);
-    }
-    else {
-      console.log('Prisijungem prie mongoDBZurnaluProjekto!');
-      var collectionZurnalai = db.collection('zurnalai');
-      console.log('aaa');
-      collectionZurnalai.find().toArray(function(err, masyvasDocumentuZurnalu){
-        if (err) {
-          console.log('Pri');
-          console.log(err);
-        }
-        // else if (sarasasZurnalu.length) {
-        //
-        // }
-        else {
-          console.log('masyvasZurnaluDocumentu1: ', masyvasDocumentuZurnalu, '@@@');
-          res.render('index', {
-            pavadinimasSvetaines: variables.pavadinimasSvetaines,
-            pristatymasSvetaines: variables.pristatymasSvetaines,
-            masyvasDocumentuZurnalu: masyvasDocumentuZurnalu,
-            getPavadinimaStulpelio: variables.getPavadinimaStulpelio,
-            getPavadinimaFieldo: variables.getPavadinimaFieldo,
-            kiekisStulpeliuRodomu: variables.kiekisStulpeliuRodomu,
-            masyvasRaidziuAbecelesLietuviskos: variables.masyvasRaidziuAbecelesLietuviskos
-          });
-          db.close(function() {
-            console.log('Tiketina, kad ivykdyta db.close()')
-          });
-        }
-      });
-    }
-  });
-});
 
 
 router.get('/naujasirasas', function(req, res) {
@@ -87,6 +48,48 @@ router.post('/naujasirasasposted', function(req, res) {
   });
 });
 
+
+
+/* GET home page. */
+router.get('/', function(req, res, next) {
+  var MongoClient = mongodb.MongoClient;
+  // res.render('index', { title: 'Lietuvos mokslo žurnalai' });
+  MongoClient.connect(variables.urlOfDatabase, function(err, db) {
+    if (err) {
+      console.log('Erroras meginant connectintis prie mongoDBZurnaluProjekto:', err);
+    }
+    else {
+      console.log('Prisijungem prie mongoDBZurnaluProjekto!');
+      var collectionZurnalai = db.collection('zurnalai');
+      console.log('aaa');
+      collectionZurnalai.find().toArray(function(err, masyvasDocumentuZurnalu){
+        if (err) {
+          console.log('Pri');
+          console.log(err);
+        }
+        // else if (sarasasZurnalu.length) {
+        //
+        // }
+        else {
+          console.log('masyvasZurnaluDocumentu1: ', masyvasDocumentuZurnalu, '@@@');
+          res.render('index', {
+            pavadinimasSvetaines: variables.pavadinimasSvetaines,
+            pristatymasSvetaines: variables.pristatymasSvetaines,
+            masyvasDocumentuZurnalu: masyvasDocumentuZurnalu,
+            getPavadinimaStulpelio: variables.getPavadinimaStulpelio,
+            getPavadinimaFieldo: variables.getPavadinimaFieldo,
+            kiekisStulpeliuRodomu: variables.kiekisStulpeliuRodomu,
+            masyvasRaidziuAbecelesLietuviskos: variables.masyvasRaidziuAbecelesLietuviskos
+          });
+          db.close(function() {
+            console.log('Tiketina, kad ivykdyta db.close()')
+          });
+        }
+      });
+    }
+  });
+});
+
 router.get('/*', function(req, res) {
   var path = req.path;
   console.log(path);
@@ -117,7 +120,7 @@ router.get('/*', function(req, res) {
 
 
 
-              
+
             }
           });
         }

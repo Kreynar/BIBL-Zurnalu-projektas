@@ -27,6 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.locals.pavadinimasSvetaines = 'Lietuvos mokslo žurnalų sąrašas';
+app.locals.pathPaiesku = '/ieskoti?'
 
 
 
