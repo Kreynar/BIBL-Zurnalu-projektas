@@ -3,53 +3,7 @@ var router = express.Router();
 
 var mongodb = require('mongodb');
 
-
-
-/*
-  Duomenu bazes adresas.
- */
-var urlOfDatabase = 'mongodb://localhost:27017/mongoDBZurnaluProjekto';
-
-/*
-  Sito masyvo elementu pavadinimus gali tekti pakeisti, jei keisis duomenu bazeje
-  field'u pavadinimai (arba bus nauju fieldu, kuriuos reikes atvaizduoti
-  lenteleje)!!!!!!!!!!!!!!!!!!!!
- */
-var masyvasDvimatisPavadinimuStulpeliuIrAtitinkamuFieldu = [
-
-  /*
-  <fieldoPavadinimasDuombazeje>       <stulpelioPavadinimasLentelejeSvetaineje>
-  */
-  [null,                                    'Nr.'],                       // 0
-  ['pavadinimas1',                         'Pavadinimas'],                // 1
-  ['pavadinimas2',                          'Kitas pavadinimas'],         // 2
-  ['issn',                                  'ISSN'],                      // 3
-  ['leidejas',                              'Leidėjas'],                  // 4
-  ['db',                                   'Duomenų bazė'],               // 5
-  ['pastabos',                              'Pastabos']                   // 6
-];
-
-var getPavadinimaStulpelio = function(numerisStulpelio) {
-  return masyvasDvimatisPavadinimuStulpeliuIrAtitinkamuFieldu[numerisStulpelio][1];
-}
-
-var getPavadinimaFieldo = function(numerisFieldo) {
-  return masyvasDvimatisPavadinimuStulpeliuIrAtitinkamuFieldu[numerisFieldo][0];
-}
-
-var kiekisStulpeliuRodomu = masyvasDvimatisPavadinimuStulpeliuIrAtitinkamuFieldu.length;
-
-var pavadinimasSvetaines = 'Lietuvos mokslo žurnalų sąrašas';
-
-var pristatymasSvetaines = 'Sveiki atvykę į Lietuvos mokslo žurnalų internetinę svetainę!' +
-    ' Čia galite rasti visų mokslo bendruomenės žurnalų sąrašą bei sužinoti, kokiose duomenų' +
-    ' bazėse talpinamas pilnas šių žurnalų turinys.';
-
-var masyvasRaidziuAbecelesLietuviskos = [
-  'A', 'Ą', 'B', 'C', 'Č', 'D', 'E', 'Ę', 'Ė','F'
-  ,'G','H', 'I', 'Į', 'Y', 'J', 'K', 'L', 'M'
-  ,'N', 'O', 'P', 'R', 'S', 'Š', 'T', 'U', 'Ų', 'Ū', 'V', 'Z', 'Ž'
-    ];
+var variables = require('../routes/variables.js');
 
 
 
@@ -58,14 +12,13 @@ var masyvasRaidziuAbecelesLietuviskos = [
 router.get('/', function(req, res, next) {
   var MongoClient = mongodb.MongoClient;
   // res.render('index', { title: 'Lietuvos mokslo žurnalai' });
-  MongoClient.connect(urlOfDatabase, function(err, db) {
+  MongoClient.connect(variables.urlOfDatabase, function(err, db) {
     if (err) {
       console.log('Erroras meginant connectintis prie mongoDBZurnaluProjekto:', err);
     }
     else {
       console.log('Prisijungem prie mongoDBZurnaluProjekto!');
       var collectionZurnalai = db.collection('zurnalai');
-      collectionZurnalai.find();
       console.log('aaa');
       collectionZurnalai.find().toArray(function(err, masyvasDocumentuZurnalu){
         if (err) {
@@ -78,13 +31,13 @@ router.get('/', function(req, res, next) {
         else {
           console.log('masyvasZurnaluDocumentu1: ', masyvasDocumentuZurnalu, '@@@');
           res.render('index', {
-            pavadinimasSvetaines: pavadinimasSvetaines,
-            pristatymasSvetaines: pristatymasSvetaines,
+            pavadinimasSvetaines: variables.pavadinimasSvetaines,
+            pristatymasSvetaines: variables.pristatymasSvetaines,
             masyvasDocumentuZurnalu: masyvasDocumentuZurnalu,
-            getPavadinimaStulpelio: getPavadinimaStulpelio,
-            getPavadinimaFieldo: getPavadinimaFieldo,
-            kiekisStulpeliuRodomu: kiekisStulpeliuRodomu,
-            masyvasRaidziuAbecelesLietuviskos: masyvasRaidziuAbecelesLietuviskos
+            getPavadinimaStulpelio: variables.getPavadinimaStulpelio,
+            getPavadinimaFieldo: variables.getPavadinimaFieldo,
+            kiekisStulpeliuRodomu: variables.kiekisStulpeliuRodomu,
+            masyvasRaidziuAbecelesLietuviskos: variables.masyvasRaidziuAbecelesLietuviskos
           });
           db.close(function() {
             console.log('Tiketina, kad ivykdyta db.close()')
@@ -98,16 +51,16 @@ router.get('/', function(req, res, next) {
 
 router.get('/naujasirasas', function(req, res) {
   res.render('naujasirasas', {
-    pavadinimasSvetaines: pavadinimasSvetaines,
-    getPavadinimaStulpelio: getPavadinimaStulpelio,
-    getPavadinimaFieldo: getPavadinimaFieldo,
-    kiekisStulpeliuRodomu: kiekisStulpeliuRodomu
+    pavadinimasSvetaines: variables.pavadinimasSvetaines,
+    getPavadinimaStulpelio: variables.getPavadinimaStulpelio,
+    getPavadinimaFieldo: variables.getPavadinimaFieldo,
+    kiekisStulpeliuRodomu: variables.kiekisStulpeliuRodomu
   });
 });
 
 router.post('/naujasirasasposted', function(req, res) {
   var MongoClient = mongodb.MongoClient;
-  MongoClient.connect(urlOfDatabase, function(err, db) {
+  MongoClient.connect(variables.urlOfDatabase, function(err, db) {
     if (err) {
       console.log(err);
     }
@@ -116,8 +69,8 @@ router.post('/naujasirasasposted', function(req, res) {
       var pavadinimasStulpelio = '';
       var pavadinimasFieldo = '';
       console.log('118@@@@@@', req.body.pavadinimas1, '@@@@@@@@118');
-      for (var numerisFieldoIrStulpelio = 1; numerisFieldoIrStulpelio < kiekisStulpeliuRodomu; numerisFieldoIrStulpelio++) {
-        documentNaujoZurnalo[getPavadinimaFieldo(numerisFieldoIrStulpelio)] = req.body[getPavadinimaFieldo(numerisFieldoIrStulpelio)];
+      for (var numerisFieldoIrStulpelio = 1; numerisFieldoIrStulpelio < variables.kiekisStulpeliuRodomu; numerisFieldoIrStulpelio++) {
+        documentNaujoZurnalo[variables.getPavadinimaFieldo(numerisFieldoIrStulpelio)] = req.body[variables.getPavadinimaFieldo(numerisFieldoIrStulpelio)];
       }
       console.log('121@@@@@@', documentNaujoZurnalo, '@@@@@@@@121');
       var collectionZurnalai = db.collection('zurnalai');
@@ -136,10 +89,39 @@ router.post('/naujasirasasposted', function(req, res) {
 
 router.get('/*', function(req, res) {
   var path = req.path;
+  console.log(path);
   path = path.replace(/\//g, '');
-  for (var numerisRaidesAbeceleje = 0; numerisRaidesAbeceleje < masyvasRaidziuAbecelesLietuviskos.length; numerisRaidesAbeceleje++) {
-    if (masyvasRaidziuAbecelesLietuviskos[numerisRaidesAbeceleje] == path) {
-      
+  path = decodeURIComponent(path);
+  console.log(path);
+  for (var numerisRaidesAbeceleje = 0; numerisRaidesAbeceleje < variables.masyvasRaidziuAbecelesLietuviskos.length; numerisRaidesAbeceleje++) {
+    if (path == variables.masyvasRaidziuAbecelesLietuviskos[numerisRaidesAbeceleje]) {
+      var MongoClient = mongodb.MongoClient;
+      MongoClient.connect(variables.urlOfDatabase, function(err, db) {
+        if (err) {
+          console.log(err);
+        }
+        else {
+          console.log('@@@@@@147');//^\s*A
+          var regExp = new RegExp('^\\s*' + path, 'i');
+          console.log('@@@@@@105', regExp);
+          var collectionZurnalai = db.collection('zurnalai');
+          collectionZurnalai.find({ pavadinimas1: regExp }).toArray(function(err, result){
+            if (err) {
+              console.log('@@@@@@151', err);
+            }
+            else {
+              console.log('@@@@@@@@@154', result);
+              //res.render
+
+
+
+
+
+              
+            }
+          });
+        }
+      });
     }
   }
 });
