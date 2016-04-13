@@ -13,10 +13,33 @@ router.get('/', function(req, res, next) {
   next();
 });
 
+router.get(variables.pathPaiesku, function(req, res, next) {
+  if (req.query) {
+    var masyvasPavadinimuParametruInQuery = Object.keys(req.query);
+    console.log('@@@@@@@12', req.query);  // printoutina: @@@@@@@12 { regex: '/gr/i' }
+    if (masyvasPavadinimuParametruInQuery.length == 1) {
+      var pavadinimasParametro = masyvasPavadinimuParametruInQuery[0];
+      if (pavadinimasParametro == variables.parametrasQueryPaieskuPagalRegex) {
+        next();
+      }
+      else {
+
+        // Kadanors gal papildysiu dar paiesku funkcionaluma.
+      }
+    }
+    else {
+
+      // Kadanors gal papildysiu dar paiesku funkcionaluma.
+    }
+  }
+  else {
+
+    // Kadanors gal papildysiu dar paiesku funkcionaluma.
+  }
+});
 
 
 router.get(masyvasPathuKaiBusAtvaizduojamaZurnaluLentele, function(req, res, next) {
-
   var MongoClient = mongodb.MongoClient;
   // res.render('index', { title: 'Lietuvos mokslo žurnalai' });
   MongoClient.connect(variables.urlOfDatabase, function(err, db) {
@@ -26,28 +49,44 @@ router.get(masyvasPathuKaiBusAtvaizduojamaZurnaluLentele, function(req, res, nex
     else {
       console.log('Prisijungem prie mongoDBZurnaluProjekto!');
       var collectionZurnalai = db.collection('zurnalai');
-      console.log('aaa');
-      collectionZurnalai.find({
+      var objektasZurnaluPaieskosMongoDb = {};
+      var regexPaieskos = '';
+      if (req.query) {
 
+        // Cia assuminam, kad yra '/ieskoti?regex=NNN...' route
+        // Tures but objektasZurnaluPaieskosMongoDb =
+        // {  $or: [ { keyA: 'valueA' }, {keyB: 'valueB'} ]  }
+        var $or = [];
+        var objektasPaieskosMasyvo$or = {};
+        regexPaieskos = req.query[variables.parametrasQueryPaieskuPagalRegex];
+        for (var i = 1; i < variables.kiekisStulpeliuRodomu; i++) {
+          objektasPaieskosMasyvo$or[variables.getPavadinimaFieldo(i)] = regexPaieskos;
+          $or.push(objektasPaieskosMasyvo$or);
+        }
+        objektasZurnaluPaieskosMongoDb['$or'] = $or;
+      }
+      else {
 
-      }).toArray(function(err, masyvasDocumentuZurnalu){
+        // Cia '/' route, NES req.query == null or smth.
+        objektasZurnaluPaieskosMongoDb = {};
+      }
+      collectionZurnalai.find(objektasZurnaluPaieskosMongoDb).toArray(function(err, masyvasDocumentuZurnalu){
         if (err) {
-          console.log('Pri');
-          console.log(err);
+          console.log('@@@@@56', err);
         }
         // else if (sarasasZurnalu.length) {
         //
         // }
         else {
-          console.log('masyvasZurnaluDocumentu1: ', masyvasDocumentuZurnalu, '@@@');
+          console.log('@@@@@@81', 'masyvasZurnaluDocumentu YRA ', masyvasDocumentuZurnalu, '@@@');
           res.render('index', {
-            pavadinimasSvetaines: variables.pavadinimasSvetaines,
-            pristatymasSvetaines: variables.pristatymasSvetaines,
+            // pavadinimasSvetaines: variables.pavadinimasSvetaines,
+            // pristatymasSvetaines: variables.pristatymasSvetaines,
             masyvasDocumentuZurnalu: masyvasDocumentuZurnalu,
-            getPavadinimaStulpelio: variables.getPavadinimaStulpelio,
-            getPavadinimaFieldo: variables.getPavadinimaFieldo,
-            kiekisStulpeliuRodomu: variables.kiekisStulpeliuRodomu,
-            masyvasRaidziuAbecelesLietuviskos: variables.masyvasRaidziuAbecelesLietuviskos
+            // getPavadinimaStulpelio: variables.getPavadinimaStulpelio,
+            // getPavadinimaFieldo: variables.getPavadinimaFieldo,
+            // kiekisStulpeliuRodomu: variables.kiekisStulpeliuRodomu,
+            // masyvasRaidziuAbecelesLietuviskos: variables.masyvasRaidziuAbecelesLietuviskos
           });
           db.close(function() {
             console.log('Tiketina, kad ivykdyta db.close()')
@@ -100,26 +139,6 @@ router.get(masyvasPathuKaiBusAtvaizduojamaZurnaluLentele, function(req, res, nex
 //   });
 // });
 
-router.get(variables.pathPaiesku, function(req, res, next) {
-  if (req.query) {
-    var masyvasPavadinimuParametruInQuery = Object.keys(req.query);
-    console.log('@@@@@@@12', req.query);  // printoutina: @@@@@@@12 { regex: '/gr/i' }
-    if (masyvasPavadinimuParametruInQuery.length == 1) {
-      var pavadinimasParametro = masyvasPavadinimuParametruInQuery[0];
-      if (pavadinimasParametro == variables.parametrasQueryPaieskuPagalRegex) {
-
-      }
-      else {
-
-        // Kadanors gal papildysiu dar paiesku funkcionaluma.
-      }
-    }
-    else {
-
-      // Kadanors gal papildysiu dar paiesku funkcionaluma.
-    }
-  }
-});
 
 router.get('/naujasirasas', function(req, res) {
   res.render('naujasirasas', {
@@ -181,19 +200,25 @@ router.get('/*', function(req, res) {
           var regExp = new RegExp('^\\s*' + path, 'i');
           console.log('@@@@@@105', regExp);
           var collectionZurnalai = db.collection('zurnalai');
-          collectionZurnalai.find({ pavadinimas1: regExp }).toArray(function(err, result){
+          collectionZurnalai.find({ pavadinimas1: regExp }).toArray(function(err, masyvasDocumentuZurnalu){
             if (err) {
               console.log('@@@@@@151', err);
             }
             else {
-              console.log('@@@@@@@@@154', result);
-              //res.render
-
-
-
-
-
-
+              console.log('@@@@@@@@@154');
+              console.log('masyvasZurnaluDocumentu1: ', masyvasDocumentuZurnalu, '@@@');
+              res.render('index', {
+                // pavadinimasSvetaines: variables.pavadinimasSvetaines,
+                // pristatymasSvetaines: variables.pristatymasSvetaines,
+                masyvasDocumentuZurnalu: masyvasDocumentuZurnalu,
+                getPavadinimaStulpelio: variables.getPavadinimaStulpelio,
+                getPavadinimaFieldo: variables.getPavadinimaFieldo,
+                kiekisStulpeliuRodomu: variables.kiekisStulpeliuRodomu,
+                masyvasRaidziuAbecelesLietuviskos: variables.masyvasRaidziuAbecelesLietuviskos
+              });
+              db.close(function() {
+                console.log('Tiketina, kad ivykdyta db.close()')
+              });
             }
           });
         }

@@ -27,9 +27,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // app.locals.pavadinimasSvetaines = 'Lietuvos mokslo žurnalų sąrašas';
 app.locals.pavadinimasSvetaines = variables.pavadinimasSvetaines;
+app.locals.getPavadinimaStulpelio = variables.getPavadinimaStulpelio;
+app.locals.getPavadinimaFieldo = variables.getPavadinimaFieldo;
+app.locals.kiekisStulpeliuRodomu = variables.kiekisStulpeliuRodomu;
+app.locals.masyvasRaidziuAbecelesLietuviskos = variables.masyvasRaidziuAbecelesLietuviskos;
+
 app.locals.pathPaiesku = variables.pathPaiesku;
 app.locals.parametrasQueryPaieskuPagalRegex = variables.parametrasQueryPaieskuPagalRegex;
 app.locals.pathPaieskuPagalRegex = variables.pathIrQueryPaieskuPagalRegexBeReiksmesParametro;
+
 
 
 
