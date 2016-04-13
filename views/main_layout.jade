@@ -19,7 +19,9 @@ body
   include navbar.jade
   block CONTENT
   include footer.jade
-  script(src='https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
+  - if (typeof jQuery == 'undefined') {
+    script(type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
+  - }
   script(src='/bootstrap-3.3.6-dist/js/bootstrap.min.js')
   block SCRIPTS_ADDITIONAL
 

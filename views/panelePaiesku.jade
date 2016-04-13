@@ -9,20 +9,43 @@
         .btn-group(role='group' aria-label='grupeMygtukuPagalAbecelePaieskos')
           a(href='/'): .btn.btn-default(type='button'): b Visi
           each raide in masyvasRaidziuAbecelesLietuviskos
-            a(href=raide)
+            a(href=pathIrQueryPaieskuPagalRegexBeReiksmesParametro+'/^\\s*'+raide+'/i')
               .btn.btn-default(type='button')= raide
     #panelePagalFrazePaieskos.panel.panel-default
       .panel-body
-        form.row
-          label.col-sm-3(style='font-size:20px; text-align:right;' for='inputPaieskaPagalFraze'): b Įrašykite ieškomą tekstą:
+        .row
+          label.col-sm-3(style='font-size:20px; text-align:right;' for='textareaPaieskaPagalFraze'): b Įrašykite ieškomą tekstą:
           .col-sm-6
-            textarea#inputPaieskaPagalFraze.form-control(type='text' style='')
-          button.btn.btn-default.col-sm-1(type='submit') Ieškoti
+            textarea#textareaPaieskaPagalFraze.form-control(type='text' style='')
+          a#aPaieskaPagalFraze.btn.btn-default.col-sm-1(href=pathIrQueryPaieskuPagalRegexBeReiksmesParametro) Ieškoti
     #mygtukasNaujasIrasas
         a(href='/naujasirasas')
           .btn.btn-success.col-sm-offset-1.col-sm-10(type='button') Pridėti mokslo žurnalą
 
 
+- if (typeof jQuery == 'undefined') {
+  script(type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
+- }
+
+script.
+  $(document).ready(function(){
+
+    $('#aPaieskaPagalFraze').click(function (event) {
+      event.preventDefault();
+      var frazePaieskos = $('#textareaPaieskaPagalFraze').val();
+      if (frazePaieskos) {
+        frazePaieskos = $.trim(frazePaieskos);
+        var queryRegexPaieskos = '/' + frazePaieskos + '/i';
+        var pathIrQuery = $(this).attr('href') + queryRegexPaieskos
+        window.location.href = pathIrQuery;
+        //      $('#aPaieskaPagalFraze').attr('href', pathIrQuery);
+      }
+      else {
+        $('#textareaPaieskaPagalFraze').focus();
+      }
+    });
+
+  });
 
 
 

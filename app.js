@@ -25,9 +25,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-
-app.locals.pavadinimasSvetaines = 'Lietuvos mokslo žurnalų sąrašas';
-app.locals.pathPaiesku = '/ieskoti?'
+// app.locals.pavadinimasSvetaines = 'Lietuvos mokslo žurnalų sąrašas';
+app.locals.pavadinimasSvetaines = variables.pavadinimasSvetaines;
+app.locals.pathPaiesku = variables.pathPaiesku;
+app.locals.parametrasQueryPaieskuPagalRegex = variables.parametrasQueryPaieskuPagalRegex;
+app.locals.pathPaieskuPagalRegex = variables.pathIrQueryPaieskuPagalRegexBeReiksmesParametro;
 
 
 
