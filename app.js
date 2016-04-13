@@ -34,7 +34,7 @@ app.locals.masyvasRaidziuAbecelesLietuviskos = variables.masyvasRaidziuAbecelesL
 
 app.locals.pathPaiesku = variables.pathPaiesku;
 app.locals.parametrasQueryPaieskuPagalRegex = variables.parametrasQueryPaieskuPagalRegex;
-app.locals.pathPaieskuPagalRegex = variables.pathIrQueryPaieskuPagalRegexBeReiksmesParametro;
+app.locals.pathIrQueryPaieskuPagalRegexBeReiksmesParametro = variables.pathIrQueryPaieskuPagalRegexBeReiksmesParametro;
 
 
 

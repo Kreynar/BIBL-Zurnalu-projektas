@@ -26,6 +26,11 @@ var masyvasDvimatisPavadinimuStulpeliuIrAtitinkamuFieldu = [
     ['pastabos', 'Pastabos']                   // 6
 ];
 
+var pathPaiesku = '/ieskoti';
+
+var parametrasQueryPaieskuPagalRegex = 'regex';
+
+var pathIrQueryPaieskuPagalRegexBeReiksmesParametro = pathPaiesku + '?' + parametrasQueryPaieskuPagalRegex + '=';
 
 module.exports = {
 
@@ -56,11 +61,11 @@ module.exports = {
         , 'N', 'O', 'P', 'R', 'S', 'Š', 'T', 'U', 'Ų', 'Ū', 'V', 'Z', 'Ž'
     ]
 
-    , pathPaiesku : '/ieskoti'
+    , pathPaiesku : pathPaiesku
 
-    , parametrasQueryPaieskuPagalRegex : 'regex'
+    , parametrasQueryPaieskuPagalRegex : parametrasQueryPaieskuPagalRegex
 
-    , pathIrQueryPaieskuPagalRegexBeReiksmesParametro : this.pathPaiesku+'?'+this.parametrasQueryPaieskuPagalRegex+'='
+    , pathIrQueryPaieskuPagalRegexBeReiksmesParametro : pathIrQueryPaieskuPagalRegexBeReiksmesParametro
 
 
 

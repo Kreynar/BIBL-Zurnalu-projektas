@@ -9,7 +9,8 @@
         .btn-group(role='group' aria-label='grupeMygtukuPagalAbecelePaieskos')
           a(href='/'): .btn.btn-default(type='button'): b Visi
           each raide in masyvasRaidziuAbecelesLietuviskos
-            a(href=pathIrQueryPaieskuPagalRegexBeReiksmesParametro+'/^\\s*'+raide+'/i')
+            //a(href=pathIrQueryPaieskuPagalRegexBeReiksmesParametro+'/^\\s*'+raide+'/i')
+            a(href='/'+raide)
               .btn.btn-default(type='button')= raide
     #panelePagalFrazePaieskos.panel.panel-default
       .panel-body
@@ -29,14 +30,18 @@
 
 script.
   $(document).ready(function(){
+    console.log('@@@@@@@33');
 
     $('#aPaieskaPagalFraze').click(function (event) {
       event.preventDefault();
       var frazePaieskos = $('#textareaPaieskaPagalFraze').val();
+      console.log('@@@@@@@38');
       if (frazePaieskos) {
+        //console.log('@@@@@@@40', pathIrQueryPaieskuPagalRegexBeReiksmesParametro);
         frazePaieskos = $.trim(frazePaieskos);
         var queryRegexPaieskos = '/' + frazePaieskos + '/i';
-        var pathIrQuery = $(this).attr('href') + queryRegexPaieskos
+        var pathIrQuery = $(this).attr('href') + queryRegexPaieskos;
+        console.log('@@@@@@@41', pathIrQuery, $(this).attr('href'), queryRegexPaieskos);
         window.location.href = pathIrQuery;
         //      $('#aPaieskaPagalFraze').attr('href', pathIrQuery);
       }
