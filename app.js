@@ -36,6 +36,7 @@ app.locals.pathPaiesku = variables.pathPaiesku;
 app.locals.parametrasQueryPaieskuPagalRegex = variables.parametrasQueryPaieskuPagalRegex;
 app.locals.pathIrQueryPaieskuPagalRegexBeReiksmesParametro = variables.pathIrQueryPaieskuPagalRegexBeReiksmesParametro;
 
+app.locals.Autolinker = variables.Autolinker;
 
 
 

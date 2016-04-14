@@ -2,7 +2,7 @@
 
 
 
-table#lenteleZurnaluSaraso.table-responsivetable.table.table-striped
+table#lenteleZurnaluSaraso.table-responsivetable.table.table-striped.table-bordered
   thead
     - console.log('@@@in index.jade: ', 'in index.jade@@@')
     tr
@@ -26,7 +26,9 @@ table#lenteleZurnaluSaraso.table-responsivetable.table.table-striped
           - }
           - else if (objektasDocumentZurnalo.hasOwnProperty(getPavadinimaFieldo(numerisStulpelio))) {
             //td RADO
-            td= objektasDocumentZurnalo[getPavadinimaFieldo(numerisStulpelio)]
+            //-var autolinkintasTextas = Autolinker.link();
+            //td= objektasDocumentZurnalo[getPavadinimaFieldo(numerisStulpelio)]
+            td!= Autolinker.link(objektasDocumentZurnalo[getPavadinimaFieldo(numerisStulpelio)])
             //- rasta = true;
             //- break;
           - }

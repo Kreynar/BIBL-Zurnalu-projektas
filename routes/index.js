@@ -5,6 +5,8 @@ var mongodb = require('mongodb');
 
 var variables = require('../routes/variables.js');
 
+
+
 var masyvasPathuKaiBusAtvaizduojamaZurnaluLentele = ['/', variables.pathPaiesku];
 
 var masyvasPathuPaieskosPagalAbecele = [];

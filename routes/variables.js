@@ -32,6 +32,8 @@ var parametrasQueryPaieskuPagalRegex = 'regex';
 
 var pathIrQueryPaieskuPagalRegexBeReiksmesParametro = pathPaiesku + '?' + parametrasQueryPaieskuPagalRegex + '=';
 
+var Autolinker = require( 'autolinker' );
+
 module.exports = {
 
     /*
@@ -67,7 +69,7 @@ module.exports = {
 
     , pathIrQueryPaieskuPagalRegexBeReiksmesParametro : pathIrQueryPaieskuPagalRegexBeReiksmesParametro
 
-
+    , Autolinker : Autolinker
 
 }
 
