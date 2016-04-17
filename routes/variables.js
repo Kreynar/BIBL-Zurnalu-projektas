@@ -12,44 +12,86 @@ console.log('@@@@@@@7' + app.locals);
  field'u pavadinimai (arba bus nauju fieldu, kuriuos reikes atvaizduoti
  lenteleje)!!!!!!!!!!!!!!!!!!!!
  */
-var masyvasDvimatisPavadinimuStulpeliuIrAtitinkamuFieldu = [
+// var masyvasDvimatisPavadinimuStulpeliuIrAtitinkamuFieldu = [
+//
+//     /*
+//      <fieldoPavadinimasDuombazeje>       <stulpelioPavadinimasLentelejeSvetaineje>
+//      */
+//     [null,                                    'Checkbox']
+//     ,['_id',                                  'ID']
+//     ,['aristrintas',                          'Ar istrintas']
+//     ,[null,                                   'Nr.']                        // 0
+//     ,['pavadinimas1',                         'Pavadinimas']                // 1
+//     ,['pavadinimas2',                         'Kitas pavadinimas']         // 2
+//     ,['issn',                                 'ISSN']                      // 3
+//     ,['leidejas',                             'Leidėjas']                  // 4
+//     ,['db',                                   'Duomenų bazė']              // 5
+//     ,['pastabos',                             'Pastabos']                   // 6
+// ];
+
+
+
+var metadataStulpeliuIrFieldu = {
 
     /*
-     <fieldoPavadinimasDuombazeje>       <stulpelioPavadinimasLentelejeSvetaineje>
+    <aliasStulpelioArbaFieldo>     <arRodytLentelej> <arFiksuojamaDb> <pavadinimasStulpelio> <pavadinimasFieldo>
      */
-    [null, 'Nr.'],                       // 0
-    ['pavadinimas1', 'Pavadinimas'],                // 1
-    ['pavadinimas2', 'Kitas pavadinimas'],         // 2
-    ['issn', 'ISSN'],                      // 3
-    ['leidejas', 'Leidėjas'],                  // 4
-    ['db', 'Duomenų bazė'],               // 5
-    ['pastabos', 'Pastabos']                   // 6
-];
+    checkboxTrynimoIrKeitimo :     [true,                 false,         '',                        '']
+    , id :                         [false,                true,          '',                        '_id']
+    , arIstrintas :                [false,                true,          '',                       'aristrintas']
+    , nr :                         [true,                 false,         'Nr.',                     '']
+    , pavadinimas1 :               [true,                 true,          'Pavadinimas',            'pavadinimas1']
+    , pavadinimas2 :               [true,                 true,          'Kitas pavadinimas',      'pavadinimas2']
+    , issn :                       [true,                 true,          'ISSN',                    'issn']
+    , leidejas :                   [true,                 true,          'Leidėjas',               'leidejas']
+    , db :                         [true,                 true,          'Duomenų bazė(-ės)',      'db']
+    , pastabos :                   [true,                 true,          'Pastabos',               'pastabos']
 
-var pathPaiesku = '/ieskoti';
+};
 
-var parametrasQueryPaieskuPagalRegex = 'regex';
 
-var pathIrQueryPaieskuPagalRegexBeReiksmesParametro = pathPaiesku + '?' + parametrasQueryPaieskuPagalRegex + '=';
-
-var Autolinker = require( 'autolinker' );
-
-module.exports = {
+module.exports = ({ 
 
     /*
      Duomenu bazes adresas.
      */
     urlOfDatabase : 'mongodb://localhost:27017/mongoDBZurnaluProjekto',
 
-    getPavadinimaStulpelio : function (numerisStulpelio) {
-        return masyvasDvimatisPavadinimuStulpeliuIrAtitinkamuFieldu[numerisStulpelio][1];
+    getPavadinimaStulpelio : function (aliasArbaNumerisStulpelioArbaFieldo) {
+        if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'string') {
+            return metadataStulpeliuIrFieldu[aliasArbaNumerisStulpelioArbaFieldo][2];
+        }
+        else if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'number') {
+            return metadataStulpeliuIrFieldu[Object.keys(metadataStulpeliuIrFieldu)[aliasArbaNumerisStulpelioArbaFieldo]][2];
+        }
     },
 
-    getPavadinimaFieldo : function (numerisFieldo) {
-        return masyvasDvimatisPavadinimuStulpeliuIrAtitinkamuFieldu[numerisFieldo][0];
+    getPavadinimaFieldo : function (aliasArbaNumerisStulpelioArbaFieldo) {
+        if (typeof aliasArbaNumerisStulpelioArbaFieldo === 'string') {
+            return metadataStulpeliuIrFieldu[aliasArbaNumerisStulpelioArbaFieldo][3];
+        }
+        else if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'number') {
+            return metadataStulpeliuIrFieldu[Object.keys(metadataStulpeliuIrFieldu)[aliasArbaNumerisStulpelioArbaFieldo]][3];
+        }
+        else {
+
+        }
     },
 
-    kiekisStulpeliuRodomu : masyvasDvimatisPavadinimuStulpeliuIrAtitinkamuFieldu.length,
+    getAliasStulpelioArbaFieldo : function (numerisStulpelioArbaFieldo) {
+        return Object.keys(metadataStulpeliuIrFieldu)[numerisStulpelioArbaFieldo];
+    },
+
+    getArRodytiStulpeliLenteleje : function (aliasArbaNumerisStulpelioArbaFieldo) {
+        if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'string') {
+            return metadataStulpeliuIrFieldu[aliasArbaNumerisStulpelioArbaFieldo][0];
+        }
+        else if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'number') {
+            return metadataStulpeliuIrFieldu[Object.keys(metadataStulpeliuIrFieldu)[aliasArbaNumerisStulpelioArbaFieldo]][0];
+        }
+    },
+
+    kiekisStulpeliuArbaFieldu : Object.keys(metadataStulpeliuIrFieldu).length,
 
     pavadinimasSvetaines : 'Lietuvos mokslo žurnalų sąrašas',
 
@@ -63,19 +105,39 @@ module.exports = {
         , 'N', 'O', 'P', 'R', 'S', 'Š', 'T', 'U', 'Ų', 'Ū', 'V', 'Z', 'Ž'
     ]
 
-    , pathPaiesku : pathPaiesku
+    , pathPaiesku : '/ieskoti'
 
-    , parametrasQueryPaieskuPagalRegex : parametrasQueryPaieskuPagalRegex
+    , parametrasQueryPaieskuPagalRegex : 'regex'
+    
+    , pranesimas404 : 'Ieškomas puslapis nerastas'
 
-    , pathIrQueryPaieskuPagalRegexBeReiksmesParametro : pathIrQueryPaieskuPagalRegexBeReiksmesParametro
-
-    , Autolinker : Autolinker
-
-}
+    , pranesimasFrazePaieskosNegera : 'Įvyko klaida. Pamėginkite pakeisti paieškos frazę.'
 
 
+    , inicializuotiObjekta : function() {
+
+        this.pathIrQueryPaieskuPagalRegexBeReiksmesParametro = this.pathPaiesku + '?' + this.parametrasQueryPaieskuPagalRegex + '=';
+
+        this.Autolinker = require( 'autolinker' );
+
+        this.kiekisStulpeliuRodomu = function () {
+            var kiekisStulpeliuRodomu = 0;
+            for (var aliasStulpelioArbaFieldo in metadataStulpeliuIrFieldu) {
+                if (this.getArRodytiStulpeliLenteleje(metadataStulpeliuIrFieldu[aliasStulpelioArbaFieldo])) {
+                    kiekisStulpeliuRodomu++;
+                }
+            }
+            return kiekisStulpeliuRodomu;
+        };
+
+        return this;
+    }
+
+}).inicializuotiObjekta();
 
 
+
+ 
 
 
 

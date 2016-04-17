@@ -27,9 +27,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // app.locals.pavadinimasSvetaines = 'Lietuvos mokslo žurnalų sąrašas';
 app.locals.pavadinimasSvetaines = variables.pavadinimasSvetaines;
+app.locals.pristatymasSvetaines = variables.pristatymasSvetaines;
 app.locals.getPavadinimaStulpelio = variables.getPavadinimaStulpelio;
 app.locals.getPavadinimaFieldo = variables.getPavadinimaFieldo;
+app.locals.getArRodytiStulpeliLenteleje = variables.getArRodytiStulpeliLenteleje;
+app.locals.getAliasStulpelioArbaFieldo = variables.getAliasStulpelioArbaFieldo;
 app.locals.kiekisStulpeliuRodomu = variables.kiekisStulpeliuRodomu;
+app.locals.kiekisStulpeliuArbaFieldu = variables.kiekisStulpeliuArbaFieldu;
 app.locals.masyvasRaidziuAbecelesLietuviskos = variables.masyvasRaidziuAbecelesLietuviskos;
 
 app.locals.pathPaiesku = variables.pathPaiesku;
@@ -41,12 +45,12 @@ app.locals.Autolinker = variables.Autolinker;
 
 
 
-app.use('/',  routes);
+app.use('/', routes);
 // app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  var err = new Error(variables.pranesimas404);
   err.status = 404;
   next(err);
 });
