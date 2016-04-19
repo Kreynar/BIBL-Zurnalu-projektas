@@ -1,9 +1,107 @@
 // Created by Martynas on 4/17/2016.
 
-.nav-wrapper
+
+style.
+  .affix {
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+#paneleMygtukoNaujasIrasas.panel-default.panel
+  .container
+    a(href='/naujasirasas')
+      .btn.btn-success.col-sm-offset-1.col-sm-10(type='button') Pridėti mokslo žurnalą
+//.nav-wrapper
+#paneleKeitimoIrTrynimoIrasu.panel.panel-default
+  .container.text-center
+    label#labelKeitimoIrTrynimo Pažymėkite įrašą(-us), kurį(-iuos) norėtumėte ištrinti
+    div#paneleMygtukamsKeistiIrTrinti.container.panel.panel-default(style='height:fit-content; width:fit-content; border-top:0; padding:0; margin-bottom:0')
+      button#mygtukasKeisti.btn.btn-warning(style='margin:5px') Keisti
+      // src='images/arrowUp.png'
+      //: img(style='background: url(images/arrowUp.png)')
+      a#aIVirsu(href='#' style='margin:5px 0px').btn.btn-default: span.glyphicon.glyphicon-triangle-top
+      //button.btn.btn-default: span.glyphicon.glyphicon-triangle-top
+      button#mygtukasTrinti.btn.btn-danger(style='margin:5px') Trinti
+    div#placeholderis
 
 
 
+
+
+- if (typeof jQuery == 'undefined') {
+  script(type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
+- }
+
+script(type='text/javascript' src='bootstrap-3.3.6-dist/js/bootstrap.min.js')
+script.
+  $(document).ready(function(){
+
+    $('#placeholderis').height($("#paneleMygtukamsKeistiIrTrinti").height());
+    $('#placeholderis').width($("#paneleMygtukamsKeistiIrTrinti").width());
+    $('#placeholderis').hide();
+
+    $('#mygtukasKeisti').click(function() {
+      var masyvasIdDocumentuPazymetu = [];
+      $(".checkboxInTbody").each(function () {
+        var $this = $(this);
+        if ($this.is(":checked")) {
+          masyvasIdDocumentuPazymetu.push($this.attr("id"));
+        } else {
+
+        }
+      });
+      if (masyvasIdDocumentuPazymetu.length == 0) {
+
+      }
+      else if (masyvasIdDocumentuPazymetu.length == 1) {
+
+      }
+      else if (masyvasIdDocumentuPazymetu.length > 1) {
+        alert('Norėdami keisti, pažymėkite tik 1 įrašą!');
+      }
+    });
+
+    $('#mygtukasTrinti').click(function () {
+      var masyvasIdDocumentuPazymetu = [];
+      $(".checkboxInTbody").each(function () {
+        var $this = $(this);
+        if ($this.is(":checked")) {
+          masyvasIdDocumentuPazymetu.push($this.attr("id"));
+        } else {
+
+        }
+      });
+      if (masyvasIdDocumentuPazymetu.length == 0) {
+
+      }
+      else if (masyvasIdDocumentuPazymetu.length >= 1) {
+        //var arTikraiTrinti = confirm('Ar tikrai norite trinti', masyvasIdDocumentuPazymetu.length, 'įrašą (-us)?');
+        if (confirm('Ar tikrai norite trinti', masyvasIdDocumentuPazymetu.length, 'įrašą (-us)?')) {
+
+        }
+      }
+    });
+
+
+  });
+
+  $('#paneleMygtukamsKeistiIrTrinti').on('affix.bs.affix', function() {
+    $('#paneleMygtukamsKeistiIrTrinti').height($("#mygtukasKeisti").outerHeight() + 10);
+    $('#paneleMygtukamsKeistiIrTrinti').width($("#mygtukasKeisti").outerWidth() + $("#aIVirsu").outerWidth() + $("#mygtukasTrinti").outerWidth() + 25);
+    $('#placeholderis').show();
+  });
+  $('#paneleMygtukamsKeistiIrTrinti').on('affix-top.bs.affix', function () {
+    //$('#paneleMygtukamsKeistiIrTrinti').height(50);
+    //$('#paneleMygtukamsKeistiIrTrinti').height($("#placeholderis").height());
+    //$('#paneleMygtukamsKeistiIrTrinti').width($("#placeholderis").width());
+    $('#placeholderis').hide();
+  });
+  $('#paneleMygtukamsKeistiIrTrinti').affix({
+    offset: {
+      top: $('#paneleMygtukamsKeistiIrTrinti').offset().top
+    }
+  });
 
 
 
