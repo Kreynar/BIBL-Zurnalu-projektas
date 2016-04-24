@@ -10,7 +10,7 @@ style.
 
 #paneleMygtukoNaujasIrasas.panel-default.panel
   .container
-    a(href='/naujasirasas')
+    a(href=pathSukurtiNaujaIrasa)
       .btn.btn-success.col-sm-offset-1.col-sm-10(type='button') Pridėti mokslo žurnalą
 //.nav-wrapper
 #paneleKeitimoIrTrynimoIrasu.panel.panel-default
@@ -77,7 +77,33 @@ script.
       }
       else if (masyvasIdDocumentuPazymetu.length >= 1) {
         //var arTikraiTrinti = confirm('Ar tikrai norite trinti', masyvasIdDocumentuPazymetu.length, 'įrašą (-us)?');
-        if (confirm('Ar tikrai norite trinti', masyvasIdDocumentuPazymetu.length, 'įrašą (-us)?')) {
+        if (confirm('Ar tikrai norite trinti ' + masyvasIdDocumentuPazymetu.length + '@@@' + ' įrašą (-us)?')) {
+          alert($(location).attr('href'));
+          $.ajax({
+            type: "POST",
+            dataType: 'json',
+            url: '/trinti-irasa',
+            async: false,
+            data: {
+              //masyvasIdDocumentuPazymetu: masyvasIdDocumentuPazymetu
+              masyvasIdDocumentuPazymetu : JSON.stringify(masyvasIdDocumentuPazymetu)
+              , urlOfPageInClientCurrently: window.location.href
+            }
+            //  , success: function (data) {
+            //    if (data.hasOwnProperty('success')) {
+            //      console.log("data was sent!");
+            //
+            //      if (reload_on_return) {
+            //        setTimeout(function () { location.reload(); }, 0001);
+            //      }
+            //
+            //    }
+            //  },
+            //  error: function () {
+            //    console.log("Data didn't get sent!!");
+            //  }
+          });
+
 
         }
       }

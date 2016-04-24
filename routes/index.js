@@ -7,96 +7,51 @@ var variables = require('../routes/variables.js');
 
 
 
-// console.log(variables);
+var trintiIrasa = function(req, res, next) {
+  var MongoClient = mongodb.MongoClient;
+  MongoClient.connect(variables.urlOfDatabase, function(err, db) {
+    if (err) {
+      console.log(err);
+    }
+    else {
+      var collectionZurnalai = db.collection('zurnalai');
+      var masyvasIdDocumentuPazymetu = req.body.masyvasIdDocumentuPazymetu;
+      console.log('@@@@@@@19' + req);
+      console.log('@@@@@@@20' + masyvasIdDocumentuPazymetu);
+      console.log('@@@@@@@21' + masyvasIdDocumentuPazymetu[0]);
+      masyvasIdDocumentuPazymetu = JSON.parse(masyvasIdDocumentuPazymetu);
+      console.log('@@@@@@@23' + masyvasIdDocumentuPazymetu[0]);
+      for (var i = 0;  i < masyvasIdDocumentuPazymetu.length; i++) {
+        masyvasIdDocumentuPazymetu[i] = new mongodb.ObjectId(masyvasIdDocumentuPazymetu[i]);
+      }
 
-var masyvasPathuPaieskosPagalAbecele = [];
-for (var i = 0; i < variables.masyvasRaidziuAbecelesLietuviskos.length; i++) {
-  masyvasPathuPaieskosPagalAbecele.push('/'+encodeURIComponent(variables.masyvasRaidziuAbecelesLietuviskos[i]));
-}
+      collectionZurnalai.updateMany(
+        {
+          '_id' : {
+            $in : masyvasIdDocumentuPazymetu
+          }
+        },
+        {
+          $set : { 'pastabos' : '2016-04-24 8:4333h' }
+          // $set : { 'aristrintas' : true }
+        },
+        function(err, result) {
+          if (err) {
+            console.log(err);
+            next(err);
+          }
+          else {
+            console.log('@@@@@@@@39');
+            db.close();
+            next();
+          }
+        }
+      );
+    }
+  });
+};
 
-// console.log('@@@@@@@@@17', masyvasPathuPaieskosPagalAbecele);
-
-// router.get(masyvasPathuPaieskosPagalAbecele, function(req, res) {
-//   var path = req.path;
-//   console.log(path);
-//   path = path.replace(/\//g, '');
-//   path = decodeURIComponent(path);
-//   console.log(path);
-//   for (var numerisRaidesAbeceleje = 0; numerisRaidesAbeceleje < variables.masyvasRaidziuAbecelesLietuviskos.length; numerisRaidesAbeceleje++) {
-//     if (path == variables.masyvasRaidziuAbecelesLietuviskos[numerisRaidesAbeceleje]) {
-//       var MongoClient = mongodb.MongoClient;
-//       MongoClient.connect(variables.urlOfDatabase, function(err, db) {
-//         if (err) {
-//           console.log(err);
-//         }
-//         else {
-//           console.log('@@@@@@147');//^\s*A
-//           var regExp = new RegExp('^\\s*' + path, 'i');
-//           console.log('@@@@@@105', regExp);
-//           var collectionZurnalai = db.collection('zurnalai');
-//           var options = {
-//             sort : variables.getPavadinimaFieldo(1)
-//           }
-//           collectionZurnalai.find({ pavadinimas1: regExp }, options).toArray(function(err, masyvasDocumentuZurnalu){
-//             if (err) {
-//               console.log('@@@@@@151', err);
-//             }
-//             else {
-//               console.log('@@@@@@@@@154');
-//               console.log('masyvasZurnaluDocumentu1: ', masyvasDocumentuZurnalu, '@@@');
-//               res.render('index', {
-//                 // pavadinimasSvetaines: variables.pavadinimasSvetaines,
-//                 // pristatymasSvetaines: variables.pristatymasSvetaines,
-//                 masyvasDocumentuZurnalu: masyvasDocumentuZurnalu,
-//                 // getPavadinimaStulpelio: variables.getPavadinimaStulpelio,
-//                 // getPavadinimaFieldo: variables.getPavadinimaFieldo,
-//                 // kiekisStulpeliuRodomu: variables.kiekisStulpeliuRodomu,
-//                 // masyvasRaidziuAbecelesLietuviskos: variables.masyvasRaidziuAbecelesLietuviskos
-//               });
-//               db.close(function() {
-//                 console.log('Tiketina, kad ivykdyta db.close()')
-//               });
-//             }
-//           });
-//         }
-//       });
-//     }
-//   }
-// });
-
-
-// /* GET
-// home page. */
-// router.get('/', function(req, res, next) {
-//   next();
-// });
-
-// router.get(variables.pathPaiesku, function(req, res, next) {
-//   if (Object.keys(req.query).length) {
-//     var masyvasPavadinimuParametruInQuery = Object.keys(req.query);
-//     console.log('@@@@@@@12', req.query);  // printoutina: @@@@@@@12 { regex: '/gr/i' }
-//     if (masyvasPavadinimuParametruInQuery.length == 1) {
-//       var pavadinimasParametro = masyvasPavadinimuParametruInQuery[0];
-//       if (pavadinimasParametro == variables.parametrasQueryPaieskuPagalRegex) {
-//         next();
-//       }
-//       else {
-//
-//         // Kadanors gal papildysiu dar paiesku funkcionaluma.
-//       }
-//     }
-//     else {
-//
-//       // Kadanors gal papildysiu dar paiesku funkcionaluma.
-//     }
-//   }
-//   else {
-//
-//     // Kadanors gal papildysiu dar paiesku funkcionaluma.
-//   }
-// });
-
-router.get(masyvasPathuPaieskosPagalAbecele, function(req, res) {
+var getIrasusIsDbPagalAbeceleIrUzpildytiLentele = function(req, res) {
   var path = req.path;
   console.log(path);
   path = path.replace(/\//g, '');
@@ -136,10 +91,9 @@ router.get(masyvasPathuPaieskosPagalAbecele, function(req, res) {
       });
     }
   }
-});
+};
 
-router.get(['/', variables.pathPaiesku], function(req, res, next) {
-// router.get('/', function(req, res, next) {
+var getIrasusIsDbPagalFrazeIrUzpildytiLentele = function(req, res, next) {
   var MongoClient = mongodb.MongoClient;
   MongoClient.connect(variables.urlOfDatabase, function(err, db) {
     if (err) {
@@ -151,6 +105,7 @@ router.get(['/', variables.pathPaiesku], function(req, res, next) {
         var collectionZurnalai = db.collection('zurnalai');
         var objektasZurnaluPaieskosMongoDb = {};
         var regexPaieskos = '';
+        var $or1 = [];
         if (Object.keys(req.query).length) {
           console.log('@@@@@@@@55', req.query);
 
@@ -159,7 +114,6 @@ router.get(['/', variables.pathPaiesku], function(req, res, next) {
            Tures but objektasZurnaluPaieskosMongoDb =
            {  $or: [ { keyA: 'valueA' }, {keyB: 'valueB'} ]  }
            */
-          var $or = [];
           try {
             regexPaieskos = req.query[variables.parametrasQueryPaieskuPagalRegex];
             console.log('@@@@@@@@133', regexPaieskos);
@@ -174,33 +128,57 @@ router.get(['/', variables.pathPaiesku], function(req, res, next) {
             }
           }
           catch (errOfRegex) {
-            var errOfRegex = new Error(variables.pranesimasFrazePaieskosNegera);
+            errOfRegex = new Error(variables.pranesimasFrazePaieskosNegera);
             next(errOfRegex);
           }
           console.log('@@@@@@@@1411', regexPaieskos);
-          for (var i = 1; i < variables.kiekisStulpeliuRodomu; i++) {
-            var objektasPaieskosMasyvo$or = {};
-            objektasPaieskosMasyvo$or[variables.getPavadinimaFieldo(i)] = regexPaieskos;
-            $or.push(objektasPaieskosMasyvo$or);
+          console.log('@@@@@@@@1411', variables.kiekisStulpeliuArbaFieldu);
+          for (var numerisStulpelioArbaFieldo = 0; numerisStulpelioArbaFieldo < variables.kiekisStulpeliuArbaFieldu; numerisStulpelioArbaFieldo++) {
+            if (variables.gerArFiksuojamasStulpelisDuomenuBazeje(numerisStulpelioArbaFieldo)
+                && variables.getAliasStulpelioArbaFieldo(numerisStulpelioArbaFieldo) != 'id' ) {
+              var objektasPaieskosMasyvo$or1 = {};
+              objektasPaieskosMasyvo$or1[variables.getPavadinimaFieldo(numerisStulpelioArbaFieldo)] = regexPaieskos;
+              $or1.push(objektasPaieskosMasyvo$or1);
+            }
           }
-          objektasZurnaluPaieskosMongoDb['$or'] = $or;
         }
         else {
 
           /*
            Cia '/' route, NES req.query == null or smth.
            */
-          objektasZurnaluPaieskosMongoDb = {};
-          console.log('@@@@@721', objektasZurnaluPaieskosMongoDb);
-          console.log('@@@@@722', variables.getPavadinimaFieldo('pavadinimas1'));
+          $or1.push({});
         }
+
+        /*
+         Dabar sudarau antraji siai paieskai reikalinga $or[ ] masyva.
+         Si dalis paieskos objekte bus atsakinga uz pafetchinima TIK tu Document'u,
+         kurie arba isvis neturi fieldo 'aristrintas', arba ju 'aristrintas'=false.
+         */
+        var $or2 = [ { aristrintas:{$exists:false} }, { aristrintas:{$ne:true} } ];
+
+        /*
+         Galiausiai, paieskos-query objektas turi atrodyti mazdaug taip:
+         {
+         $and: [
+         { $or:[ {pavadinimas1:FRAZE}, ..., {pastabos:FRAZE} ] },
+         { $or:[ { aristrintas:{$exists:false} }, { aristrintas:{$ne:true} } ] }
+         ]
+         }
+
+         */
+        var $and = [
+          {'$or' : $or1}
+          , {'$or' : $or2}
+        ];
+        objektasZurnaluPaieskosMongoDb = { '$and' : $and };
         var options = {
           sort : variables.getPavadinimaFieldo('pavadinimas1')
         };
-        console.log('@@@@@@@@199', options);
+        // console.log('@@@@@@@@199', objektasZurnaluPaieskosMongoDb);
         collectionZurnalai.find(objektasZurnaluPaieskosMongoDb, options).toArray(function(err, masyvasDocumentuZurnalu){
           if (err) {
-            console.log('@@@@@56', err);
+            console.log('@@@@@56', err, objektasZurnaluPaieskosMongoDb);
           }
           else {
             console.log('@@@@@@81', 'masyvasZurnaluDocumentu YRA ', masyvasDocumentuZurnalu, '@@@');
@@ -218,137 +196,9 @@ router.get(['/', variables.pathPaiesku], function(req, res, next) {
       }
     }
   });
-});
+};
 
-
-// router.get(['/', variables.pathPaiesku], function(req, res, next) {
-//   var MongoClient = mongodb.MongoClient;
-//   MongoClient.connect(variables.urlOfDatabase, function(err, db) {
-//     if (err) {
-//       console.log('@@@@@@@@101 Erroras meginant connectintis prie mongoDBZurnaluProjekto:', err);
-//     }
-//     else {
-//       try {
-//         console.log('Prisijungem prie mongoDBZurnaluProjekto!');
-//         var collectionZurnalai = db.collection('zurnalai');
-//         var objektasZurnaluPaieskosMongoDb = {};
-//         var regexPaieskos = '';
-//         if (Object.keys(req.query).length) {
-//           console.log('@@@@@@@@55', req.query);
-//
-//           /*
-//               Cia assuminam, kad yra '/ieskoti?regex=NNN...' route
-//               Tures but objektasZurnaluPaieskosMongoDb =
-//               {  $or: [ { keyA: 'valueA' }, {keyB: 'valueB'} ]  }
-//           */
-//           var $or = [];
-//           try {
-//             regexPaieskos = req.query[variables.parametrasQueryPaieskuPagalRegex];
-//             console.log('@@@@@@@@133', regexPaieskos);
-//             regexPaieskos = regexPaieskos.substr(1);
-//             if ('i' == regexPaieskos.substr(regexPaieskos.length-1)) {
-//               regexPaieskos = regexPaieskos.substr(0, regexPaieskos.length-2);
-//               regexPaieskos = new RegExp(regexPaieskos, 'i');
-//             }
-//             else if ('/' == regexPaieskos.substr(regexPaieskos.length-1)) {
-//               regexPaieskos = regexPaieskos.substr(0, regexPaieskos.length-1);
-//               regexPaieskos = new RegExp(regexPaieskos);
-//             }
-//           }
-//           catch (errOfRegex) {
-//             var errOfRegex = new Error(variables.pranesimasFrazePaieskosNegera);
-//             next(errOfRegex);
-//           }
-//           console.log('@@@@@@@@1411', regexPaieskos);
-//           for (var i = 1; i < variables.kiekisStulpeliuRodomu; i++) {
-//             var objektasPaieskosMasyvo$or = {};
-//             objektasPaieskosMasyvo$or[variables.getPavadinimaFieldo(i)] = regexPaieskos;
-//             $or.push(objektasPaieskosMasyvo$or);
-//           }
-//           objektasZurnaluPaieskosMongoDb['$or'] = $or;
-//         }
-//         else {
-//
-//           /*
-//            Cia '/' route, NES req.query == null or smth.
-//           */
-//           objektasZurnaluPaieskosMongoDb = {};
-//           console.log('@@@@@72', objektasZurnaluPaieskosMongoDb);
-//         }
-//         var options = {
-//           sort : variables.getPavadinimaFieldo(1)
-//         }
-//         collectionZurnalai.find(objektasZurnaluPaieskosMongoDb, options).toArray(function(err, masyvasDocumentuZurnalu){
-//           if (err) {
-//             console.log('@@@@@56', err);
-//           }
-//           else {
-//             console.log('@@@@@@81', 'masyvasZurnaluDocumentu YRA ', masyvasDocumentuZurnalu, '@@@');
-//             res.render('index', {
-//               masyvasDocumentuZurnalu: masyvasDocumentuZurnalu
-//             });
-//             db.close(function() {
-//               console.log('Tiketina, kad ivykdyta db.close()')
-//             });
-//           }
-//         });
-//       }
-//       catch (err) {
-//         next();
-//       }
-//     }
-//   });
-// });
-
-
-
-
-// /* GET home page. */
-// router.get('/', function(req, res, next) {
-//   var MongoClient = mongodb.MongoClient;
-//   // res.render('index', { title: 'Lietuvos mokslo žurnalai' });
-//   MongoClient.connect(variables.urlOfDatabase, function(err, db) {
-//     if (err) {
-//       console.log('Erroras meginant connectintis prie mongoDBZurnaluProjekto:', err);
-//     }
-//     else {
-//       console.log('Prisijungem prie mongoDBZurnaluProjekto!');
-//       var collectionZurnalai = db.collection('zurnalai');
-//       console.log('aaa');
-//       collectionZurnalai.find().toArray(function(err, masyvasDocumentuZurnalu){
-//         if (err) {
-//           console.log('Pri');
-//           console.log(err);
-//         }
-//         // else if (sarasasZurnalu.length) {
-//         //
-//         // }
-//         else {
-//           console.log('masyvasZurnaluDocumentu1: ', masyvasDocumentuZurnalu, '@@@');
-//           res.render('index', {
-//             pavadinimasSvetaines: variables.pavadinimasSvetaines,
-//             pristatymasSvetaines: variables.pristatymasSvetaines,
-//             masyvasDocumentuZurnalu: masyvasDocumentuZurnalu,
-//             getPavadinimaStulpelio: variables.getPavadinimaStulpelio,
-//             getPavadinimaFieldo: variables.getPavadinimaFieldo,
-//             kiekisStulpeliuRodomu: variables.kiekisStulpeliuRodomu,
-//             masyvasRaidziuAbecelesLietuviskos: variables.masyvasRaidziuAbecelesLietuviskos
-//           });
-//           db.close(function() {
-//             console.log('Tiketina, kad ivykdyta db.close()')
-//           });
-//         }
-//       });
-//     }
-//   });
-// });
-
-
-router.get('/naujasirasas', function(req, res) {
-  res.render('naujasirasas');
-});
-
-router.post('/naujasirasasposted', function(req, res) {
+var postNaujaIrasa = function(req, res) {
   var MongoClient = mongodb.MongoClient;
   MongoClient.connect(variables.urlOfDatabase, function(err, db) {
     if (err) {
@@ -357,8 +207,13 @@ router.post('/naujasirasasposted', function(req, res) {
     else {
       var documentNaujoZurnalo = {};
       console.log('118@@@@@@', req.body.pavadinimas1, '@@@@@@@@118');
-      for (var numerisFieldoIrStulpelio = 1; numerisFieldoIrStulpelio < variables.kiekisStulpeliuRodomu; numerisFieldoIrStulpelio++) {
-        documentNaujoZurnalo[variables.getPavadinimaFieldo(numerisFieldoIrStulpelio)] = ( req.body[variables.getPavadinimaFieldo(numerisFieldoIrStulpelio)] ).trim();
+      for (var numerisFieldoArbaStulpelio = 0; numerisFieldoArbaStulpelio < variables.kiekisStulpeliuArbaFieldu; numerisFieldoArbaStulpelio++) {
+        if (variables.gerArFiksuojamasStulpelisDuomenuBazeje(numerisFieldoArbaStulpelio)
+            && variables.getAliasStulpelioArbaFieldo(numerisFieldoArbaStulpelio) != 'id'
+            && variables.getAliasStulpelioArbaFieldo(numerisFieldoArbaStulpelio) != 'arIstrintas') {
+          documentNaujoZurnalo[variables.getPavadinimaFieldo(numerisFieldoArbaStulpelio)]
+              = ( req.body[variables.getPavadinimaFieldo(numerisFieldoArbaStulpelio)] ).trim();
+        }
       }
       console.log('121@@@@@@', documentNaujoZurnalo, '@@@@@@@@121');
       var collectionZurnalai = db.collection('zurnalai');
@@ -373,7 +228,37 @@ router.post('/naujasirasasposted', function(req, res) {
       });
     }
   });
+};
+
+var reloadintiPuslapiSuAtnaujintaisIrasais = function(req, res, next) {
+  var urlOfPage = req.body.urlOfPageInClientCurrently;
+  console.log('@@@@@@@@235', urlOfPage, variables.pathIrQueryPaieskuPagalRegexBeReiksmesParametro);
+  if (urlOfPage.indexOf(variables.pathIrQueryPaieskuPagalRegexBeReiksmesParametro) > -1) {
+    console.log('@@@@@@@@237');
+    getIrasusIsDbPagalFrazeIrUzpildytiLentele(req, res, next);
+  } 
+  // else if (urlOfPage.indexOf(variables.pathPaiesku)) {
+  else {
+    console.log('@@@@@@@@242');
+    getIrasusIsDbPagalAbeceleIrUzpildytiLentele(req, res, next);
+  }
+};
+
+
+
+router.get(variables.masyvasPathuPaieskosPagalAbecele, getIrasusIsDbPagalAbeceleIrUzpildytiLentele);
+
+router.get(['/', variables.pathPaiesku], getIrasusIsDbPagalFrazeIrUzpildytiLentele);
+
+router.get(variables.pathSukurtiNaujaIrasa, function(req, res) {
+  res.render('naujasirasas');
 });
+
+router.post(variables.pathPostNaujaIrasa, postNaujaIrasa);
+
+router.post(variables.pathTrintiIrasa, trintiIrasa, reloadintiPuslapiSuAtnaujintaisIrasais);
+
+
 
 
 

@@ -4,33 +4,12 @@
 
 var app = require('../app');
 
-console.log('@@@@@@@7' + app.locals);
-// app.locals.pavadinimasSvetaines = 'Lietuvos mokslo žurnalų sąrašas';
 
 /*
  Sito masyvo elementu pavadinimus gali tekti pakeisti, jei keisis duomenu bazeje
  field'u pavadinimai (arba bus nauju fieldu, kuriuos reikes atvaizduoti
  lenteleje)!!!!!!!!!!!!!!!!!!!!
  */
-// var masyvasDvimatisPavadinimuStulpeliuIrAtitinkamuFieldu = [
-//
-//     /*
-//      <fieldoPavadinimasDuombazeje>       <stulpelioPavadinimasLentelejeSvetaineje>
-//      */
-//     [null,                                    'Checkbox']
-//     ,['_id',                                  'ID']
-//     ,['aristrintas',                          'Ar istrintas']
-//     ,[null,                                   'Nr.']                        // 0
-//     ,['pavadinimas1',                         'Pavadinimas']                // 1
-//     ,['pavadinimas2',                         'Kitas pavadinimas']         // 2
-//     ,['issn',                                 'ISSN']                      // 3
-//     ,['leidejas',                             'Leidėjas']                  // 4
-//     ,['db',                                   'Duomenų bazė']              // 5
-//     ,['pastabos',                             'Pastabos']                   // 6
-// ];
-
-
-
 var metadataStulpeliuIrFieldu = {
 
     /*
@@ -55,80 +34,170 @@ module.exports = ({
     /*
      Duomenu bazes adresas.
      */
-    urlOfDatabase : 'mongodb://localhost:27017/mongoDBZurnaluProjekto',
+    // urlOfDatabase : 'mongodb://localhost:27017/mongoDBZurnaluProjekto',
+    //
+    // getPavadinimaStulpelio : function (aliasArbaNumerisStulpelioArbaFieldo) {
+    //     if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'string') {
+    //         return metadataStulpeliuIrFieldu[aliasArbaNumerisStulpelioArbaFieldo][2];
+    //     }
+    //     else if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'number') {
+    //         return metadataStulpeliuIrFieldu[Object.keys(metadataStulpeliuIrFieldu)[aliasArbaNumerisStulpelioArbaFieldo]][2];
+    //     }
+    // },
+    //
+    // getPavadinimaFieldo : function (aliasArbaNumerisStulpelioArbaFieldo) {
+    //     if (typeof aliasArbaNumerisStulpelioArbaFieldo === 'string') {
+    //         return metadataStulpeliuIrFieldu[aliasArbaNumerisStulpelioArbaFieldo][3];
+    //     }
+    //     else if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'number') {
+    //         return metadataStulpeliuIrFieldu[Object.keys(metadataStulpeliuIrFieldu)[aliasArbaNumerisStulpelioArbaFieldo]][3];
+    //     }
+    //     else {
+    //
+    //     }
+    // },
+    //
+    // getAliasStulpelioArbaFieldo : function (numerisStulpelioArbaFieldo) {
+    //     return Object.keys(metadataStulpeliuIrFieldu)[numerisStulpelioArbaFieldo];
+    // },
+    //
+    // getArRodytiStulpeliLenteleje : function (aliasArbaNumerisStulpelioArbaFieldo) {
+    //     if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'string') {
+    //         return metadataStulpeliuIrFieldu[aliasArbaNumerisStulpelioArbaFieldo][0];
+    //     }
+    //     else if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'number') {
+    //         return metadataStulpeliuIrFieldu[Object.keys(metadataStulpeliuIrFieldu)[aliasArbaNumerisStulpelioArbaFieldo]][0];
+    //     }
+    // },
+    //
+    // gerArFiksuojamasStulpelisDuomenuBazeje : function (aliasArbaNumerisStulpelioArbaFieldo) {
+    //     if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'string') {
+    //         return metadataStulpeliuIrFieldu[aliasArbaNumerisStulpelioArbaFieldo][1];
+    //     }
+    //     else if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'number') {
+    //         return metadataStulpeliuIrFieldu[Object.keys(metadataStulpeliuIrFieldu)[aliasArbaNumerisStulpelioArbaFieldo]][1];
+    //     }
+    // },
+    //
+    // kiekisStulpeliuArbaFieldu : Object.keys(metadataStulpeliuIrFieldu).length,
+    //
+    // pavadinimasSvetaines : 'Lietuvos mokslo žurnalų sąrašas',
+    //
+    // pristatymasSvetaines : 'Sveiki atvykę į Lietuvos mokslo žurnalų internetinę svetainę!' +
+    //     ' Čia galite rasti visų mokslo bendruomenės žurnalų sąrašą bei sužinoti, kokiose duomenų' +
+    //     ' bazėse talpinamas pilnas šių žurnalų turinys.',
+    //
+    // masyvasRaidziuAbecelesLietuviskos : [
+    //     'A', 'Ą', 'B', 'C', 'Č', 'D', 'E', 'Ę', 'Ė', 'F'
+    //     , 'G', 'H', 'I', 'Į', 'Y', 'J', 'K', 'L', 'M'
+    //     , 'N', 'O', 'P', 'R', 'S', 'Š', 'T', 'U', 'Ų', 'Ū', 'V', 'Z', 'Ž'
+    // ]
+    //
+    // , pathPaiesku : '/ieskoti'
+    //
+    // , pathTrintiIrasa : '/trinti-irasa'
+    //
+    // , pathPostNaujaIrasa : '/sukurti-nauja-irasa'
+    //
+    // , parametrasQueryPaieskuPagalRegex : 'regex'
+    //
+    // , pranesimas404 : 'Ieškomas puslapis nerastas'
+    //
+    // , pranesimasFrazePaieskosNegera : 'Įvyko klaida. Pamėginkite pakeisti paieškos frazę.'
 
-    getPavadinimaStulpelio : function (aliasArbaNumerisStulpelioArbaFieldo) {
-        if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'string') {
-            return metadataStulpeliuIrFieldu[aliasArbaNumerisStulpelioArbaFieldo][2];
-        }
-        else if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'number') {
-            return metadataStulpeliuIrFieldu[Object.keys(metadataStulpeliuIrFieldu)[aliasArbaNumerisStulpelioArbaFieldo]][2];
-        }
-    },
 
-    getPavadinimaFieldo : function (aliasArbaNumerisStulpelioArbaFieldo) {
-        if (typeof aliasArbaNumerisStulpelioArbaFieldo === 'string') {
-            return metadataStulpeliuIrFieldu[aliasArbaNumerisStulpelioArbaFieldo][3];
-        }
-        else if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'number') {
-            return metadataStulpeliuIrFieldu[Object.keys(metadataStulpeliuIrFieldu)[aliasArbaNumerisStulpelioArbaFieldo]][3];
-        }
-        else {
+    // , inicializuotiObjekta : function() {
 
-        }
-    },
+    inicializuotiObjekta : function() {
 
-    getAliasStulpelioArbaFieldo : function (numerisStulpelioArbaFieldo) {
-        return Object.keys(metadataStulpeliuIrFieldu)[numerisStulpelioArbaFieldo];
-    },
+        this.urlOfDatabase = 'mongodb://localhost:27017/mongoDBZurnaluProjekto';
 
-    getArRodytiStulpeliLenteleje : function (aliasArbaNumerisStulpelioArbaFieldo) {
-        if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'string') {
-            return metadataStulpeliuIrFieldu[aliasArbaNumerisStulpelioArbaFieldo][0];
-        }
-        else if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'number') {
-            return metadataStulpeliuIrFieldu[Object.keys(metadataStulpeliuIrFieldu)[aliasArbaNumerisStulpelioArbaFieldo]][0];
-        }
-    },
+        this.getPavadinimaStulpelio = function (aliasArbaNumerisStulpelioArbaFieldo) {
+            if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'string') {
+                return metadataStulpeliuIrFieldu[aliasArbaNumerisStulpelioArbaFieldo][2];
+            }
+            else if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'number') {
+                return metadataStulpeliuIrFieldu[Object.keys(metadataStulpeliuIrFieldu)[aliasArbaNumerisStulpelioArbaFieldo]][2];
+            }
+        };
 
-    kiekisStulpeliuArbaFieldu : Object.keys(metadataStulpeliuIrFieldu).length,
+        this.getPavadinimaFieldo = function (aliasArbaNumerisStulpelioArbaFieldo) {
+            if (typeof aliasArbaNumerisStulpelioArbaFieldo === 'string') {
+                return metadataStulpeliuIrFieldu[aliasArbaNumerisStulpelioArbaFieldo][3];
+            }
+            else if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'number') {
+                return metadataStulpeliuIrFieldu[Object.keys(metadataStulpeliuIrFieldu)[aliasArbaNumerisStulpelioArbaFieldo]][3];
+            }
+            else {
 
-    pavadinimasSvetaines : 'Lietuvos mokslo žurnalų sąrašas',
+            }
+        };
 
-    pristatymasSvetaines : 'Sveiki atvykę į Lietuvos mokslo žurnalų internetinę svetainę!' +
+        this.getAliasStulpelioArbaFieldo = function (numerisStulpelioArbaFieldo) {
+            return Object.keys(metadataStulpeliuIrFieldu)[numerisStulpelioArbaFieldo];
+        };
+
+        this.getArRodytiStulpeliLenteleje = function (aliasArbaNumerisStulpelioArbaFieldo) {
+            if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'string') {
+                return metadataStulpeliuIrFieldu[aliasArbaNumerisStulpelioArbaFieldo][0];
+            }
+            else if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'number') {
+                return metadataStulpeliuIrFieldu[Object.keys(metadataStulpeliuIrFieldu)[aliasArbaNumerisStulpelioArbaFieldo]][0];
+            }
+        };
+
+        this.gerArFiksuojamasStulpelisDuomenuBazeje = function (aliasArbaNumerisStulpelioArbaFieldo) {
+            if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'string') {
+                return metadataStulpeliuIrFieldu[aliasArbaNumerisStulpelioArbaFieldo][1];
+            }
+            else if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'number') {
+                return metadataStulpeliuIrFieldu[Object.keys(metadataStulpeliuIrFieldu)[aliasArbaNumerisStulpelioArbaFieldo]][1];
+            }
+        };
+
+        this.kiekisStulpeliuArbaFieldu = Object.keys(metadataStulpeliuIrFieldu).length;
+
+        this.pavadinimasSvetaines = 'Lietuvos mokslo žurnalų sąrašas';
+
+        this.pristatymasSvetaines = 'Sveiki atvykę į Lietuvos mokslo žurnalų internetinę svetainę!' +
         ' Čia galite rasti visų mokslo bendruomenės žurnalų sąrašą bei sužinoti, kokiose duomenų' +
-        ' bazėse talpinamas pilnas šių žurnalų turinys.',
+        ' bazėse talpinamas pilnas šių žurnalų turinys.';
 
-    masyvasRaidziuAbecelesLietuviskos : [
-        'A', 'Ą', 'B', 'C', 'Č', 'D', 'E', 'Ę', 'Ė', 'F'
-        , 'G', 'H', 'I', 'Į', 'Y', 'J', 'K', 'L', 'M'
-        , 'N', 'O', 'P', 'R', 'S', 'Š', 'T', 'U', 'Ų', 'Ū', 'V', 'Z', 'Ž'
-    ]
+        this.masyvasRaidziuAbecelesLietuviskos = [
+            'A', 'Ą', 'B', 'C', 'Č', 'D', 'E', 'Ę', 'Ė', 'F'
+            , 'G', 'H', 'I', 'Į', 'Y', 'J', 'K', 'L', 'M'
+            , 'N', 'O', 'P', 'R', 'S', 'Š', 'T', 'U', 'Ų', 'Ū', 'V', 'Z', 'Ž'
+        ];
 
-    , pathPaiesku : '/ieskoti'
-
-    , parametrasQueryPaieskuPagalRegex : 'regex'
-    
-    , pranesimas404 : 'Ieškomas puslapis nerastas'
-
-    , pranesimasFrazePaieskosNegera : 'Įvyko klaida. Pamėginkite pakeisti paieškos frazę.'
-
-
-    , inicializuotiObjekta : function() {
-
+        this.pathIndex = '/';
+        this.pathPaiesku = '/ieskoti';
+        this.pathTrintiIrasa = '/trinti-irasa';
+        this.pathSukurtiNaujaIrasa = '/naujas-irasas';
+        this.pathPostNaujaIrasa = '/issaugoti-nauja-irasa';
+        this.parametrasQueryPaieskuPagalRegex = 'regex';
         this.pathIrQueryPaieskuPagalRegexBeReiksmesParametro = this.pathPaiesku + '?' + this.parametrasQueryPaieskuPagalRegex + '=';
+
+        this.pranesimas404 = 'Ieškomas puslapis nerastas';
+
+        this.pranesimasFrazePaieskosNegera = 'Įvyko klaida. Pamėginkite pakeisti paieškos frazę.';
 
         this.Autolinker = require( 'autolinker' );
 
-        this.kiekisStulpeliuRodomu = function () {
-            var kiekisStulpeliuRodomu = 0;
-            for (var aliasStulpelioArbaFieldo in metadataStulpeliuIrFieldu) {
-                if (this.getArRodytiStulpeliLenteleje(metadataStulpeliuIrFieldu[aliasStulpelioArbaFieldo])) {
-                    kiekisStulpeliuRodomu++;
-                }
-            }
-            return kiekisStulpeliuRodomu;
-        };
+        // this.kiekisStulpeliuRodomu = function () {
+        //     var kiekisStulpeliuRodomu = 0;
+        //     for (var aliasStulpelioArbaFieldo in metadataStulpeliuIrFieldu) {
+        //         console.log('@@@@@@@192', this.getArRodytiStulpeliLenteleje);
+        //         if (this.getArRodytiStulpeliLenteleje(metadataStulpeliuIrFieldu[aliasStulpelioArbaFieldo])) {
+        //             kiekisStulpeliuRodomu++;
+        //         }
+        //     }
+        //     return kiekisStulpeliuRodomu;
+        // }();
+
+        this.masyvasPathuPaieskosPagalAbecele = [];
+        for (var i = 0; i < this.masyvasRaidziuAbecelesLietuviskos.length; i++) {
+            this.masyvasPathuPaieskosPagalAbecele.push('/'+encodeURIComponent(this.masyvasRaidziuAbecelesLietuviskos[i]));
+        }
 
         return this;
     }

@@ -7,12 +7,14 @@ block CONTENT
     .container-fluid
       h1.col-sm-offset-5 Naujas įrašas
       br
-      form.form-horizontal.col-sm-offset-1.col-sm-8(name='naujasirasas' method='post' action='/naujasirasasposted')
-        - for (var numerisStulpelioIrFieldo = 1; numerisStulpelioIrFieldo < kiekisStulpeliuRodomu; numerisStulpelioIrFieldo++) {
+      form.form-horizontal.col-sm-offset-1.col-sm-8(name='naujasirasas' method='post' action=pathPostNaujaIrasa)
+        - for (var numerisStulpelioIrFieldo = 0; numerisStulpelioIrFieldo < kiekisStulpeliuArbaFieldu; numerisStulpelioIrFieldo++) {
           .form-group
-            label.col-sm-2.control-label(for=getPavadinimaFieldo(numerisStulpelioIrFieldo)) #{getPavadinimaStulpelio(numerisStulpelioIrFieldo)}:
-            .col-sm-10
-              textarea.form-control(type='text' id=getPavadinimaFieldo(numerisStulpelioIrFieldo) name=getPavadinimaFieldo(numerisStulpelioIrFieldo))
+            - if (getArRodytiStulpeliLenteleje(numerisStulpelioIrFieldo) && gerArFiksuojamasStulpelisDuomenuBazeje(numerisStulpelioIrFieldo)) {
+              label.col-sm-2.control-label(for=getPavadinimaFieldo(numerisStulpelioIrFieldo)) #{getPavadinimaStulpelio(numerisStulpelioIrFieldo)}
+              .col-sm-10
+                textarea.form-control(type='text' id=getPavadinimaFieldo(numerisStulpelioIrFieldo) name=getPavadinimaFieldo(numerisStulpelioIrFieldo))
+            - }
         - }
         .col-sm-offset-2
           .form-group
