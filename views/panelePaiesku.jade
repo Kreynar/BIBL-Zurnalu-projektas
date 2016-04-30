@@ -10,7 +10,7 @@
           a(href='/'): .btn.btn-default(type='button'): b Visi
           each raide in masyvasRaidziuAbecelesLietuviskos
             //a(href=pathIrQueryPaieskuPagalRegexBeReiksmesParametro+'/^\\s*'+raide+'/i')
-            a(href='/'+raide)
+            a(href='/' + '?raide=' + raide)
               .btn.btn-default(type='button')= raide
     #panelePagalFrazePaieskos.panel.panel-default
       .panel-body
@@ -18,7 +18,7 @@
           label.col-sm-3(style='font-size:20px; text-align:right;' for='textareaPaieskaPagalFraze'): b Įrašykite ieškomą tekstą:
           .col-sm-6
             textarea#textareaPaieskaPagalFraze.form-control(type='text' style='')
-          a#aPaieskaPagalFraze.btn.btn-default.col-sm-1(href=pathIrQueryPaieskuPagalRegexBeReiksmesParametro) Ieškoti
+          a#aPaieskaPagalFraze.btn.btn-default.col-sm-1(href='/'+'?fraze=') Ieškoti
 
 
 - if (typeof jQuery == 'undefined') {
@@ -34,18 +34,24 @@ script.
       var frazePaieskos = $('#textareaPaieskaPagalFraze').val();
       console.log('@@@@@@@38');
       if (frazePaieskos) {
-        //console.log('@@@@@@@40', pathIrQueryPaieskuPagalRegexBeReiksmesParametro);
         frazePaieskos = $.trim(frazePaieskos);
-        var queryRegexPaieskos = '/' + frazePaieskos + '/i';
-        var pathIrQuery = $(this).attr('href') + queryRegexPaieskos;
-        console.log('@@@@@@@41', pathIrQuery, $(this).attr('href'), queryRegexPaieskos);
-        window.location.href = pathIrQuery;
-        //      $('#aPaieskaPagalFraze').attr('href', pathIrQuery);
+        if (frazePaieskos) {
+          var pathIrQuery = $(this).attr('href') + frazePaieskos;
+          window.location.href = pathIrQuery;
+        }
+        else {
+          $('#textareaPaieskaPagalFraze').focus();
+        }
       }
       else {
         $('#textareaPaieskaPagalFraze').focus();
       }
     });
+
+    var parser = document.createElement('a');
+    parser.href = "http://example.com:3000/pathname/?search=test#hash";
+
+    console.log('@@@@@@54'+parser.protocol)
 
   });
 

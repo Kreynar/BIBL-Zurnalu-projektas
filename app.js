@@ -37,12 +37,16 @@ app.locals.getAliasStulpelioArbaFieldo = variables.getAliasStulpelioArbaFieldo;
 app.locals.kiekisStulpeliuArbaFieldu = variables.kiekisStulpeliuArbaFieldu;
 app.locals.masyvasRaidziuAbecelesLietuviskos = variables.masyvasRaidziuAbecelesLietuviskos;
 app.locals.pathIndex = variables.pathIndex;
-app.locals.pathPaiesku = variables.pathPaiesku;
-app.locals.pathTrintiIrasa = variables.pathTrintiIrasa;
-app.locals.pathSukurtiNaujaIrasa = variables.pathSukurtiNaujaIrasa;
-app.locals.pathPostNaujaIrasa = variables.pathPostNaujaIrasa;
-app.locals.pathIrQueryPaieskuPagalRegexBeReiksmesParametro = variables.pathIrQueryPaieskuPagalRegexBeReiksmesParametro;
-app.locals.parametrasQueryPaieskuPagalRegex = variables.parametrasQueryPaieskuPagalRegex;
+app.locals.pathCollectionZurnalu = variables.pathCollectionZurnalu;
+app.locals.pathZurnalasNaujas = variables.pathZurnalasNaujas;
+app.locals.pathZurnalasAnksciauSukurtas = variables.pathZurnalasAnksciauSukurtas;
+app.locals.parametrasQueryPaieskuPagalRaide = variables.parametrasQueryPaieskuPagalRaide;
+app.locals.parametrasQueryPaieskuPagalFraze = variables.parametrasQueryPaieskuPagalFraze;
+// app.locals.pathPaiesku = variables.pathPaiesku;
+// app.locals.pathTrintiIrasa = variables.pathTrintiIrasa;
+// app.locals.pathPostNaujaIrasa = variables.pathPostNaujaIrasa;
+// app.locals.pathIrQueryPaieskuPagalRegexBeReiksmesParametro = variables.pathIrQueryPaieskuPagalRegexBeReiksmesParametro;
+// app.locals.parametrasQueryPaieskuPagalRegex = variables.parametrasQueryPaieskuPagalRegex;
 
 app.locals.Autolinker = variables.Autolinker;
 

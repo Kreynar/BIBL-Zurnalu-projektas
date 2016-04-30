@@ -167,15 +167,26 @@ module.exports = ({
             'A', 'Ą', 'B', 'C', 'Č', 'D', 'E', 'Ę', 'Ė', 'F'
             , 'G', 'H', 'I', 'Į', 'Y', 'J', 'K', 'L', 'M'
             , 'N', 'O', 'P', 'R', 'S', 'Š', 'T', 'U', 'Ų', 'Ū', 'V', 'Z', 'Ž'
+            // , 'a', 'ą', 'b', 'c', 'č', 'd', 'e', 'ę', 'ė', 'f'
+            // , 'g', 'h', 'i', 'į', 'y', 'j', 'k', 'l', 'm'
+            // , 'n', 'o', 'p', 'r', 's', 'š', 't', 'u', 'ų', 'ū', 'v', 'z', 'ž'
         ];
 
+        // this.masyvasRaidziuAbecelesLietuviskos
+
         this.pathIndex = '/';
-        this.pathPaiesku = '/ieskoti';
-        this.pathTrintiIrasa = '/trinti-irasa';
-        this.pathSukurtiNaujaIrasa = '/naujas-irasas';
-        this.pathPostNaujaIrasa = '/issaugoti-nauja-irasa';
-        this.parametrasQueryPaieskuPagalRegex = 'regex';
-        this.pathIrQueryPaieskuPagalRegexBeReiksmesParametro = this.pathPaiesku + '?' + this.parametrasQueryPaieskuPagalRegex + '=';
+        // this.pathPaiesku = '/ieskoti';
+        // this.pathPaiesku = '/';
+        this.pathCollectionZurnalu = '/';
+        // this.pathTrintiIrasa = '/trinti-irasa';
+        // this.pathTrintiIrasa = '/';
+        this.pathZurnalasNaujas = '/naujas';
+        this.pathZurnalasAnksciauSukurtas = '/:id';
+        this.parametrasQueryPaieskuPagalRaide = 'raide';
+        this.parametrasQueryPaieskuPagalFraze = 'fraze'; 
+        // this.pathPostNaujaIrasa = '/naujas';
+        // this.parametrasQueryPaieskuPagalRegex = 'regex';
+        // this.pathIrQueryPaieskuPagalRegexBeReiksmesParametro = this.pathPaiesku + '?' + this.parametrasQueryPaieskuPagalRegex + '=';
 
         this.pranesimas404 = 'Ieškomas puslapis nerastas';
 
@@ -194,10 +205,10 @@ module.exports = ({
         //     return kiekisStulpeliuRodomu;
         // }();
 
-        this.masyvasPathuPaieskosPagalAbecele = [];
-        for (var i = 0; i < this.masyvasRaidziuAbecelesLietuviskos.length; i++) {
-            this.masyvasPathuPaieskosPagalAbecele.push('/'+encodeURIComponent(this.masyvasRaidziuAbecelesLietuviskos[i]));
-        }
+        // this.masyvasPathuPaieskosPagalAbecele = [];
+        // for (var i = 0; i < this.masyvasRaidziuAbecelesLietuviskos.length; i++) {
+        //     this.masyvasPathuPaieskosPagalAbecele.push('/'+encodeURIComponent(this.masyvasRaidziuAbecelesLietuviskos[i]));
+        // }
 
         return this;
     }
