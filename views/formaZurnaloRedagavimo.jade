@@ -5,7 +5,7 @@ extends main_layout.jade
 block CONTENT
   #paneleNaujoIraso.panel.panel-default(style='padding:10px')
     .container-fluid
-      h1.col-sm-offset-5 Naujas įrašas
+      h1.col-sm-offset-5= headeris
       br
       form.form-horizontal.col-sm-offset-1.col-sm-8(name='naujasirasas' method='post' action=pathPostNaujaIrasa)
         - for (var numerisStulpelioIrFieldo = 0; numerisStulpelioIrFieldo < kiekisStulpeliuArbaFieldu; numerisStulpelioIrFieldo++) {
@@ -14,6 +14,7 @@ block CONTENT
               label.col-sm-2.control-label(for=getPavadinimaFieldo(numerisStulpelioIrFieldo)) #{getPavadinimaStulpelio(numerisStulpelioIrFieldo)}
               .col-sm-10
                 textarea.form-control(type='text' id=getPavadinimaFieldo(numerisStulpelioIrFieldo) name=getPavadinimaFieldo(numerisStulpelioIrFieldo))
+                  #{(documentZurnalo[getPavadinimaFieldo(numerisStulpelioIrFieldo)] ? documentZurnalo[getPavadinimaFieldo(numerisStulpelioIrFieldo)] : '')}
             - }
         - }
         .col-sm-offset-2
@@ -22,6 +23,7 @@ block CONTENT
               button(type='submit').btn.btn-success.form-control Įrašyti
             .col-sm-6
               a(href='/').btn.btn-default.form-control Atsisakyti
+
 
 
 

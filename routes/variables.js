@@ -172,43 +172,19 @@ module.exports = ({
             // , 'n', 'o', 'p', 'r', 's', 'š', 't', 'u', 'ų', 'ū', 'v', 'z', 'ž'
         ];
 
-        // this.masyvasRaidziuAbecelesLietuviskos
-
         this.pathIndex = '/';
-        // this.pathPaiesku = '/ieskoti';
-        // this.pathPaiesku = '/';
         this.pathCollectionZurnalu = '/';
-        // this.pathTrintiIrasa = '/trinti-irasa';
-        // this.pathTrintiIrasa = '/';
         this.pathZurnalasNaujas = '/naujas';
         this.pathZurnalasAnksciauSukurtas = '/:id';
         this.parametrasQueryPaieskuPagalRaide = 'raide';
         this.parametrasQueryPaieskuPagalFraze = 'fraze'; 
-        // this.pathPostNaujaIrasa = '/naujas';
-        // this.parametrasQueryPaieskuPagalRegex = 'regex';
-        // this.pathIrQueryPaieskuPagalRegexBeReiksmesParametro = this.pathPaiesku + '?' + this.parametrasQueryPaieskuPagalRegex + '=';
-
         this.pranesimas404 = 'Ieškomas puslapis nerastas';
 
         this.pranesimasFrazePaieskosNegera = 'Įvyko klaida. Pamėginkite pakeisti paieškos frazę.';
 
         this.Autolinker = require( 'autolinker' );
 
-        // this.kiekisStulpeliuRodomu = function () {
-        //     var kiekisStulpeliuRodomu = 0;
-        //     for (var aliasStulpelioArbaFieldo in metadataStulpeliuIrFieldu) {
-        //         console.log('@@@@@@@192', this.getArRodytiStulpeliLenteleje);
-        //         if (this.getArRodytiStulpeliLenteleje(metadataStulpeliuIrFieldu[aliasStulpelioArbaFieldo])) {
-        //             kiekisStulpeliuRodomu++;
-        //         }
-        //     }
-        //     return kiekisStulpeliuRodomu;
-        // }();
-
-        // this.masyvasPathuPaieskosPagalAbecele = [];
-        // for (var i = 0; i < this.masyvasRaidziuAbecelesLietuviskos.length; i++) {
-        //     this.masyvasPathuPaieskosPagalAbecele.push('/'+encodeURIComponent(this.masyvasRaidziuAbecelesLietuviskos[i]));
-        // }
+        this.$salygaPaieskosTikNeistrintuIrasu = { '$or' : [ { 'aristrintas':{'$exists':false} }, { 'aristrintas':{'$ne':true} } ] };
 
         return this;
     }

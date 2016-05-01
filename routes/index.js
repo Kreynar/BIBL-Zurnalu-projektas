@@ -16,11 +16,7 @@ var trintiDocumentsZurnalu = function(req, res, next) {
     else {
       var collectionZurnalai = db.collection('zurnalai');
       var masyvasIdDocumentuPazymetu = req.body.masyvasIdDocumentuPazymetu;
-      console.log('@@@@@@@19' + req);
-      console.log('@@@@@@@20' + masyvasIdDocumentuPazymetu);
-      console.log('@@@@@@@21' + masyvasIdDocumentuPazymetu[0]);
       masyvasIdDocumentuPazymetu = JSON.parse(masyvasIdDocumentuPazymetu);
-      console.log('@@@@@@@23' + masyvasIdDocumentuPazymetu[0]);
       for (var i = 0;  i < masyvasIdDocumentuPazymetu.length; i++) {
         masyvasIdDocumentuPazymetu[i] = new mongodb.ObjectId(masyvasIdDocumentuPazymetu[i]);
       }
@@ -41,7 +37,6 @@ var trintiDocumentsZurnalu = function(req, res, next) {
             next(err);
           }
           else {
-            console.log('@@@@@@@@39');
             // next();
             res.send({ 'statusas' : 'ok' });
             db.close();
@@ -52,16 +47,10 @@ var trintiDocumentsZurnalu = function(req, res, next) {
   });
 };
 
-var getZurnalusIsDbIrUzpildytiLentele = function(req, res, next) {
-  var objektasQuery = {};
-  var $salygaPaieskosTikNeistrintuIrasu = { $or : [ { aristrintas:{$exists:false} }, { aristrintas:{$ne:true} } ] };
+var getObjektaQueryPagalRaideArbaFraze = function(req, res, next, id) {
   var $salygaPaieskosPagalRaideArbaFraze = {};
-  // var $salygaPaieskosPagalRaidePirmaPavadinimo = {};
-  // var $salygaPaieskosPagalFraze = {};
-  var MongoClient = mongodb.MongoClient;
   var regExp = null;
-  var objektasSort = {'pavadinimas1':1};
-  console.log('@@@@@@@@64');
+  var objektasQuery = {};
   try {
     if (!req.query.raide && !req.query.fraze) {
 
@@ -84,30 +73,65 @@ var getZurnalusIsDbIrUzpildytiLentele = function(req, res, next) {
         ]
       };
     }
-    objektasQuery = { '$and' : [$salygaPaieskosTikNeistrintuIrasu, $salygaPaieskosPagalRaideArbaFraze] };
-    console.log('@@@@@@@@88' + JSON.stringify(objektasQuery, null, 4));
+    objektasQuery = { '$and' : [variables.$salygaPaieskosTikNeistrintuIrasu, $salygaPaieskosPagalRaideArbaFraze] };
+    return objektasQuery;
   }
   catch (err) {
     console.log(err);
     next(err);
   }
+};
+
+var getObjektaQueryPagalId = function(idZurnalo) {
+  var objektasQuery;
+  var $salygaPaieskosPagalId = { '_id' : idZurnalo };
+  objektasQuery = { '$and' : [variables.$salygaPaieskosTikNeistrintuIrasu, $salygaPaieskosPagalId] };
+  return objektasQuery;
+}
+
+var getZurnalusIsDbIrAtvaizduotiPuslapyje = function(req, res, next) {
+  var MongoClient = mongodb.MongoClient;
+  var objektasQuery = {};
+  var objektasSort = {'pavadinimas1':1};
+  var puslapisRenderinamas = '';
+  var objektasKintamuju = {};
+  var idZurnalo = req.params.id || '';
+  // >>>>>>>>>>>
+  if (idZurnalo) {
+    objektasQuery = getObjektaQueryPagalRaideArbaFraze(req, res, next);
+  }
+  else {
+    objektasQuery = getObjektaQueryPagalId(idZurnalo);
+  }
+  // <<<<<<<<<<<<<
   MongoClient.connect(variables.urlOfDatabase, function(err, db) {
     if (err) {
       console.log(err);
       next(err);
     }
     else {
-      console.log('@@@@@@147');//^\s*A
       var collectionZurnalai = db.collection('zurnalai');
       collectionZurnalai.find(objektasQuery).sort(objektasSort).toArray(function(err, masyvasZurnalu) {
         if (err) {
           console.log(err);
           next(err);
         }
-        console.log('@@@@@@@@103', masyvasZurnalu, JSON.stringify(masyvasZurnalu, null, 4));
-        res.render('index', {
-          masyvasDocumentuZurnalu: masyvasZurnalu
-        });
+        else if (idZurnalo && !masyvasZurnalu) { 
+          var err = new Error(variables.pranesimas404);
+          err.status = 404;
+          next(err);
+        }
+        // >>>>>>>>>>>
+        if (idZurnalo) {
+          puslapisRenderinamas = 'formaZurnaloRedagavimo';
+          objektasKintamuju = { 'headeris' : 'Įrašo keitimas', 'documentZurnalo': masyvasZurnalu[0] };
+        }
+        else {
+          puslapisRenderinamas = 'index';
+          objektasKintamuju = { 'masyvasDocumentuZurnalu': masyvasZurnalu };
+        }
+        res.render(puslapisRenderinamas, objektasKintamuju);
+        // <<<<<<<<<<<
         db.close(function() {
           console.log('Tiketina, kad ivykdyta db.close()')
         });
@@ -124,7 +148,6 @@ var postNaujaIrasa = function(req, res) {
     }
     else {
       var documentNaujoZurnalo = {};
-      console.log('118@@@@@@', req.body.pavadinimas1, '@@@@@@@@118');
       for (var numerisFieldoArbaStulpelio = 0; numerisFieldoArbaStulpelio < variables.kiekisStulpeliuArbaFieldu; numerisFieldoArbaStulpelio++) {
         if (variables.gerArFiksuojamasStulpelisDuomenuBazeje(numerisFieldoArbaStulpelio)
             && variables.getAliasStulpelioArbaFieldo(numerisFieldoArbaStulpelio) != 'id'
@@ -133,7 +156,6 @@ var postNaujaIrasa = function(req, res) {
               = ( req.body[variables.getPavadinimaFieldo(numerisFieldoArbaStulpelio)] ).trim();
         }
       }
-      console.log('121@@@@@@', documentNaujoZurnalo, '@@@@@@@@121');
       var collectionZurnalai = db.collection('zurnalai');
       collectionZurnalai.insert([documentNaujoZurnalo], function(err, result) {
         if (err) {
@@ -149,13 +171,16 @@ var postNaujaIrasa = function(req, res) {
 };
 
 
-router.get(variables.pathCollectionZurnalu, getZurnalusIsDbIrUzpildytiLentele);
+router.get(variables.pathCollectionZurnalu, getZurnalusIsDbIrAtvaizduotiPuslapyje);
 
 router.delete(variables.pathCollectionZurnalu, trintiDocumentsZurnalu);
 
-router.get([variables.pathZurnalasNaujas, variables.pathZurnalasAnksciauSukurtas], function(req, res) {
-  res.render('formaZurnaloRedagavimo');
+router.get(variables.pathZurnalasNaujas, function(req, res) {
+  res.render('formaZurnaloRedagavimo', { 'headeris' : 'Naujas įrašas' } );
 });
+
+/* Sitas route handleris kode turi but apacioje nuo visu kitu '/<stringKonstanta>'! */
+router.get('/:id', getZurnalusIsDbIrAtvaizduotiPuslapyje);
 
 router.post([variables.pathZurnalasNaujas, variables.pathZurnalasAnksciauSukurtas], function(req, res) {
 

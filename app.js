@@ -25,7 +25,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-// app.locals.pavadinimasSvetaines = 'Lietuvos mokslo žurnalų sąrašas';
 app.locals.pavadinimasSvetaines = variables.pavadinimasSvetaines;
 app.locals.pristatymasSvetaines = variables.pristatymasSvetaines;
 app.locals.getPavadinimaStulpelio = variables.getPavadinimaStulpelio;
@@ -33,7 +32,6 @@ app.locals.getPavadinimaFieldo = variables.getPavadinimaFieldo;
 app.locals.getArRodytiStulpeliLenteleje = variables.getArRodytiStulpeliLenteleje;
 app.locals.gerArFiksuojamasStulpelisDuomenuBazeje = variables.gerArFiksuojamasStulpelisDuomenuBazeje;
 app.locals.getAliasStulpelioArbaFieldo = variables.getAliasStulpelioArbaFieldo;
-// app.locals.kiekisStulpeliuRodomu = variables.kiekisStulpeliuRodomu;
 app.locals.kiekisStulpeliuArbaFieldu = variables.kiekisStulpeliuArbaFieldu;
 app.locals.masyvasRaidziuAbecelesLietuviskos = variables.masyvasRaidziuAbecelesLietuviskos;
 app.locals.pathIndex = variables.pathIndex;
@@ -42,13 +40,8 @@ app.locals.pathZurnalasNaujas = variables.pathZurnalasNaujas;
 app.locals.pathZurnalasAnksciauSukurtas = variables.pathZurnalasAnksciauSukurtas;
 app.locals.parametrasQueryPaieskuPagalRaide = variables.parametrasQueryPaieskuPagalRaide;
 app.locals.parametrasQueryPaieskuPagalFraze = variables.parametrasQueryPaieskuPagalFraze;
-// app.locals.pathPaiesku = variables.pathPaiesku;
-// app.locals.pathTrintiIrasa = variables.pathTrintiIrasa;
-// app.locals.pathPostNaujaIrasa = variables.pathPostNaujaIrasa;
-// app.locals.pathIrQueryPaieskuPagalRegexBeReiksmesParametro = variables.pathIrQueryPaieskuPagalRegexBeReiksmesParametro;
-// app.locals.parametrasQueryPaieskuPagalRegex = variables.parametrasQueryPaieskuPagalRegex;
-
 app.locals.Autolinker = variables.Autolinker;
+app.locals.$salygaPaieskosTikNeistrintuIrasu = variables.$salygaPaieskosTikNeistrintuIrasu;
 
 
 
