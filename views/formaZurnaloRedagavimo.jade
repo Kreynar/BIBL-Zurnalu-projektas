@@ -13,8 +13,13 @@ block CONTENT
             - if (getArRodytiStulpeliLenteleje(numerisStulpelioIrFieldo) && gerArFiksuojamasStulpelisDuomenuBazeje(numerisStulpelioIrFieldo)) {
               label.col-sm-2.control-label(for=getPavadinimaFieldo(numerisStulpelioIrFieldo)) #{getPavadinimaStulpelio(numerisStulpelioIrFieldo)}
               .col-sm-10
-                textarea.form-control(type='text' id=getPavadinimaFieldo(numerisStulpelioIrFieldo) name=getPavadinimaFieldo(numerisStulpelioIrFieldo))
-                  #{(documentZurnalo[getPavadinimaFieldo(numerisStulpelioIrFieldo)] ? documentZurnalo[getPavadinimaFieldo(numerisStulpelioIrFieldo)] : '')}
+                -if (documentZurnalo) {
+                  textarea.form-control(type='text' id=getPavadinimaFieldo(numerisStulpelioIrFieldo) name=getPavadinimaFieldo(numerisStulpelioIrFieldo)).
+                    #{(documentZurnalo[getPavadinimaFieldo(numerisStulpelioIrFieldo)] ? documentZurnalo[getPavadinimaFieldo(numerisStulpelioIrFieldo)] : '')}
+                -}
+                -else {
+                  textarea.form-control(type='text' id=getPavadinimaFieldo(numerisStulpelioIrFieldo) name=getPavadinimaFieldo(numerisStulpelioIrFieldo))
+                -}
             - }
         - }
         .col-sm-offset-2
@@ -23,6 +28,14 @@ block CONTENT
               button(type='submit').btn.btn-success.form-control Įrašyti
             .col-sm-6
               a(href='/').btn.btn-default.form-control Atsisakyti
+
+//- if (typeof jQuery == 'undefined') {
+//  script(type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
+//- }
+//script.
+//  $(document).ready(function(){
+//    console.log(documentZurnalo);
+//  });
 
 
 

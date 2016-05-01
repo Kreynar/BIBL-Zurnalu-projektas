@@ -84,10 +84,10 @@ var getObjektaQueryPagalRaideArbaFraze = function(req, res, next, id) {
 
 var getObjektaQueryPagalId = function(idZurnalo) {
   var objektasQuery;
-  var $salygaPaieskosPagalId = { '_id' : idZurnalo };
+  var $salygaPaieskosPagalId = { '_id' : new mongodb.ObjectId(idZurnalo) };
   objektasQuery = { '$and' : [variables.$salygaPaieskosTikNeistrintuIrasu, $salygaPaieskosPagalId] };
   return objektasQuery;
-}
+};
 
 var getZurnalusIsDbIrAtvaizduotiPuslapyje = function(req, res, next) {
   var MongoClient = mongodb.MongoClient;
@@ -98,10 +98,17 @@ var getZurnalusIsDbIrAtvaizduotiPuslapyje = function(req, res, next) {
   var idZurnalo = req.params.id || '';
   // >>>>>>>>>>>
   if (idZurnalo) {
-    objektasQuery = getObjektaQueryPagalRaideArbaFraze(req, res, next);
+    try {
+      objektasQuery = getObjektaQueryPagalId(idZurnalo);
+    }
+    catch (err) {
+      var err = new Error(variables.pranesimas404);
+      err.status = 404;
+      next(err);
+    }
   }
   else {
-    objektasQuery = getObjektaQueryPagalId(idZurnalo);
+    objektasQuery = getObjektaQueryPagalRaideArbaFraze(req, res, next);
   }
   // <<<<<<<<<<<<<
   MongoClient.connect(variables.urlOfDatabase, function(err, db) {
@@ -110,21 +117,27 @@ var getZurnalusIsDbIrAtvaizduotiPuslapyje = function(req, res, next) {
       next(err);
     }
     else {
+      console.log(JSON.stringify(objektasQuery, null, 2));
       var collectionZurnalai = db.collection('zurnalai');
+      console.log(JSON.stringify(objektasQuery, null, 4));
       collectionZurnalai.find(objektasQuery).sort(objektasSort).toArray(function(err, masyvasZurnalu) {
         if (err) {
           console.log(err);
           next(err);
         }
-        else if (idZurnalo && !masyvasZurnalu) { 
-          var err = new Error(variables.pranesimas404);
-          err.status = 404;
-          next(err);
-        }
-        // >>>>>>>>>>>
-        if (idZurnalo) {
+        else if (idZurnalo) {
+          if (!masyvasZurnalu) {
+            var err = new Error(variables.pranesimas404);
+            err.status = 404;
+            next(err);
+          }
+          else if (masyvasZurnalu.length == 0) {
+            var err = new Error(variables.pranesimas404);
+            err.status = 404;
+            next(err);
+          }
           puslapisRenderinamas = 'formaZurnaloRedagavimo';
-          objektasKintamuju = { 'headeris' : 'Įrašo keitimas', 'documentZurnalo': masyvasZurnalu[0] };
+          objektasKintamuju = {'headeris': 'Įrašo keitimas', 'documentZurnalo': masyvasZurnalu[0]};
         }
         else {
           puslapisRenderinamas = 'index';
@@ -140,11 +153,14 @@ var getZurnalusIsDbIrAtvaizduotiPuslapyje = function(req, res, next) {
   });
 };
 
-var postNaujaIrasa = function(req, res) {
+var sukurtiNaujaArbaPakeistiSenaIrasa = function(req, res, next) {
   var MongoClient = mongodb.MongoClient;
+  var objektasQuery = {};
+  var objektasUpdate = {};
   MongoClient.connect(variables.urlOfDatabase, function(err, db) {
     if (err) {
       console.log(err);
+      next(err);
     }
     else {
       var documentNaujoZurnalo = {};
@@ -157,15 +173,38 @@ var postNaujaIrasa = function(req, res) {
         }
       }
       var collectionZurnalai = db.collection('zurnalai');
-      collectionZurnalai.insert([documentNaujoZurnalo], function(err, result) {
-        if (err) {
-          console.log(err);
+      if (req.params.id) {
+        try {
+          objektasQuery = getObjektaQueryPagalId(req.params.id);
+          objektasUpdate = { '$set' : documentNaujoZurnalo };
+          collectionZurnalai.updateOne(objektasQuery, objektasUpdate, {'upsert' : false},  function(err, result) {
+            if (err) {
+              console.log(err);
+              next(err);
+            }
+            else {
+              res.redirect(variables.pathCollectionZurnalu);
+            }
+          });
         }
-        else {
-          res.redirect('/');
+        catch (err) {
+          var err = new Error(variables.pranesimas404);
+          err.status = 404;
+          next(err);
         }
-        db.close();
-      });
+      }
+      else {
+        collectionZurnalai.insertOne(documentNaujoZurnalo, function(err, result) {
+          db.close();
+          if (err) {
+            console.log(err);
+            next(err);
+          }
+          else {
+            res.redirect(variables.pathCollectionZurnalu);
+          }
+        });
+      }
     }
   });
 };
@@ -180,14 +219,11 @@ router.get(variables.pathZurnalasNaujas, function(req, res) {
 });
 
 /* Sitas route handleris kode turi but apacioje nuo visu kitu '/<stringKonstanta>'! */
-router.get('/:id', getZurnalusIsDbIrAtvaizduotiPuslapyje);
+router.get(variables.pathZurnalasAnksciauSukurtas, getZurnalusIsDbIrAtvaizduotiPuslapyje);
 
-router.post([variables.pathZurnalasNaujas, variables.pathZurnalasAnksciauSukurtas], function(req, res) {
+router.post(variables.pathZurnalasNaujas, sukurtiNaujaArbaPakeistiSenaIrasa);
 
-  postNaujaIrasa;
-  postKeitimaZurnalo;
-
-});
+router.post(variables.pathZurnalasAnksciauSukurtas, sukurtiNaujaArbaPakeistiSenaIrasa);
 
 
 

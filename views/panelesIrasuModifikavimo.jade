@@ -62,6 +62,9 @@ script.
         objektasUrlIrasoKeitimo.pathname = '/' + masyvasIdDocumentuPazymetu[0];
         window.location.href = objektasUrlIrasoKeitimo.href;
       }
+      else {
+        alert('Vienu metu galite keisti tik 1 įrašą!');
+      }
     });
 
     $('#mygtukasTrinti').click(function () {
