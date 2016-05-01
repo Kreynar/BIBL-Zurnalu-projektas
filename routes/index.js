@@ -78,6 +78,7 @@ var getObjektaQueryPagalRaideArbaFraze = function(req, res, next, id) {
   }
   catch (err) {
     console.log(err);
+    err = new Error(variables.pranesimasFrazePaieskosNegera);
     next(err);
   }
 };

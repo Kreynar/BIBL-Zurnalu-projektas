@@ -1,9 +1,9 @@
 // Created by Martynas on 4/9/2016.
 
 
-#panelePaiesku.panel.panel-default(style='padding:10px')
+#panelePaiesku.panel.panel-default(style='padding:10px; margin-bottom:0;')
   .container-fluid
-    #panelePagalAbecelePaieskos.panel.panel-defaul
+    #panelePagalAbecelePaieskos.panel.panel-defaul(style='margin-bottom:0')
       .panel-body(align='center')
         span(style='font-size:20px; margin-right:20px'): b Pasirinkite:
         .btn-group(role='group' aria-label='grupeMygtukuPagalAbecelePaieskos')
@@ -12,7 +12,7 @@
             //a(href=pathIrQueryPaieskuPagalRegexBeReiksmesParametro+'/^\\s*'+raide+'/i')
             a(href='/' + '?raide=' + raide)
               .btn.btn-default(type='button')= raide
-    #panelePagalFrazePaieskos.panel.panel-default
+    #panelePagalFrazePaieskos.panel.panel-default(style='margin-bottom:0')
       .panel-body
         .row
           label.col-sm-3(style='font-size:20px; text-align:right;' for='textareaPaieskaPagalFraze'): b Įrašykite ieškomą tekstą:
@@ -29,14 +29,13 @@ script.
   $(document).ready(function(){
     console.log('@@@@@@@33');
 
-    $('#aPaieskaPagalFraze').click(function (event) {
-      event.preventDefault();
+    var ieskotiPagalFraze = function() {
       var frazePaieskos = $('#textareaPaieskaPagalFraze').val();
       console.log('@@@@@@@38');
       if (frazePaieskos) {
         frazePaieskos = $.trim(frazePaieskos);
         if (frazePaieskos) {
-          var pathIrQuery = $(this).attr('href') + frazePaieskos;
+          var pathIrQuery = $('#aPaieskaPagalFraze').attr('href') + frazePaieskos;
           window.location.href = pathIrQuery;
         }
         else {
@@ -45,6 +44,18 @@ script.
       }
       else {
         $('#textareaPaieskaPagalFraze').focus();
+      }
+    };
+
+    $('#aPaieskaPagalFraze').click(function (event) {
+      event.preventDefault();
+      ieskotiPagalFraze();
+    });
+
+    $("#textareaPaieskaPagalFraze").keypress(function (event) {
+      if ((event.keyCode || event.which) == 13) { //Enter keycode
+        event.preventDefault();
+        ieskotiPagalFraze();
       }
     });
 
