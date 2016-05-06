@@ -2,7 +2,7 @@
  * Created by Martynas on 4/11/2016.
  */
 
-var app = require('../app');
+var app = require('app');
 
 
 /*
@@ -173,13 +173,22 @@ module.exports = ({
         ];
 
         this.pathIndex = '/';
-        this.pathCollectionZurnalu = '/';
-        this.pathZurnalasNaujas = '/naujas';
-        this.pathZurnalasAnksciauSukurtas = '/:id';
+        this.pathZurnalai = '/zurnalai';
+        this.pathZurnalasNaujas = this.pathZurnalai + '/naujas';
+        this.pathZurnalasAnksciauSukurtas = this.pathZurnalai + '/:id';
         this.parametrasQueryPaieskuPagalRaide = 'raide';
-        this.parametrasQueryPaieskuPagalFraze = 'fraze'; 
-        this.pranesimas404 = 'Ieškomas puslapis nerastas';
+        this.parametrasQueryPaieskuPagalFraze = 'fraze';
 
+        this.pathLeidejai = '/leidejai';
+        this.pathLeidejasNaujas = this.pathLeidejai + '/naujas';
+        this.pathLeidejasAnksciauSukurtas = this.pathLeidejai + '/:id';
+
+        this.pathDuomenuBazes = '/duomenu-bazes';
+        this.pathDuomenuBazeNauja = this.pathDuomenuBazes + '/naujas';
+        this.pathDuomenuBazeAnksciauSukurta = this.pathDuomenuBazes + '/:id';
+
+
+        this.pranesimas404 = 'Ieškomas puslapis nerastas';
         this.pranesimasFrazePaieskosNegera = 'Įvyko klaida. Pamėginkite pakeisti paieškos frazę.';
 
         this.Autolinker = require( 'autolinker' );

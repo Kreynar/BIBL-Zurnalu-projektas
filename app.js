@@ -5,10 +5,12 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
+var routesZurnalai = require('./routes/zurnalai');
+var routesLeidejai = require('./routes/leidejai');
+var routesDuomenuBazes = require('./routes/duomenuBazes');
+// var users = require('./routes/users');
 
-var variables = require('./routes/variables.js');
+var variables = require('./variables.js');
 
 var app = express();
 
@@ -35,18 +37,34 @@ app.locals.getAliasStulpelioArbaFieldo = variables.getAliasStulpelioArbaFieldo;
 app.locals.kiekisStulpeliuArbaFieldu = variables.kiekisStulpeliuArbaFieldu;
 app.locals.masyvasRaidziuAbecelesLietuviskos = variables.masyvasRaidziuAbecelesLietuviskos;
 app.locals.pathIndex = variables.pathIndex;
-app.locals.pathCollectionZurnalu = variables.pathCollectionZurnalu;
+app.locals.pathZurnalai = variables.pathZurnalai;
 app.locals.pathZurnalasNaujas = variables.pathZurnalasNaujas;
 app.locals.pathZurnalasAnksciauSukurtas = variables.pathZurnalasAnksciauSukurtas;
 app.locals.parametrasQueryPaieskuPagalRaide = variables.parametrasQueryPaieskuPagalRaide;
 app.locals.parametrasQueryPaieskuPagalFraze = variables.parametrasQueryPaieskuPagalFraze;
+app.locals.pathLeidejai = variables.pathLeidejai;
+app.locals.pathLeidejasNaujas = variables.pathLeidejasNaujas;
+app.locals.pathLeidejasAnksciauSukurtas = variables.pathLeidejasAnksciauSukurtas;
+app.locals.pathDuomenuBazes = variables.pathDuomenuBazes;
+app.locals.pathDuomenuBazeNauja = variables.pathDuomenuBazeNauja;
+app.locals.pathDuomenuBazeAnksciauSukurta = variables.pathDuomenuBazeAnksciauSukurta;
 app.locals.Autolinker = variables.Autolinker;
 app.locals.$salygaPaieskosTikNeistrintuIrasu = variables.$salygaPaieskosTikNeistrintuIrasu;
 
 
 
 
-app.use('/', routes);
+
+app.use(variables.pathZurnalai, routesZurnalai);
+app.use(variables.pathDuomenuBazes, routesDuomenuBazes);
+app.use(variables.pathLeidejai, routesLeidejai);
+
+/*
+Sitas v app.use(pathIndex,...) turi kode eiti butinai po visu kitu app.use()!
+ */
+app.use(variables.pathIndex, routesZurnalai);
+
+
 // app.use('/users', users);
 
 // catch 404 and forward to error handler

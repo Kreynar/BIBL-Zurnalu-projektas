@@ -1,9 +1,7 @@
 var express = require('express');
 var router = express.Router();
-
 var mongodb = require('mongodb');
-
-var variables = require('../routes/variables.js');
+var variables = require('../variables.js');
 
 
 
@@ -184,7 +182,7 @@ var sukurtiNaujaArbaPakeistiSenaIrasa = function(req, res, next) {
               next(err);
             }
             else {
-              res.redirect(variables.pathCollectionZurnalu);
+              res.redirect(variables.pathZurnalai);
             }
           });
         }
@@ -202,7 +200,7 @@ var sukurtiNaujaArbaPakeistiSenaIrasa = function(req, res, next) {
             next(err);
           }
           else {
-            res.redirect(variables.pathCollectionZurnalu);
+            res.redirect(variables.pathZurnalai);
           }
         });
       }
@@ -211,9 +209,13 @@ var sukurtiNaujaArbaPakeistiSenaIrasa = function(req, res, next) {
 };
 
 
-router.get(variables.pathCollectionZurnalu, getZurnalusIsDbIrAtvaizduotiPuslapyje);
+router.get(variables.pathIndex, function(req, res, next) {
+  res.redirect(variables.pathZurnalai);
+});
 
-router.delete(variables.pathCollectionZurnalu, trintiDocumentsZurnalu);
+router.get(variables.pathZurnalai, getZurnalusIsDbIrAtvaizduotiPuslapyje);
+
+router.delete(variables.pathZurnalai, trintiDocumentsZurnalu);
 
 router.get(variables.pathZurnalasNaujas, function(req, res) {
   res.render('formaZurnaloRedagavimo', { 'headeris' : 'Naujas įrašas' } );
@@ -225,6 +227,8 @@ router.get(variables.pathZurnalasAnksciauSukurtas, getZurnalusIsDbIrAtvaizduotiP
 router.post(variables.pathZurnalasNaujas, sukurtiNaujaArbaPakeistiSenaIrasa);
 
 router.post(variables.pathZurnalasAnksciauSukurtas, sukurtiNaujaArbaPakeistiSenaIrasa);
+
+
 
 
 
