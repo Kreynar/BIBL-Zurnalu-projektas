@@ -54,15 +54,23 @@ app.locals.$salygaPaieskosTikNeistrintuIrasu = variables.$salygaPaieskosTikNeist
 
 
 
+app.use(variables.pathIndex, function(req, res, next) {
 
+  /*
+  Patikrina, ar HTTP request path'o tik pradzia lygi variables.pathIndex, ar visas request path'as lygus variables.pathIndex.
+   */
+  if (req.path == variables.pathIndex) {
+    res.redirect(variables.pathZurnalai);
+  }
+  else {
+    next();
+  }
+});
 app.use(variables.pathZurnalai, routesZurnalai);
 app.use(variables.pathDuomenuBazes, routesDuomenuBazes);
 app.use(variables.pathLeidejai, routesLeidejai);
 
-/*
-Sitas v app.use(pathIndex,...) turi kode eiti butinai po visu kitu app.use()!
- */
-app.use(variables.pathIndex, routesZurnalai);
+
 
 
 // app.use('/users', users);
