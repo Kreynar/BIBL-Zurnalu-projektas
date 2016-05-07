@@ -11,7 +11,7 @@ var app = require('app');
  lenteleje)!!!!!!!!!!!!!!!!!!!!
  */
 
-var metadataStulpeliuIrFieldu = {
+var metadataZurnalu = {
 
     /*
     <aliasStulpelioArbaFieldo>     <arRodytLentelej> <arFiksuojamaDb> <pavadinimasStulpelio> <pavadinimasFieldo>
@@ -65,19 +65,19 @@ module.exports = ({
 
         this.getPavadinimaStulpelio = function (aliasArbaNumerisStulpelioArbaFieldo) {
             if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'string') {
-                return metadataStulpeliuIrFieldu[aliasArbaNumerisStulpelioArbaFieldo][2];
+                return metadataZurnalu[aliasArbaNumerisStulpelioArbaFieldo][2];
             }
             else if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'number') {
-                return metadataStulpeliuIrFieldu[Object.keys(metadataStulpeliuIrFieldu)[aliasArbaNumerisStulpelioArbaFieldo]][2];
+                return metadataZurnalu[Object.keys(metadataZurnalu)[aliasArbaNumerisStulpelioArbaFieldo]][2];
             }
         };
 
         this.getPavadinimaFieldo = function (aliasArbaNumerisStulpelioArbaFieldo) {
             if (typeof aliasArbaNumerisStulpelioArbaFieldo === 'string') {
-                return metadataStulpeliuIrFieldu[aliasArbaNumerisStulpelioArbaFieldo][3];
+                return metadataZurnalu[aliasArbaNumerisStulpelioArbaFieldo][3];
             }
             else if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'number') {
-                return metadataStulpeliuIrFieldu[Object.keys(metadataStulpeliuIrFieldu)[aliasArbaNumerisStulpelioArbaFieldo]][3];
+                return metadataZurnalu[Object.keys(metadataZurnalu)[aliasArbaNumerisStulpelioArbaFieldo]][3];
             }
             else {
 
@@ -85,46 +85,70 @@ module.exports = ({
         };
 
         this.getAliasStulpelioArbaFieldo = function (numerisStulpelioArbaFieldo) {
-            return Object.keys(metadataStulpeliuIrFieldu)[numerisStulpelioArbaFieldo];
+            return Object.keys(metadataZurnalu)[numerisStulpelioArbaFieldo];
         };
 
-        this.getArRodytiStulpeliLenteleje = function (aliasArbaNumerisStulpelioArbaFieldo) {
+        this.getArRodomasStulpelisLenteleje = function (aliasArbaNumerisStulpelioArbaFieldo) {
             if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'string') {
-                return metadataStulpeliuIrFieldu[aliasArbaNumerisStulpelioArbaFieldo][0];
+                return metadataZurnalu[aliasArbaNumerisStulpelioArbaFieldo][0];
             }
             else if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'number') {
-                return metadataStulpeliuIrFieldu[Object.keys(metadataStulpeliuIrFieldu)[aliasArbaNumerisStulpelioArbaFieldo]][0];
+                return metadataZurnalu[Object.keys(metadataZurnalu)[aliasArbaNumerisStulpelioArbaFieldo]][0];
             }
         };
 
-        this.gerArFiksuojamasStulpelisDuomenuBazeje = function (aliasArbaNumerisStulpelioArbaFieldo) {
+        this.getArFiksuojamasStulpelisDuomenuBazeje = function (aliasArbaNumerisStulpelioArbaFieldo) {
             if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'string') {
-                return metadataStulpeliuIrFieldu[aliasArbaNumerisStulpelioArbaFieldo][1];
+                return metadataZurnalu[aliasArbaNumerisStulpelioArbaFieldo][1];
             }
             else if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'number') {
-                return metadataStulpeliuIrFieldu[Object.keys(metadataStulpeliuIrFieldu)[aliasArbaNumerisStulpelioArbaFieldo]][1];
+                return metadataZurnalu[Object.keys(metadataZurnalu)[aliasArbaNumerisStulpelioArbaFieldo]][1];
             }
         };
 
-        this.getObjektaError404 = function() {
+        this.getObjektaError404 = function(errorObjektasOriginalus) {
+            if (errorObjektasOriginalus) {
+                console.log(errorObjektasOriginalus);
+            }
             var err = new Error(this.pranesimas404);
             err.status = 404;
             return err;
         };
 
-        this.getObjektaErrorNegeraPaieskosFraze = function() {
+        this.getObjektaErrorNegeraPaieskosFraze = function(errorObjektasOriginalus) {
+            if (errorObjektasOriginalus) {
+                console.log(errorObjektasOriginalus);
+            }
             var err = new Error(this.pranesimasFrazePaieskosNegera);
             err.status = 422;
             return err;
         };
         
-        this.getObjektaErrorTechniniaiNesklandumai = function() {
+        this.getObjektaErrorTechniniaiNesklandumai = function(errorObjektasOriginalus) {
+            if (errorObjektasOriginalus) {
+                console.log(errorObjektasOriginalus);
+            }
             var err = new Error(this.pranesimasTechniniaiNesklandumai);
             err.status = 500;
             return err;
         };
 
-        this.kiekisStulpeliuArbaFieldu = Object.keys(metadataStulpeliuIrFieldu).length;
+        this.getKiekiStulpeliuIrFieldu = function(pavadinimasCollection) {
+            var kiekisStulpeliuIrFieldu = 0;
+            if (pavadinimasCollection == 'zurnalai') {
+                kiekisStulpeliuIrFieldu = Object.keys(metadataZurnalu).length;
+            }
+            else if (pavadinimasCollection == 'leidejai') {
+                kiekisStulpeliuIrFieldu = Object.keys(metadataLeideju).length;
+            }
+            else if (pavadinimasCollection == 'duomenubazes') {
+                kiekisStulpeliuIrFieldu = Object.keys(metadataDuomenuBaziu).length;
+            }
+            else {
+                kiekisStulpeliuIrFieldu = 0;
+            }
+            return kiekisStulpeliuIrFieldu;
+        };
 
         this.pavadinimasSvetaines = 'Lietuvos mokslo žurnalų sąrašas';
 
@@ -159,7 +183,7 @@ module.exports = ({
 
         this.pranesimas404 = 'Ieškomas puslapis nerastas';
         this.pranesimasFrazePaieskosNegera = 'Įvyko klaida. Pamėginkite pakeisti paieškos frazę.';
-        this.pranesimasTechniniaiNesklandumai = 'Techninis nesklandumas. Pamėginkite vėliau.'
+        this.pranesimasTechniniaiNesklandumai = 'Techninis nesklandumas. Pamėginkite vėliau.';
 
         this.Autolinker = require( 'autolinker' );
 

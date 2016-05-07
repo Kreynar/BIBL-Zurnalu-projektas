@@ -13,9 +13,9 @@ block CONTENT
             - if (getArRodytiStulpeliLenteleje(numerisStulpelioIrFieldo) && gerArFiksuojamasStulpelisDuomenuBazeje(numerisStulpelioIrFieldo)) {
               label.col-sm-2.control-label(for=getPavadinimaFieldo(numerisStulpelioIrFieldo)) #{getPavadinimaStulpelio(numerisStulpelioIrFieldo)}
               .col-sm-10
-                -if (documentZurnalo) {
+                -if (documentIraso) {
                   textarea.form-control(type='text' id=getPavadinimaFieldo(numerisStulpelioIrFieldo) name=getPavadinimaFieldo(numerisStulpelioIrFieldo)).
-                    #{(documentZurnalo[getPavadinimaFieldo(numerisStulpelioIrFieldo)] ? documentZurnalo[getPavadinimaFieldo(numerisStulpelioIrFieldo)] : '')}
+                    #{(documentIraso[getPavadinimaFieldo(numerisStulpelioIrFieldo)] ? documentIraso[getPavadinimaFieldo(numerisStulpelioIrFieldo)] : '')}
                 -}
                 -else {
                   textarea.form-control(type='text' id=getPavadinimaFieldo(numerisStulpelioIrFieldo) name=getPavadinimaFieldo(numerisStulpelioIrFieldo))
@@ -34,7 +34,7 @@ block CONTENT
 //- }
 //script.
 //  $(document).ready(function(){
-//    console.log(documentZurnalo);
+//    console.log(documentIraso);
 //  });
 
 
