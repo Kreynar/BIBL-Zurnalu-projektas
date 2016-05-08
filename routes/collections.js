@@ -84,6 +84,22 @@ var getObjektaQueryPagalId = function(req, res, next) {
   return objektasQuery;
 };
 
+var getObjektaQuery = function(req, res, next) {
+  var objektasQuery;
+  if (req.params.id) {
+    try {
+      objektasQuery = getObjektaQueryPagalId(req.params.id);
+    }
+    catch (err) {
+      next(variables.getObjektaError404(err));
+    }
+  }
+  else {
+    objektasQuery = getObjektaQueryPagalRaideArbaFraze(req, res, next);
+  }
+  return objektasQuery;
+};
+
 var getObjektaSort = function(req, res, next) {
   var objektasSort;
   if (req.baseUrl == variables.pathZurnalai) {
@@ -110,22 +126,6 @@ var getPavadinimaPuslapioRenderinamo = function(req, res, next) {
     pavadinimasPuslapioRenderinamo = 'puslapisIrasuLenteles';
   }
   return pavadinimasPuslapioRenderinamo;
-};
-
-var getObjektaQuery = function(req, res, next) {
-  var objektasQuery;
-  if (req.params.id) {
-    try {
-      objektasQuery = getObjektaQueryPagalId(req.params.id);
-    }
-    catch (err) {
-      next(variables.getObjektaError404(err));
-    }
-  }
-  else {
-    objektasQuery = getObjektaQueryPagalRaideArbaFraze(req, res, next);
-  }
-  return objektasQuery;
 };
 
 var getPavadinimaCollection = function(req, res, next) {
@@ -212,7 +212,7 @@ var getDocumentNaujoIraso = function(req, res, next) {
   var kiekisStulpeliuIrFieldu = getKiekiStulpeliuIrFieldu(req, res, next);
   var documentNaujoIraso = {};
   for (var nr = 0; nr < kiekisStulpeliuIrFieldu; nr++) {
-    if (variables.getArFiksuojamasStulpelisDuomenuBazeje(pavadinimasCollection, nr)
+    if (variables.getArFiksuojamasFieldasDuomenuBazeje(pavadinimasCollection, nr)
         && variables.getArRodomasStulpelisLenteleje(pavadinimasCollection, nr)) {
       documentNaujoIraso[variables.getPavadinimaFieldo(pavadinimasCollection, nr)]
           = ( req.body[variables.getPavadinimaFieldo(pavadinimasCollection, nr)] ).trim();
@@ -223,16 +223,6 @@ var getDocumentNaujoIraso = function(req, res, next) {
 
 
 var sukurtiNaujaArbaPakeistiSenaIrasa = function(req, res, next) {
-
-  var objektasKintamuju = {};
-  objektasKintamuju.MongoClient = mongodb.MongoClient;
-  objektasKintamuju.idIraso = req.params.id || '';
-  objektasKintamuju.objektasSort = getObjektaSort(req, res, next, objektasKintamuju);
-  objektasKintamuju.pavadinimasPuslapioRenderinamo = getPavadinimaPuslapioRenderinamo(objektasKintamuju);
-  objektasKintamuju.objektasQuery = getObjektaQuery(req, res, next, objektasKintamuju);
-  objektasKintamuju.pavadinimasCollection = getPavadinimaCollection(req, res, next);
-  return objektasKintamuju;
-
   var MongoClient = mongodb.MongoClient;
   var idIraso = req.params.id || '';
   var documentNaujoIraso = getDocumentNaujoIraso(req, res, next);
@@ -245,7 +235,7 @@ var sukurtiNaujaArbaPakeistiSenaIrasa = function(req, res, next) {
     }
     else {
       var collection = db.collection(pavadinimasCollection);
-      if (req.params.id) {
+      if (idIraso) {
         try {
           collection.updateOne(objektasQuery, objektasUpdate, {'upsert' : false},  function(err, result) {
             if (err) {
@@ -276,26 +266,40 @@ var sukurtiNaujaArbaPakeistiSenaIrasa = function(req, res, next) {
 };
 
 
+/* '/' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
 router.get(variables.pathIndex, function(req, res, next) {
   res.redirect(variables.pathZurnalai);
 });
 
+/* '/zurnalai' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
 router.get(variables.pathZurnalai, getIrasusIsDbIrAtvaizduotiPuslapyje);
-
 router.delete(variables.pathZurnalai, trintiIrasus);
-
 router.get(variables.pathZurnalasNaujas, function(req, res) {
   res.render('formaIrasoRedagavimo', { 'headeris' : 'Naujas įrašas' } );
 });
-
-/* Sitas route handleris kode turi but apacioje nuo visu kitu router.get('/<stringKonstanta>',...);! */
 router.get(variables.pathZurnalasAnksciauSukurtas, getIrasusIsDbIrAtvaizduotiPuslapyje);
-
 router.post(variables.pathZurnalasNaujas, sukurtiNaujaArbaPakeistiSenaIrasa);
-
 router.post(variables.pathZurnalasAnksciauSukurtas, sukurtiNaujaArbaPakeistiSenaIrasa);
 
+/* '/leidejai' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+router.get(variables.pathLeidejai, getIrasusIsDbIrAtvaizduotiPuslapyje);
+router.delete(variables.pathLeidejai, trintiIrasus);
+router.get(variables.pathLeidejasNaujas, function(req, res) {
+  res.render('formaIrasoRedagavimo', { 'headeris' : 'Naujas įrašas' } );
+});
+router.get(variables.pathLeidejasAnksciauSukurtas, getIrasusIsDbIrAtvaizduotiPuslapyje);
+router.post(variables.pathLeidejasNaujas, sukurtiNaujaArbaPakeistiSenaIrasa);
+router.post(variables.pathLeidejasAnksciauSukurtas, sukurtiNaujaArbaPakeistiSenaIrasa);
 
+/* '/duomenu-bazes' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+router.get(variables.pathDuomenuBazes, getIrasusIsDbIrAtvaizduotiPuslapyje);
+router.delete(variables.pathDuomenuBazes, trintiIrasus);
+router.get(variables.pathDuomenuBazeNauja, function(req, res) {
+  res.render('formaIrasoRedagavimo', { 'headeris' : 'Naujas įrašas' } );
+});
+router.get(variables.pathDuomenuBazeAnksciauSukurta, getIrasusIsDbIrAtvaizduotiPuslapyje);
+router.post(variables.pathDuomenuBazeNauja, sukurtiNaujaArbaPakeistiSenaIrasa);
+router.post(variables.pathDuomenuBazeAnksciauSukurta, sukurtiNaujaArbaPakeistiSenaIrasa);
 
 
 

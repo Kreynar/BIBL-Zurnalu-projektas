@@ -63,47 +63,81 @@ module.exports = ({
 
         this.urlOfDatabase = 'mongodb://localhost:27017/mongoDBZurnaluProjekto';
 
-        this.getPavadinimaStulpelio = function (aliasArbaNumerisStulpelioArbaFieldo) {
-            if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'string') {
-                return metadataZurnalu[aliasArbaNumerisStulpelioArbaFieldo][2];
+
+        this.getMetadataOfCollection = function(nameOfCollection) {
+            if (nameOfCollection == 'zurnalai') {
+                return metadataZurnalu;
             }
-            else if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'number') {
-                return metadataZurnalu[Object.keys(metadataZurnalu)[aliasArbaNumerisStulpelioArbaFieldo]][2];
+            else if (nameOfCollection == 'leidejai') {
+                return metadataLeideju;
+            }
+            else if (nameOfCollection == 'duomenubazes') {
+                return metadataDuomenuBaziu;
             }
         };
 
-        this.getPavadinimaFieldo = function (aliasArbaNumerisStulpelioArbaFieldo) {
-            if (typeof aliasArbaNumerisStulpelioArbaFieldo === 'string') {
-                return metadataZurnalu[aliasArbaNumerisStulpelioArbaFieldo][3];
-            }
-            else if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'number') {
-                return metadataZurnalu[Object.keys(metadataZurnalu)[aliasArbaNumerisStulpelioArbaFieldo]][3];
+        this.getInfoApieStulpeliArbaFielda = function(pavadinimasCollection, aliasArbaNumerisStulpelioArbaFieldo, numberOfTypeOfInformation) {
+            var metadataOfCollection = this.getMetadataOfCollection(pavadinimasCollection);
+            var masyvasAliasIsMetadata = Object.keys(metadataOfCollection);
+            if (numberOfTypeOfInformation) {
+                if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'string') {
+                    return metadataOfCollection[aliasArbaNumerisStulpelioArbaFieldo][numberOfTypeOfInformation];
+                }
+                else if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'number') {
+                    return metadataOfCollection[masyvasAliasIsMetadata[aliasArbaNumerisStulpelioArbaFieldo]][numberOfTypeOfInformation];
+                }
             }
             else {
-
+                if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'string') {
+                    var numerisStulpelioArbaFieldo = -1;
+                    for (var i = 0; i < masyvasAliasIsMetadata.length; i++) {
+                        if (aliasArbaNumerisStulpelioArbaFieldo == masyvasAliasIsMetadata[i]) {
+                            numerisStulpelioArbaFieldo = i;
+                        }
+                    }
+                    return numerisStulpelioArbaFieldo;
+                }
+                else if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'number') {
+                    return masyvasAliasIsMetadata[aliasArbaNumerisStulpelioArbaFieldo];
+                }
             }
         };
 
-        this.getAliasStulpelioArbaFieldo = function (numerisStulpelioArbaFieldo) {
-            return Object.keys(metadataZurnalu)[numerisStulpelioArbaFieldo];
+        this.getArRodomasStulpelisLenteleje = function (pavadinimasCollection, aliasArbaNumerisStulpelioArbaFieldo) {
+            return this.getInfoApieStulpeliArbaFielda(pavadinimasCollection, aliasArbaNumerisStulpelioArbaFieldo, 0);
         };
 
-        this.getArRodomasStulpelisLenteleje = function (aliasArbaNumerisStulpelioArbaFieldo) {
-            if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'string') {
-                return metadataZurnalu[aliasArbaNumerisStulpelioArbaFieldo][0];
-            }
-            else if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'number') {
-                return metadataZurnalu[Object.keys(metadataZurnalu)[aliasArbaNumerisStulpelioArbaFieldo]][0];
-            }
+        this.getArFiksuojamasFieldasDuomenuBazeje = function (pavadinimasCollection, aliasArbaNumerisStulpelioArbaFieldo) {
+            return this.getInfoApieStulpeliArbaFielda(pavadinimasCollection, aliasArbaNumerisStulpelioArbaFieldo, 1);
         };
 
-        this.getArFiksuojamasStulpelisDuomenuBazeje = function (aliasArbaNumerisStulpelioArbaFieldo) {
-            if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'string') {
-                return metadataZurnalu[aliasArbaNumerisStulpelioArbaFieldo][1];
+        this.getPavadinimaStulpelio = function (pavadinimasCollection, aliasArbaNumerisStulpelioArbaFieldo) {
+            return this.getInfoApieStulpeliArbaFielda(pavadinimasCollection, aliasArbaNumerisStulpelioArbaFieldo, 2);
+        };
+
+        this.getPavadinimaFieldo = function (pavadinimasCollection, aliasArbaNumerisStulpelioArbaFieldo) {
+            return this.getInfoApieStulpeliArbaFielda(pavadinimasCollection, aliasArbaNumerisStulpelioArbaFieldo, 3);
+        };
+
+        this.getAliasArbaNumeriStulpelioArbaFieldo = function (pavadinimasCollection, aliasArbaNumerisStulpelioArbaFieldo) {
+            return this.getInfoApieStulpeliArbaFielda(pavadinimasCollection, aliasArbaNumerisStulpelioArbaFieldo);
+        };
+
+        this.getKiekiStulpeliuIrFieldu = function(pavadinimasCollection) { 
+            var kiekisStulpeliuIrFieldu = 0;
+            if (pavadinimasCollection == 'zurnalai') {
+                kiekisStulpeliuIrFieldu = Object.keys(metadataZurnalu).length;
             }
-            else if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'number') {
-                return metadataZurnalu[Object.keys(metadataZurnalu)[aliasArbaNumerisStulpelioArbaFieldo]][1];
+            else if (pavadinimasCollection == 'leidejai') {
+                kiekisStulpeliuIrFieldu = Object.keys(metadataLeideju).length;
             }
+            else if (pavadinimasCollection == 'duomenubazes') {
+                kiekisStulpeliuIrFieldu = Object.keys(metadataDuomenuBaziu).length;
+            }
+            else {
+                kiekisStulpeliuIrFieldu = 0;
+            }
+            return kiekisStulpeliuIrFieldu;
         };
 
         this.getObjektaError404 = function(errorObjektasOriginalus) {
@@ -123,7 +157,7 @@ module.exports = ({
             err.status = 422;
             return err;
         };
-        
+
         this.getObjektaErrorTechniniaiNesklandumai = function(errorObjektasOriginalus) {
             if (errorObjektasOriginalus) {
                 console.log(errorObjektasOriginalus);
@@ -131,23 +165,6 @@ module.exports = ({
             var err = new Error(this.pranesimasTechniniaiNesklandumai);
             err.status = 500;
             return err;
-        };
-
-        this.getKiekiStulpeliuIrFieldu = function(pavadinimasCollection) {
-            var kiekisStulpeliuIrFieldu = 0;
-            if (pavadinimasCollection == 'zurnalai') {
-                kiekisStulpeliuIrFieldu = Object.keys(metadataZurnalu).length;
-            }
-            else if (pavadinimasCollection == 'leidejai') {
-                kiekisStulpeliuIrFieldu = Object.keys(metadataLeideju).length;
-            }
-            else if (pavadinimasCollection == 'duomenubazes') {
-                kiekisStulpeliuIrFieldu = Object.keys(metadataDuomenuBaziu).length;
-            }
-            else {
-                kiekisStulpeliuIrFieldu = 0;
-            }
-            return kiekisStulpeliuIrFieldu;
         };
 
         this.pavadinimasSvetaines = 'Lietuvos mokslo žurnalų sąrašas';

@@ -5,9 +5,9 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var routesZurnalai = require('./routes/zurnalai');
-var routesLeidejai = require('./routes/leidejai');
-var routesDuomenuBazes = require('./routes/duomenuBazes');
+var routesZurnaluIrLeidejuIrDuomenuBaziu = require('./routes/collections');
+// var routesLeidejai = require('./routes/leidejai');
+// var routesDuomenuBazes = require('./routes/duomenuBazes');
 // var users = require('./routes/users');
 
 var variables = require('./variables.js');
@@ -32,8 +32,8 @@ app.locals.pristatymasSvetaines = variables.pristatymasSvetaines;
 app.locals.getPavadinimaStulpelio = variables.getPavadinimaStulpelio;
 app.locals.getPavadinimaFieldo = variables.getPavadinimaFieldo;
 app.locals.getArRodomasStulpelisLenteleje = variables.getArRodomasStulpelisLenteleje;
-app.locals.getArFiksuojamasStulpelisDuomenuBazeje = variables.getArFiksuojamasStulpelisDuomenuBazeje;
-app.locals.getAliasStulpelioArbaFieldo = variables.getAliasStulpelioArbaFieldo;
+app.locals.getArFiksuojamasFieldasDuomenuBazeje = variables.getArFiksuojamasFieldasDuomenuBazeje;
+app.locals.getAliasArbaNumeriStulpelioArbaFieldo = variables.getAliasArbaNumeriStulpelioArbaFieldo;
 app.locals.kiekisStulpeliuArbaFieldu = variables.kiekisStulpeliuArbaFieldu;
 app.locals.masyvasRaidziuAbecelesLietuviskos = variables.masyvasRaidziuAbecelesLietuviskos;
 app.locals.pathIndex = variables.pathIndex;
@@ -66,28 +66,18 @@ app.use(variables.pathIndex, function(req, res, next) {
     next();
   }
 });
-app.use(variables.pathZurnalai, routesZurnalai);
-app.use(variables.pathDuomenuBazes, routesDuomenuBazes);
-app.use(variables.pathLeidejai, routesLeidejai);
+app.use(variables.pathZurnalai, routesZurnaluIrLeidejuIrDuomenuBaziu);
+app.use(variables.pathDuomenuBazes, routesZurnaluIrLeidejuIrDuomenuBaziu);
+app.use(variables.pathLeidejai, routesZurnaluIrLeidejuIrDuomenuBaziu);
 
-
-
-
-// app.use('/users', users);
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error(variables.pranesimas404);
-  err.status = 404;
-  next(err);
+app.use('/', function(req, res, next) {
+  next(variables.getObjektaError404())
 });
-
-// error handlers
 
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
+  app.use('/', function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
       // pavadinimasSvetaines: variables.pavadinimasSvetaines,
@@ -99,7 +89,7 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
+app.use('/', function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {
     // pavadinimasSvetaines: variables.pavadinimasSvetaines,
