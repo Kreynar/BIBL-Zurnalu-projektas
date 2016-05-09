@@ -27,51 +27,39 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.locals.pavadinimasSvetaines = variables.pavadinimasSvetaines;
-app.locals.pristatymasSvetaines = variables.pristatymasSvetaines;
-app.locals.getPavadinimaStulpelio = variables.getPavadinimaStulpelio;
-app.locals.getPavadinimaFieldo = variables.getPavadinimaFieldo;
-app.locals.getArRodomasStulpelisLenteleje = variables.getArRodomasStulpelisLenteleje;
-app.locals.getArFiksuojamasFieldasDuomenuBazeje = variables.getArFiksuojamasFieldasDuomenuBazeje;
-app.locals.getAliasArbaNumeriStulpelioArbaFieldo = variables.getAliasArbaNumeriStulpelioArbaFieldo;
-app.locals.kiekisStulpeliuArbaFieldu = variables.kiekisStulpeliuArbaFieldu;
-app.locals.masyvasRaidziuAbecelesLietuviskos = variables.masyvasRaidziuAbecelesLietuviskos;
-app.locals.pathIndex = variables.pathIndex;
-app.locals.pathZurnalai = variables.pathZurnalai;
-app.locals.pathZurnalasNaujas = variables.pathZurnalasNaujas;
-app.locals.pathZurnalasAnksciauSukurtas = variables.pathZurnalasAnksciauSukurtas;
-app.locals.parametrasQueryPaieskuPagalRaide = variables.parametrasQueryPaieskuPagalRaide;
-app.locals.parametrasQueryPaieskuPagalFraze = variables.parametrasQueryPaieskuPagalFraze;
-app.locals.pathLeidejai = variables.pathLeidejai;
-app.locals.pathLeidejasNaujas = variables.pathLeidejasNaujas;
-app.locals.pathLeidejasAnksciauSukurtas = variables.pathLeidejasAnksciauSukurtas;
-app.locals.pathDuomenuBazes = variables.pathDuomenuBazes;
-app.locals.pathDuomenuBazeNauja = variables.pathDuomenuBazeNauja;
-app.locals.pathDuomenuBazeAnksciauSukurta = variables.pathDuomenuBazeAnksciauSukurta;
-app.locals.Autolinker = variables.Autolinker;
-app.locals.$salygaPaieskosTikNeistrintuIrasu = variables.$salygaPaieskosTikNeistrintuIrasu;
+// app.locals.pavadinimasSvetaines = variables.pavadinimasSvetaines;
+// app.locals.pristatymasSvetaines = variables.pristatymasSvetaines;
+// app.locals.getPavadinimaStulpelio = variables.getPavadinimaStulpelio;
+// app.locals.getPavadinimaFieldo = variables.getPavadinimaFieldo;
+// app.locals.getArRodomasStulpelisLenteleje = variables.getArRodomasStulpelisLenteleje;
+// app.locals.getArFiksuojamasFieldasDuomenuBazeje = variables.getArFiksuojamasFieldasDuomenuBazeje;
+// app.locals.getAliasArbaNumeriStulpelioArbaFieldo = variables.getAliasArbaNumeriStulpelioArbaFieldo;
+// app.locals.kiekisStulpeliuArbaFieldu = variables.kiekisStulpeliuArbaFieldu;
+// app.locals.masyvasRaidziuAbecelesLietuviskos = variables.masyvasRaidziuAbecelesLietuviskos;
+// app.locals.pathIndex = variables.pathIndex;
+// app.locals.pathZurnalai = variables.pathZurnalai;
+// app.locals.pathZurnalasNaujas = variables.pathZurnalasNaujas;
+// app.locals.pathZurnalasAnksciauSukurtas = variables.pathZurnalasAnksciauSukurtas;
+// app.locals.parametrasQueryPaieskuPagalRaide = variables.parametrasQueryPaieskuPagalRaide;
+// app.locals.parametrasQueryPaieskuPagalFraze = variables.parametrasQueryPaieskuPagalFraze;
+// app.locals.pathLeidejai = variables.pathLeidejai;
+// app.locals.pathLeidejasNaujas = variables.pathLeidejasNaujas;
+// app.locals.pathLeidejasAnksciauSukurtas = variables.pathLeidejasAnksciauSukurtas;
+// app.locals.pathDuomenuBazes = variables.pathDuomenuBazes;
+// app.locals.pathDuomenuBazeNauja = variables.pathDuomenuBazeNauja;
+// app.locals.pathDuomenuBazeAnksciauSukurta = variables.pathDuomenuBazeAnksciauSukurta;
+// app.locals.Autolinker = variables.Autolinker;
+// app.locals.$salygaPaieskosTikNeistrintuIrasu = variables.$salygaPaieskosTikNeistrintuIrasu;
 
 
 
-
-app.use(variables.pathIndex, function(req, res, next) {
-
-  /*
-  Patikrina, ar HTTP request path'o tik pradzia lygi variables.pathIndex, ar visas request path'as lygus variables.pathIndex.
-   */
-  if (req.path == variables.pathIndex) {
-    res.redirect(variables.pathZurnalai);
-  }
-  else {
-    next();
-  }
-});
-app.use(variables.pathZurnalai, routesZurnaluIrLeidejuIrDuomenuBaziu);
-app.use(variables.pathDuomenuBazes, routesZurnaluIrLeidejuIrDuomenuBaziu);
-app.use(variables.pathLeidejai, routesZurnaluIrLeidejuIrDuomenuBaziu);
+app.use(variables.pathLogin, routesZurnaluIrLeidejuIrDuomenuBaziu);
+app.use(variables.pathLoginFailed, routesZurnaluIrLeidejuIrDuomenuBaziu);
+app.use(variables.pathAdmin, routesZurnaluIrLeidejuIrDuomenuBaziu);
+app.use('/', routesZurnaluIrLeidejuIrDuomenuBaziu);
 
 app.use('/', function(req, res, next) {
-  next(variables.getObjektaError404())
+  next(variables.getObjektaError404());
 });
 
 // development error handler

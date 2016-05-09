@@ -2,7 +2,7 @@
  * Created by Martynas on 4/11/2016.
  */
 
-var app = require('app');
+// var app = require('app');
 
 
 /*
@@ -123,7 +123,7 @@ module.exports = ({
             return this.getInfoApieStulpeliArbaFielda(pavadinimasCollection, aliasArbaNumerisStulpelioArbaFieldo);
         };
 
-        this.getKiekiStulpeliuIrFieldu = function(pavadinimasCollection) { 
+        this.getKiekiStulpeliuIrFieldu = function(pavadinimasCollection) {
             var kiekisStulpeliuIrFieldu = 0;
             if (pavadinimasCollection == 'zurnalai') {
                 kiekisStulpeliuIrFieldu = Object.keys(metadataZurnalu).length;
@@ -140,38 +140,43 @@ module.exports = ({
             return kiekisStulpeliuIrFieldu;
         };
 
-        this.getObjektaError404 = function(errorObjektasOriginalus) {
+        this.logIConsoleErrorOriginalu = function(errorObjektasOriginalus) {
             if (errorObjektasOriginalus) {
                 console.log(errorObjektasOriginalus);
             }
+        };
+
+        this.getObjektaError404 = function(errorObjektasOriginalus) {
+            this.logIConsoleErrorOriginalu(errorObjektasOriginalus);
             var err = new Error(this.pranesimas404);
             err.status = 404;
             return err;
         };
 
         this.getObjektaErrorNegeraPaieskosFraze = function(errorObjektasOriginalus) {
-            if (errorObjektasOriginalus) {
-                console.log(errorObjektasOriginalus);
-            }
+            this.logIConsoleErrorOriginalu(errorObjektasOriginalus);
             var err = new Error(this.pranesimasFrazePaieskosNegera);
             err.status = 422;
             return err;
         };
 
         this.getObjektaErrorTechniniaiNesklandumai = function(errorObjektasOriginalus) {
-            if (errorObjektasOriginalus) {
-                console.log(errorObjektasOriginalus);
-            }
+            this.logIConsoleErrorOriginalu(errorObjektasOriginalus);
             var err = new Error(this.pranesimasTechniniaiNesklandumai);
             err.status = 500;
             return err;
         };
 
+        this.getObjektaErrorNeteisingasPrisijungimas = function(errorObjektasOriginalus) {
+            this.logIConsoleErrorOriginalu(errorObjektasOriginalus);
+            var err = new Error(this.pranesimasNeteisingasVardasArbaSlaptazodis);
+            err.status = 401;
+            return err;
+        };
+
         this.pavadinimasSvetaines = 'Lietuvos mokslo žurnalų sąrašas';
 
-        this.pristatymasSvetaines = 'Sveiki atvykę į Lietuvos mokslo žurnalų internetinę svetainę!' +
-        ' Čia galite rasti visų mokslo bendruomenės žurnalų sąrašą bei sužinoti, kokiose duomenų' +
-        ' bazėse talpinamas pilnas šių žurnalų turinys.';
+        this.pristatymasSvetaines = 'Šioje svetainėje pateikiamas Lietuvos mokslo žurnalų sąrašas.';
 
         this.masyvasRaidziuAbecelesLietuviskos = [
             'A', 'Ą', 'B', 'C', 'Č', 'D', 'E', 'Ę', 'Ė', 'F'
@@ -182,6 +187,12 @@ module.exports = ({
             // , 'n', 'o', 'p', 'r', 's', 'š', 't', 'u', 'ų', 'ū', 'v', 'z', 'ž'
         ];
 
+
+
+        // this.pathUser = '/';
+        this.pathLogin = '/prisijungimas';
+        this.pathLoginFailed = '/prisijungimo-klaida';
+        this.pathAdmin = '/mabpcadmin'; /* Bus naudojamas, kol nebus prisiloginimo sukurta */
         this.pathIndex = '/';
         this.pathZurnalai = '/zurnalai';
         this.pathZurnalasNaujas = this.pathZurnalai + '/naujas';
@@ -201,6 +212,7 @@ module.exports = ({
         this.pranesimas404 = 'Ieškomas puslapis nerastas';
         this.pranesimasFrazePaieskosNegera = 'Įvyko klaida. Pamėginkite pakeisti paieškos frazę.';
         this.pranesimasTechniniaiNesklandumai = 'Techninis nesklandumas. Pamėginkite vėliau.';
+        this.pranesimasNeteisingasVardasArbaSlaptazodis = 'Prisijungti nepavyko. Neteisingas vartotojo vardas ir/arba slaptažodis.'
 
         this.Autolinker = require( 'autolinker' );
 

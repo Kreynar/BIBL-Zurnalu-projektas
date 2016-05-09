@@ -5,13 +5,13 @@
 table#lenteleIrasuSaraso.table-responsivetable.table.table-striped.table-bordered
   thead
     tr
-      - for (var numerisStulpelioArbaFieldo = 0; numerisStulpelioArbaFieldo < kiekisStulpeliuArbaFieldu; numerisStulpelioArbaFieldo++) {
-        - if (getArRodytiStulpeliLenteleje(numerisStulpelioArbaFieldo)) {
-          - if (getAliasStulpelioArbaFieldo(numerisStulpelioArbaFieldo) == 'checkboxTrynimoIrKeitimo') {
+      - for (var numerisStulpelioArbaFieldo = 0; numerisStulpelioArbaFieldo < variables.getKiekiStulpeliuIrFieldu(); numerisStulpelioArbaFieldo++) {
+        - if (variables.getArRodomasStulpelisLenteleje(pavadinimasCollection, numerisStulpelioArbaFieldo)) {
+          - if (variables.getAliasArbaNumeriStulpelioArbaFieldo(pavadinimasCollection, numerisStulpelioArbaFieldo) == 'checkboxTrynimoIrKeitimo') {
             th: input.checkboxInThead(type='checkbox' id='visi')
           - }
           - else {
-            th= getPavadinimaStulpelio(numerisStulpelioArbaFieldo)
+            th= variables.getPavadinimaStulpelio(pavadinimasCollection, numerisStulpelioArbaFieldo)
           - }
         - }
       - }
@@ -20,16 +20,16 @@ table#lenteleIrasuSaraso.table-responsivetable.table.table-striped.table-bordere
       tr
         - var objektasDocumento = masyvasDocumentu[numerisEilutesIrElemento];
         - var rasta = false;
-        - for (var numerisStulpelioArbaFieldo = 0; numerisStulpelioArbaFieldo < kiekisStulpeliuArbaFieldu; numerisStulpelioArbaFieldo++) {
-          - if (getArRodytiStulpeliLenteleje(numerisStulpelioArbaFieldo)) {
-            - if (getAliasStulpelioArbaFieldo(numerisStulpelioArbaFieldo) == 'checkboxTrynimoIrKeitimo') {
+        - for (var numerisStulpelioArbaFieldo = 0; numerisStulpelioArbaFieldo < variables.getKiekiStulpeliuIrFieldu(); numerisStulpelioArbaFieldo++) {
+          - if (variables.getArRodomasStulpelisLenteleje(pavadinimasCollection, numerisStulpelioArbaFieldo)) {
+            - if (variables.getAliasArbaNumeriStulpelioArbaFieldo(pavadinimasCollection, numerisStulpelioArbaFieldo) == 'checkboxTrynimoIrKeitimo') {
               td: input.checkboxInTbody(type='checkbox' id=objektasDocumento['_id'].toHexString())
             - }
-            - else if (getAliasStulpelioArbaFieldo(numerisStulpelioArbaFieldo) == 'nr') {
+            - else if (variables.getAliasArbaNumeriStulpelioArbaFieldo(pavadinimasCollection, numerisStulpelioArbaFieldo) == 'nr') {
               td= numerisEilutesIrElemento
             - }
-            - else if (objektasDocumento.hasOwnProperty(getPavadinimaFieldo(numerisStulpelioArbaFieldo))) {
-              td!= Autolinker.link(objektasDocumento[getPavadinimaFieldo(numerisStulpelioArbaFieldo)])
+            - else if (objektasDocumento.hasOwnProperty(variables.getPavadinimaFieldo(pavadinimasCollection, numerisStulpelioArbaFieldo))) {
+              td!= Autolinker.link(objektasDocumento[variables.getPavadinimaFieldo(pavadinimasCollection, numerisStulpelioArbaFieldo)])
             - }
             - else {
               td
