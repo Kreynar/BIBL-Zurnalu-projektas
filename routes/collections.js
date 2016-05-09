@@ -5,8 +5,8 @@ var variables = require('../variables.js');
 
 
 
-var trintiIrasus = function(req, res, next) {
-  var pavadinimasCollection = getPavadinimaCollection(req, res, next);
+router.trintiIrasus = function(req, res, next) {
+  var pavadinimasCollection = router.getPavadinimaCollection(req, res, next);
   var MongoClient = mongodb.MongoClient;
   MongoClient.connect(variables.urlOfDatabase, function(err, db) {
     if (err) {
@@ -41,7 +41,7 @@ var trintiIrasus = function(req, res, next) {
   });
 };
 
-var getObjektaQueryPagalRaideArbaFraze = function(req, res, next) {
+router.getObjektaQueryPagalRaideArbaFraze = function(req, res, next) {
   var $salygaPaieskosPagalRaideArbaFraze = {};
   var regExp = null;
   var objektasQuery = {};
@@ -77,30 +77,30 @@ var getObjektaQueryPagalRaideArbaFraze = function(req, res, next) {
   }
 };
 
-var getObjektaQueryPagalId = function(req, res, next) {
+router.getObjektaQueryPagalId = function(req, res, next) {
   var objektasQuery;
   var $salygaPaieskosPagalId = { '_id' : new mongodb.ObjectId(req.params.id) };
   objektasQuery = { '$and' : [variables.$salygaPaieskosTikNeistrintuIrasu, $salygaPaieskosPagalId] };
   return objektasQuery;
 };
 
-var getObjektaQuery = function(req, res, next) {
+router.getObjektaQuery = function(req, res, next) {
   var objektasQuery;
   if (req.params.id) {
     try {
-      objektasQuery = getObjektaQueryPagalId(req.params.id);
+      objektasQuery = router.getObjektaQueryPagalId(req.params.id);
     }
     catch (err) {
       next(variables.getObjektaError404(err));
     }
   }
   else {
-    objektasQuery = getObjektaQueryPagalRaideArbaFraze(req, res, next);
+    objektasQuery = router.getObjektaQueryPagalRaideArbaFraze(req, res, next);
   }
   return objektasQuery;
 };
 
-var getObjektaSort = function(req, res, next) {
+router.getObjektaSort = function(req, res, next) {
   var objektasSort;
   if (req.path == variables.pathZurnalai) {
     objektasSort = {'pavadinimas1':1};
@@ -117,7 +117,7 @@ var getObjektaSort = function(req, res, next) {
   return objektasSort;
 };
 
-var getPavadinimaPuslapioRenderinamo = function(req, res, next) {
+router.getPavadinimaPuslapioRenderinamo = function(req, res, next) {
   var pavadinimasPuslapioRenderinamo;
   if (req.params.id) {
     pavadinimasPuslapioRenderinamo = '../views/puslapisIrasuModifikavimo.jade';
@@ -128,8 +128,8 @@ var getPavadinimaPuslapioRenderinamo = function(req, res, next) {
   return pavadinimasPuslapioRenderinamo;
 };
 
-var getPavadinimaCollection = function(req, res, next) {
-  var pathBeBaseICollection = getPathBeBaseUrlICollection(req, res, next);
+router.getPavadinimaCollection = function(req, res, next) {
+  var pathBeBaseICollection = router.getPathBeBaseUrlICollection(req, res, next);
   if (pathBeBaseICollection == variables.pathZurnalai) {
     return 'zurnalai';
   }
@@ -148,29 +148,39 @@ var getPavadinimaCollection = function(req, res, next) {
   }
 };
 
-var getObjektaKintamujuPerduodamaIJade = function(req, res, next) {
-  return { 'perduotas' : { 'pavadinimasCollection' : getPavadinimaCollection(req, res, next), 'variables' : variables } };
+router.getObjektaKintamujuPerduodamaIJade = function(req, res, next) {
+  var arAdmin = (req.baseUrl == variables.pathAdmin) ? true : false;
+  return { 'pp' : {
+                  'pavadinimasCollection' : getPavadinimaCollection(req, res, next)
+                  , 'arAdmin' : arAdmin } };
 };
 
-var getIrasusIsDbIrAtvaizduotiPuslapyje = function(req, res, next) {
+router.getObjektaKintamujuPerduodamaIJade = function(req, res, next) {
+  var arAdmin = (req.baseUrl == variables.pathAdmin) ? true : false;
+  return { 'pp' : {
+    'pavadinimasCollection' : router.getPavadinimaCollection(req, res, next)
+    , 'arAdmin' : arAdmin } };
+};
+
+router.getIrasusIsDbIrAtvaizduotiPuslapyje = function(req, res, next) {
   console.log('@@@@@156 getIrasusIsDbIrAtvaizduotiPuslapyje');
   var MongoClient = mongodb.MongoClient;
   var idIraso = req.params.id || '';
-  var objektasSort = getObjektaSort(req, res, next);
-  var pavadinimasPuslapioRenderinamo = getPavadinimaPuslapioRenderinamo(req, res, next);
-  var objektasQuery = getObjektaQuery(req, res, next);
-  var pavadinimasCollection = getPavadinimaCollection(req, res, next);
-  var collectionIrasu;
-  var objektasKintamujuPerduodamuIJade = getObjektaKintamujuPerduodamaIJade(req, res, next);
+  var objektasSort = router.getObjektaSort(req, res, next);
+  var pavadinimasPuslapioRenderinamo = router.getPavadinimaPuslapioRenderinamo(req, res, next);
+  var objektasQuery = router.getObjektaQuery(req, res, next);
+  var pavadinimasCollection = router.getPavadinimaCollection(req, res, next);
+  var collection;
+  var objektasKintamujuPerduodamuIJade = router.getObjektaKintamujuPerduodamaIJade(req, res, next);
   MongoClient.connect(variables.urlOfDatabase, function(err, db) {
     if (err) {
       next(variables.getObjektaErrorTechniniaiNesklandumai(err));
     }
     else {
       console.log(JSON.stringify(objektasQuery, null, 2));
-      collectionIrasu = db.collection(pavadinimasCollection);
+      collection = db.collection(pavadinimasCollection);
       // console.log(JSON.stringify(objektasQuery, null, 4));
-      collectionIrasu.find(objektasQuery).sort(objektasSort).toArray(function(err, masyvasIrasu) {
+      collection.find(objektasQuery).sort(objektasSort).toArray(function(err, masyvasIrasu) {
         if (err) {
           next(variables.getObjektaErrorTechniniaiNesklandumai(err));
         }
@@ -181,11 +191,11 @@ var getIrasusIsDbIrAtvaizduotiPuslapyje = function(req, res, next) {
           else if (masyvasIrasu.length == 0) {
             next(variables.getObjektaError404());
           }
-          objektasKintamujuPerduodamuIJade.perduotas.headeris = 'Įrašo keitimas';
-          objektasKintamujuPerduodamuIJade.perduotas.documentIraso = masyvasIrasu[0];
+          objektasKintamujuPerduodamuIJade.pp.headeris = 'Įrašo keitimas';
+          objektasKintamujuPerduodamuIJade.pp.documentIraso = masyvasIrasu[0];
         }
         else {
-          objektasKintamujuPerduodamuIJade.perduotas.masyvasDocumentu = masyvasIrasu;
+          objektasKintamujuPerduodamuIJade.pp.masyvasDocumentu = masyvasIrasu;
         }
         console.log('@@@@@@186', pavadinimasPuslapioRenderinamo);
         res.render(pavadinimasPuslapioRenderinamo, objektasKintamujuPerduodamuIJade);
@@ -198,15 +208,15 @@ var getIrasusIsDbIrAtvaizduotiPuslapyje = function(req, res, next) {
   });
 };
 
-var getKiekiStulpeliuIrFieldu = function(req, res, next) {
-  var pavadinimasCollection = getPavadinimaCollection(req, res, next);
+router.getKiekiStulpeliuIrFieldu = function(req, res, next) {
+  var pavadinimasCollection = router.getPavadinimaCollection(req, res, next);
   var kiekisStulpeliuIrFieldu = variables.getKiekiStulpeliuIrFieldu(pavadinimasCollection);
   return kiekisStulpeliuIrFieldu;
 };
 
-var getDocumentNaujoIraso = function(req, res, next) {
-  var pavadinimasCollection = getPavadinimaCollection(req, res, next);
-  var kiekisStulpeliuIrFieldu = getKiekiStulpeliuIrFieldu(req, res, next);
+router.getDocumentNaujoIraso = function(req, res, next) {
+  var pavadinimasCollection = router.getPavadinimaCollection(req, res, next);
+  var kiekisStulpeliuIrFieldu = router.getKiekiStulpeliuIrFieldu(req, res, next);
   var documentNaujoIraso = {};
   for (var nr = 0; nr < kiekisStulpeliuIrFieldu; nr++) {
     if (variables.getArFiksuojamasFieldasDuomenuBazeje(pavadinimasCollection, nr)
@@ -219,14 +229,14 @@ var getDocumentNaujoIraso = function(req, res, next) {
 };
 
 
-var sukurtiNaujaArbaPakeistiSenaIrasa = function(req, res, next) {
+router.sukurtiNaujaArbaPakeistiSenaIrasa = function(req, res, next) {
   var MongoClient = mongodb.MongoClient;
   var idIraso = req.params.id || '';
-  var documentNaujoIraso = getDocumentNaujoIraso(req, res, next);
-  var pavadinimasCollection = getPavadinimaCollection(req, res, next);
-  var objektasQuery = getObjektaQueryPagalId(req, res, next);
+  var documentNaujoIraso = router.getDocumentNaujoIraso(req, res, next);
+  var pavadinimasCollection = router.getPavadinimaCollection(req, res, next);
+  var objektasQuery = router.getObjektaQueryPagalId(req, res, next);
   var objektasUpdate = { '$set' : documentNaujoIraso };
-  var pathSuBaseUrlICollection = getPathSuBaseUrlICollection(req, res, next);
+  var pathSuBaseUrlICollection = router.getPathSuBaseUrlICollection(req, res, next);
   MongoClient.connect(variables.urlOfDatabase, function(err, db) {
     if (err) {
       next(variables.getObjektaErrorTechniniaiNesklandumai(err));
@@ -263,12 +273,12 @@ var sukurtiNaujaArbaPakeistiSenaIrasa = function(req, res, next) {
   });
 };
 
-var pateiktiFormaIrasoRedagavimo = function(req, res, next) {
-  var pavadinimasPuslapioRenderinamo = getPavadinimaPuslapioRenderinamo(req, res, next);
-  var objektasQuery = getObjektaQuery(req, res, next);
-  var pavadinimasCollection = getPavadinimaCollection(req, res, next);
-  var collectionIrasu;
-  var objektasKintamujuPerduodamuIJade = getObjektaKintamujuPerduodamaIJade(req, res, next);
+router.pateiktiFormaIrasoRedagavimo = function(req, res, next) {
+  var pavadinimasPuslapioRenderinamo = router.getPavadinimaPuslapioRenderinamo(req, res, next);
+  var objektasQuery = router.getObjektaQuery(req, res, next);
+  var pavadinimasCollection = router.getPavadinimaCollection(req, res, next);
+  var collectionIrasu;  
+  var objektasKintamujuPerduodamuIJade = router.getObjektaKintamujuPerduodamaIJade(req, res, next);
 
   // Cia dar reikia pergalvot logika ir paeditint, paadint koda.
 
@@ -277,7 +287,7 @@ var pateiktiFormaIrasoRedagavimo = function(req, res, next) {
   res.render(pavadinimasPuslapioRenderinamo, objektasKintamujuPerduodamuIJade);
 };
 
-var getPathBeBaseUrlICollection = function(req, res, next) {
+router.getPathBeBaseUrlICollection = function(req, res, next) {
   if (req.path.length >= variables.pathZurnalai.length) {
     if (req.path.substring(0, variables.pathZurnalai.length) == variables.pathZurnalai) {
       return variables.pathZurnalai;
@@ -295,7 +305,7 @@ var getPathBeBaseUrlICollection = function(req, res, next) {
   }
 };
 
-var getPathSuBaseUrlICollection = function(req, res, next, pathBeBaseUrlICollectionKonkretu) {
+router.getPathSuBaseUrlICollection = function(req, res, next, pathBeBaseUrlICollectionKonkretu) {
   if (pathBeBaseUrlICollectionKonkretu) {
     if (req.baseUrl != variables.pathAdmin) {
       return pathBeBaseUrlICollectionKonkretu;
@@ -306,20 +316,20 @@ var getPathSuBaseUrlICollection = function(req, res, next, pathBeBaseUrlICollect
   }
   else {
     if (req.baseUrl != variables.pathAdmin) {
-      return getPathBeBaseUrlICollection(req, res, next);
+      return router.getPathBeBaseUrlICollection(req, res, next);
     }
     else if (req.baseUrl == variables.pathAdmin) {
-      return req.baseUrl + getPathBeBaseUrlICollection(req, res, next);
+      return req.baseUrl + router.getPathBeBaseUrlICollection(req, res, next);
     }
   }
 };
 
-var redirectIndexIZurnalai = function(req, res, next) {
+router.redirectIndexIZurnalai = function(req, res, next) {
   console.log('@@@@@316 redirectIndexIZurnalai');
   /*
    Patikrina, ar HTTP request path'o tik pradzia lygi variables.pathIndex, ar visas request path'as lygus variables.pathIndex.
    */
-  var pathSuBaseUrlIZurnalai = getPathSuBaseUrlICollection(req, res, next, variables.pathZurnalai);
+  var pathSuBaseUrlIZurnalai = router.getPathSuBaseUrlICollection(req, res, next, variables.pathZurnalai);
   // console.log('@@@@@321', pathSuBaseUrlIZurnalai);
   console.log('@@@@@321');
   if (req.path == variables.pathIndex) {
@@ -335,7 +345,7 @@ var redirectIndexIZurnalai = function(req, res, next) {
 };
 
 
-var apdorotiLoginAttempt = function(req, res, next) {
+router.apdorotiLoginAttempt = function(req, res, next) {
   if (req.body.username == 'administrator' && req.body.password == 'MABpcadmin') {
     res.redirect(variables.pathAdmin);
   }
@@ -344,13 +354,13 @@ var apdorotiLoginAttempt = function(req, res, next) {
   }
 };
 
-var atvaizduotiPuslapyjeLoginFailed = function(req, res, next) {
+router.atvaizduotiPuslapyjeLoginFailed = function(req, res, next) {
   next(variables.getObjektaErrorNeteisingasPrisijungimas());
 };
 
 
-router.get(variables.pathIndex, redirectIndexIZurnalai);
-router.get(variables.pathZurnalai, getIrasusIsDbIrAtvaizduotiPuslapyje);
+router.get(variables.pathIndex, router.redirectIndexIZurnalai);
+router.get(variables.pathZurnalai, router.getIrasusIsDbIrAtvaizduotiPuslapyje);
 
 // router.use('/', function(req, res, next) {
 //   console.log('@@@@348');
@@ -406,8 +416,12 @@ router.get(variables.pathZurnalai, getIrasusIsDbIrAtvaizduotiPuslapyje);
 //     router.get(variables.pathDuomenuBazeAnksciauSukurta, getIrasusIsDbIrAtvaizduotiPuslapyje(req, res, next));
 //     router.post(variables.pathDuomenuBazeNauja, sukurtiNaujaArbaPakeistiSenaIrasa(req, res, next));
 //     router.post(variables.pathDuomenuBazeAnksciauSukurta, sukurtiNaujaArbaPakeistiSenaIrasa(req, res, next));
-//   }
+//   } 
 // });
+
+
+
+
 
 
 

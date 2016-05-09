@@ -5,31 +5,37 @@
 table#lenteleIrasuSaraso.table-responsivetable.table.table-striped.table-bordered
   thead
     tr
-      - for (var numerisStulpelioArbaFieldo = 0; numerisStulpelioArbaFieldo < pp.vv.getKiekiStulpeliuIrFieldu(); numerisStulpelioArbaFieldo++) {
-        - if (pp.vv.getArRodomasStulpelisLenteleje(pp.pavadinimasCollection, numerisStulpelioArbaFieldo)) {
-          - if (pp.vv.getAliasArbaNumeriStulpelioArbaFieldo(pp.pavadinimasCollection, numerisStulpelioArbaFieldo) == 'checkboxTrynimoIrKeitimo') {
+      - for (var numerisStulpelioArbaFieldo = 0; numerisStulpelioArbaFieldo < vv.getKiekiStulpeliuIrFieldu(pp.pavadinimasCollection); numerisStulpelioArbaFieldo++) {
+        - if (vv.getArRodomasStulpelisLenteleje(pp.pavadinimasCollection, numerisStulpelioArbaFieldo)) {
+          - if (vv.getAliasArbaNumeriStulpelioArbaFieldo(pp.pavadinimasCollection, numerisStulpelioArbaFieldo) == 'checkboxTrynimoIrKeitimo') {
             th: input.checkboxInThead(type='checkbox' id='visi')
           - }
           - else {
-            th= pp.vv.getPavadinimaStulpelio(pp.pavadinimasCollection, numerisStulpelioArbaFieldo)
+            th= vv.getPavadinimaStulpelio(pp.pavadinimasCollection, numerisStulpelioArbaFieldo)
           - }
         - }
       - }
   tbody
-    - for (var numerisEilutesIrElemento = 0; numerisEilutesIrElemento < masyvasDocumentu.length; numerisEilutesIrElemento++) {
+    - for (var numerisEilutesIrElemento = 0; numerisEilutesIrElemento < pp.masyvasDocumentu.length; numerisEilutesIrElemento++) {
       tr
-        - var objektasDocumento = masyvasDocumentu[numerisEilutesIrElemento];
-        - var rasta = false;
-        - for (var numerisStulpelioArbaFieldo = 0; numerisStulpelioArbaFieldo < pp.vv.getKiekiStulpeliuIrFieldu(); numerisStulpelioArbaFieldo++) {
-          - if (pp.vv.getArRodomasStulpelisLenteleje(pp.pavadinimasCollection, numerisStulpelioArbaFieldo)) {
-            - if (pp.vv.getAliasArbaNumeriStulpelioArbaFieldo(pp.pavadinimasCollection, numerisStulpelioArbaFieldo) == 'checkboxTrynimoIrKeitimo') {
+        - var objektasDocumento = pp.masyvasDocumentu[numerisEilutesIrElemento];
+        - for (var numerisStulpelioArbaFieldo = 0; numerisStulpelioArbaFieldo < vv.getKiekiStulpeliuIrFieldu(pp.pavadinimasCollection); numerisStulpelioArbaFieldo++) {
+          - if (vv.getArRodomasStulpelisLenteleje(pp.pavadinimasCollection, numerisStulpelioArbaFieldo)) {
+            - if (vv.getAliasArbaNumeriStulpelioArbaFieldo(pp.pavadinimasCollection, numerisStulpelioArbaFieldo) == 'checkboxTrynimoIrKeitimo') {
               td: input.checkboxInTbody(type='checkbox' id=objektasDocumento['_id'].toHexString())
             - }
-            - else if (pp.vv.getAliasArbaNumeriStulpelioArbaFieldo(pp.pavadinimasCollection, numerisStulpelioArbaFieldo) == 'nr') {
+            - else if (vv.getAliasArbaNumeriStulpelioArbaFieldo(pp.pavadinimasCollection, numerisStulpelioArbaFieldo) == 'nr') {
               td= numerisEilutesIrElemento
             - }
-            - else if (objektasDocumento.hasOwnProperty(pp.vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioArbaFieldo))) {
-              td!= Autolinker.link(objektasDocumento[pp.vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioArbaFieldo)])
+            - else if (objektasDocumento.hasOwnProperty(vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioArbaFieldo))) {
+                //- window.alert('qqwe')
+                //-console.log('@@@@32')
+                //-var something = objektasDocumento[vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioArbaFieldo)];
+                //-console.log('@@@@32');
+                //-console.log('@@@@33' + something);
+                //- console.log(something);
+              td!= vv.Autolinker.link(objektasDocumento[vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioArbaFieldo)])
+                //td!= vv.Autolinker.link('awdawd google.lt awdwad')
             - }
             - else {
               td

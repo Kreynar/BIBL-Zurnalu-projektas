@@ -16,7 +16,7 @@ html
     block STYLES_ADDITIONAL
 
 body
-  include navbar.jade
+  block NAVBAR
   block CONTENT
   include footer.jade
   - if (typeof jQuery == 'undefined') {

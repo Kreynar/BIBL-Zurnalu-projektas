@@ -2,25 +2,29 @@
 
 extends main_layout.jade
 
+
+block NAVBAR
+  include navbar.jade
+
 block CONTENT
   #paneleIrasoRedagavimo.panel.panel-default(style='padding:10px')
     .container-fluid
       h1.col-sm-offset-5= headeris
       br
-      form.form-horizontal.col-sm-offset-1.col-sm-8(name='naujasirasas' method='post' action=pp.vv.pathPostNaujaIrasa)
+      form.form-horizontal.col-sm-offset-1.col-sm-8(name='naujasirasas' method='post' action=vv.pathPostNaujaIrasa)
         - for (var numerisStulpelioIrFieldo = 0; numerisStulpelioIrFieldo < pp.vv.getKiekiStulpeliuIrFieldu(); numerisStulpelioIrFieldo++) {
           .form-group
             -
-              if (pp.vv.getArRodomasStulpelisLenteleje(pp.vv.pavadinimasCollection, numerisStulpelioIrFieldo)
-              && pp.vv.getArFiksuojamasFieldasDuomenuBazeje(pp.vv.pavadinimasCollection, numerisStulpelioIrFieldo)) {
-                label.col-sm-2.control-label(for=pp.vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo)) #{pp.vv.getPavadinimaStulpelio(pp.pavadinimasCollection, numerisStulpelioIrFieldo)}
+              if (vv.getArRodomasStulpelisLenteleje(vv.pavadinimasCollection, numerisStulpelioIrFieldo)
+              && vv.getArFiksuojamasFieldasDuomenuBazeje(vv.pavadinimasCollection, numerisStulpelioIrFieldo)) {
+                label.col-sm-2.control-label(for=pp.vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo)) #{vv.getPavadinimaStulpelio(pp.pavadinimasCollection, numerisStulpelioIrFieldo)}
                 .col-sm-10
                   -if (pp.documentIraso) {
-                    textarea.form-control(type='text' id=pp.vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo) name=pp.vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo)).
-                      #{(pp.documentIraso[pp.vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo)] ? pp.documentIraso[pp.vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo)] : '')}
+                    textarea.form-control(type='text' id=vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo) name=vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo)).
+                      #{(pp.documentIraso[vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo)] ? pp.documentIraso[vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo)] : '')}
                   -}
                   -else {
-                    textarea.form-control(type='text' id=pp.vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo) name=pp.vv.getPavadinimaFieldo(pp.vv.pavadinimasCollection, numerisStulpelioIrFieldo))
+                    textarea.form-control(type='text' id=vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo) name=vv.getPavadinimaFieldo(vv.pavadinimasCollection, numerisStulpelioIrFieldo))
                   -}
             - }
         - }

@@ -5,7 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var routesZurnaluIrLeidejuIrDuomenuBaziu = require('./routes/collections');
+var collections = require('./routes/collections');
 // var routesLeidejai = require('./routes/leidejai');
 // var routesDuomenuBazes = require('./routes/duomenuBazes');
 // var users = require('./routes/users');
@@ -51,12 +51,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 // app.locals.Autolinker = variables.Autolinker;
 // app.locals.$salygaPaieskosTikNeistrintuIrasu = variables.$salygaPaieskosTikNeistrintuIrasu;
 
+app.locals.vv = variables;
+
 
 
 // app.use(variables.pathLoginFailed, routesZurnaluIrLeidejuIrDuomenuBaziu);
 // app.use(variables.pathLogin, routesZurnaluIrLeidejuIrDuomenuBaziu);
 // app.use(variables.pathAdmin, routesZurnaluIrLeidejuIrDuomenuBaziu);
-app.use('/', routesZurnaluIrLeidejuIrDuomenuBaziu);
+app.use('/', collections);
 // app.use('/', function(req, res, next) {
 //   console.log('@@@@@@@61');
 //   next(routesZurnaluIrLeidejuIrDuomenuBaziu);
@@ -104,12 +106,16 @@ app.use('/', function(req, res, next) {
 if (app.get('env') === 'development') {
   app.use('/', function(err, req, res, next) {
     console.log('@@@@@@@93 renderinam ir siunciam clientui puslapi su pranesimu apie klaida');
+    var objektasKintamujuPerduodamasIJade = collections.getObjektaKintamujuPerduodamaIJade(req, res, next);
+    objektasKintamujuPerduodamasIJade.pp.message = err.message;
+    objektasKintamujuPerduodamasIJade.pp.error = err;
     res.status(err.status || 500);
-    res.render('puslapisError.jade', {
-      // pavadinimasSvetaines: variables.pavadinimasSvetaines,
-      message: err.message,
-      error: err
-    });
+    res.render('puslapisError.jade', objektasKintamujuPerduodamasIJade);
+    // res.render('puslapisError.jade', {
+    //   // pavadinimasSvetaines: variables.pavadinimasSvetaines,
+    //   message: err.message,
+    //   error: err
+    // });
   });
 }
 
@@ -117,12 +123,16 @@ if (app.get('env') === 'development') {
 // no stacktraces leaked to user
 app.use('/', function(err, req, res, next) {
   console.log('@@@@@@@106');
+  var objektasKintamujuPerduodamasIJade = collections.getObjektaKintamujuPerduodamaIJade(req, res, next);
+  objektasKintamujuPerduodamasIJade.pp.message = err.message;
+  objektasKintamujuPerduodamasIJade.pp.error = err;
   res.status(err.status || 500);
-  res.render('puslapisError.jade', {
-    // pavadinimasSvetaines: variables.pavadinimasSvetaines,
-    message: err.message,
-    error: {}
-  });
+  res.render('puslapisError.jade', objektasKintamujuPerduodamasIJade);
+  // res.render('puslapisError.jade', {
+  //   // pavadinimasSvetaines: variables.pavadinimasSvetaines,
+  //   message: err.message,
+  //   error: {}
+  // });
 });
 
 
