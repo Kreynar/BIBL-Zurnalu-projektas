@@ -153,7 +153,7 @@ var getObjektaKintamujuPerduodamaIJade = function(req, res, next) {
 };
 
 var getIrasusIsDbIrAtvaizduotiPuslapyje = function(req, res, next) {
-  console.log('@@@@@200');
+  console.log('@@@@@156 getIrasusIsDbIrAtvaizduotiPuslapyje');
   var MongoClient = mongodb.MongoClient;
   var idIraso = req.params.id || '';
   var objektasSort = getObjektaSort(req, res, next);
@@ -313,14 +313,17 @@ var getPathSuBaseUrlICollection = function(req, res, next, pathBeBaseUrlICollect
 };
 
 var redirectIndexIZurnalai = function(req, res, next) {
-
+  console.log('@@@@@316 redirectIndexIZurnalai');
   /*
    Patikrina, ar HTTP request path'o tik pradzia lygi variables.pathIndex, ar visas request path'as lygus variables.pathIndex.
    */
-  var pathSuBaseUrlIZurnalai = getPathSuBaseUrlICollection(req, res, next, variables.pathZurnalai);
+  // var pathSuBaseUrlIZurnalai = getPathSuBaseUrlICollection(req, res, next, variables.pathZurnalai);
+  // console.log('@@@@@321', pathSuBaseUrlIZurnalai);
+  console.log('@@@@@321');
   if (req.path == variables.pathIndex) {
-    console.log('@@@@@63');
-    res.redirect(pathSuBaseUrlIZurnalai);
+    console.log('@@@@@63 res.redirect(variables.pathZurnalai);');
+    // res.redirect(pathSuBaseUrlIZurnalai);
+    res.redirect(variables.pathZurnalai);
   }
   else {
     console.log('@@@@@67');
@@ -344,49 +347,57 @@ var atvaizduotiPuslapyjeLoginFailed = function(req, res, next) {
 
 
 
-router.use(function(req, res, next) {
+router.use('/', function(req, res, next) {
+  console.log('@@@@348');
   
   /* Login sistema is bedos laikina >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
   if (req.baseUrl == variables.pathLogin) {
-    router.use(apdorotiLoginAttempt);
+    
+    console.log('@@@@351');
+    router.use(apdorotiLoginAttempt(req, res, next));
+    
   }
+      
   else if (req.baseUrl == variables.pathLoginFailed) {
-    router.use(atvaizduotiPuslapyjeLoginFailed);
+    console.log('@@@@355');
+    router.use(atvaizduotiPuslapyjeLoginFailed(req, res, next));
   }
   /* Login sistema is bedos laikina <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
   
   else if (req.baseUrl != variables.pathAdmin) {
-    router.get(variables.pathIndex, redirectIndexIZurnalai);
-    router.get(variables.pathZurnalai, getIrasusIsDbIrAtvaizduotiPuslapyje);
+    console.log('@@@@361');
+    router.get(variables.pathIndex, redirectIndexIZurnalai(req, res, next));
+    router.get(variables.pathZurnalai, getIrasusIsDbIrAtvaizduotiPuslapyje(req, res, next));
   }
   else if (req.baseUrl == variables.pathAdmin) {
+    console.log('@@@@366');
 
     /* '/' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
-    router.get(variables.pathIndex, redirectIndexIZurnalai);
+    router.get(variables.pathIndex, redirectIndexIZurnalai(req, res, next));
 
     /* '/zurnalai' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
-    router.get(variables.pathZurnalai, getIrasusIsDbIrAtvaizduotiPuslapyje);
-    router.delete(variables.pathZurnalai, trintiIrasus);
-    router.get(variables.pathZurnalasNaujas, pateiktiFormaIrasoRedagavimo);
-    router.get(variables.pathZurnalasAnksciauSukurtas, getIrasusIsDbIrAtvaizduotiPuslapyje);
-    router.post(variables.pathZurnalasNaujas, sukurtiNaujaArbaPakeistiSenaIrasa);
-    router.post(variables.pathZurnalasAnksciauSukurtas, sukurtiNaujaArbaPakeistiSenaIrasa);
+    router.get(variables.pathZurnalai, getIrasusIsDbIrAtvaizduotiPuslapyje(req, res, next));
+    router.delete(variables.pathZurnalai, trintiIrasus(req, res, next));
+    router.get(variables.pathZurnalasNaujas, pateiktiFormaIrasoRedagavimo(req, res, next));
+    router.get(variables.pathZurnalasAnksciauSukurtas, getIrasusIsDbIrAtvaizduotiPuslapyje(req, res, next));
+    router.post(variables.pathZurnalasNaujas, sukurtiNaujaArbaPakeistiSenaIrasa(req, res, next));
+    router.post(variables.pathZurnalasAnksciauSukurtas, sukurtiNaujaArbaPakeistiSenaIrasa(req, res, next));
 
     /* '/leidejai' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
-    router.get(variables.pathLeidejai, getIrasusIsDbIrAtvaizduotiPuslapyje);
-    router.delete(variables.pathLeidejai, trintiIrasus);
-    router.get(variables.pathLeidejasNaujas, pateiktiFormaIrasoRedagavimo);
-    router.get(variables.pathLeidejasAnksciauSukurtas, getIrasusIsDbIrAtvaizduotiPuslapyje);
-    router.post(variables.pathLeidejasNaujas, sukurtiNaujaArbaPakeistiSenaIrasa);
-    router.post(variables.pathLeidejasAnksciauSukurtas, sukurtiNaujaArbaPakeistiSenaIrasa);
+    router.get(variables.pathLeidejai, getIrasusIsDbIrAtvaizduotiPuslapyje(req, res, next));
+    router.delete(variables.pathLeidejai, trintiIrasus(req, res, next));
+    router.get(variables.pathLeidejasNaujas, pateiktiFormaIrasoRedagavimo(req, res, next));
+    router.get(variables.pathLeidejasAnksciauSukurtas, getIrasusIsDbIrAtvaizduotiPuslapyje(req, res, next));
+    router.post(variables.pathLeidejasNaujas, sukurtiNaujaArbaPakeistiSenaIrasa(req, res, next));
+    router.post(variables.pathLeidejasAnksciauSukurtas, sukurtiNaujaArbaPakeistiSenaIrasa(req, res, next));
 
     /* '/duomenu-bazes' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
-    router.get(variables.pathDuomenuBazes, getIrasusIsDbIrAtvaizduotiPuslapyje);
-    router.delete(variables.pathDuomenuBazes, trintiIrasus);
-    router.get(variables.pathDuomenuBazeNauja, pateiktiFormaIrasoRedagavimo);
-    router.get(variables.pathDuomenuBazeAnksciauSukurta, getIrasusIsDbIrAtvaizduotiPuslapyje);
-    router.post(variables.pathDuomenuBazeNauja, sukurtiNaujaArbaPakeistiSenaIrasa);
-    router.post(variables.pathDuomenuBazeAnksciauSukurta, sukurtiNaujaArbaPakeistiSenaIrasa);
+    router.get(variables.pathDuomenuBazes, getIrasusIsDbIrAtvaizduotiPuslapyje(req, res, next));
+    router.delete(variables.pathDuomenuBazes, trintiIrasus(req, res, next));
+    router.get(variables.pathDuomenuBazeNauja, pateiktiFormaIrasoRedagavimo(req, res, next));
+    router.get(variables.pathDuomenuBazeAnksciauSukurta, getIrasusIsDbIrAtvaizduotiPuslapyje(req, res, next));
+    router.post(variables.pathDuomenuBazeNauja, sukurtiNaujaArbaPakeistiSenaIrasa(req, res, next));
+    router.post(variables.pathDuomenuBazeAnksciauSukurta, sukurtiNaujaArbaPakeistiSenaIrasa(req, res, next));
   }
 });
 

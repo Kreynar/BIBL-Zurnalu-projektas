@@ -53,12 +53,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 
-app.use(variables.pathLogin, routesZurnaluIrLeidejuIrDuomenuBaziu);
 app.use(variables.pathLoginFailed, routesZurnaluIrLeidejuIrDuomenuBaziu);
+app.use(variables.pathLogin, routesZurnaluIrLeidejuIrDuomenuBaziu);
 app.use(variables.pathAdmin, routesZurnaluIrLeidejuIrDuomenuBaziu);
 app.use('/', routesZurnaluIrLeidejuIrDuomenuBaziu);
+// app.use('/', function(req, res, next) {
+//   console.log('@@@@@@@61');
+//   next(routesZurnaluIrLeidejuIrDuomenuBaziu);
+//   // app.use('/', routesZurnaluIrLeidejuIrDuomenuBaziu);
+// });
 
 app.use('/', function(req, res, next) {
+  console.log('@@@@@@@67');
   next(variables.getObjektaError404());
 });
 
@@ -66,8 +72,9 @@ app.use('/', function(req, res, next) {
 // will print stacktrace
 if (app.get('env') === 'development') {
   app.use('/', function(err, req, res, next) {
+    console.log('@@@@@@@75', req.originalUrl, req.baseUrl, req.path);
     res.status(err.status || 500);
-    res.render('error', {
+    res.render('puslapisError.jade', {
       // pavadinimasSvetaines: variables.pavadinimasSvetaines,
       message: err.message,
       error: err
@@ -78,8 +85,9 @@ if (app.get('env') === 'development') {
 // production error handler
 // no stacktraces leaked to user
 app.use('/', function(err, req, res, next) {
+  console.log('@@@@@@@88');
   res.status(err.status || 500);
-  res.render('error', {
+  res.render('puslapisError.jade', {
     // pavadinimasSvetaines: variables.pavadinimasSvetaines,
     message: err.message,
     error: {}
