@@ -1,6 +1,6 @@
 extends main_layout
 
 block CONTENT
-  h1= message
-  h2= error.status
-  pre #{error.stack}
+  h1= pp.message
+  h2= pp.error.status
+  pre #{pp.error.stack}

@@ -7,19 +7,21 @@ block CONTENT
     .container-fluid
       h1.col-sm-offset-5= headeris
       br
-      form.form-horizontal.col-sm-offset-1.col-sm-8(name='naujasirasas' method='post' action=pathPostNaujaIrasa)
-        - for (var numerisStulpelioIrFieldo = 0; numerisStulpelioIrFieldo < kiekisStulpeliuArbaFieldu; numerisStulpelioIrFieldo++) {
+      form.form-horizontal.col-sm-offset-1.col-sm-8(name='naujasirasas' method='post' action=pp.vv.pathPostNaujaIrasa)
+        - for (var numerisStulpelioIrFieldo = 0; numerisStulpelioIrFieldo < pp.vv.getKiekiStulpeliuIrFieldu(); numerisStulpelioIrFieldo++) {
           .form-group
-            - if (getArRodytiStulpeliLenteleje(numerisStulpelioIrFieldo) && gerArFiksuojamasStulpelisDuomenuBazeje(numerisStulpelioIrFieldo)) {
-              label.col-sm-2.control-label(for=getPavadinimaFieldo(numerisStulpelioIrFieldo)) #{getPavadinimaStulpelio(numerisStulpelioIrFieldo)}
-              .col-sm-10
-                -if (documentIraso) {
-                  textarea.form-control(type='text' id=getPavadinimaFieldo(numerisStulpelioIrFieldo) name=getPavadinimaFieldo(numerisStulpelioIrFieldo)).
-                    #{(documentIraso[getPavadinimaFieldo(numerisStulpelioIrFieldo)] ? documentIraso[getPavadinimaFieldo(numerisStulpelioIrFieldo)] : '')}
-                -}
-                -else {
-                  textarea.form-control(type='text' id=getPavadinimaFieldo(numerisStulpelioIrFieldo) name=getPavadinimaFieldo(numerisStulpelioIrFieldo))
-                -}
+            -
+              if (pp.vv.getArRodomasStulpelisLenteleje(pp.vv.pavadinimasCollection, numerisStulpelioIrFieldo)
+              && pp.vv.getArFiksuojamasFieldasDuomenuBazeje(pp.vv.pavadinimasCollection, numerisStulpelioIrFieldo)) {
+                label.col-sm-2.control-label(for=pp.vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo)) #{pp.vv.getPavadinimaStulpelio(pp.pavadinimasCollection, numerisStulpelioIrFieldo)}
+                .col-sm-10
+                  -if (pp.documentIraso) {
+                    textarea.form-control(type='text' id=pp.vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo) name=pp.vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo)).
+                      #{(pp.documentIraso[pp.vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo)] ? pp.documentIraso[pp.vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo)] : '')}
+                  -}
+                  -else {
+                    textarea.form-control(type='text' id=pp.vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo) name=pp.vv.getPavadinimaFieldo(pp.vv.pavadinimasCollection, numerisStulpelioIrFieldo))
+                  -}
             - }
         - }
         .col-sm-offset-2

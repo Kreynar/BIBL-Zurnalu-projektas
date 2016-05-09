@@ -8,7 +8,7 @@
         span(style='font-size:20px; margin-right:20px'): b Pasirinkite:
         .btn-group(role='group' aria-label='grupeMygtukuPagalAbecelePaieskos')
           a(href='/'): .btn.btn-default(type='button'): b Visi
-          each raide in masyvasRaidziuAbecelesLietuviskos
+          each raide in pp.vv.masyvasRaidziuAbecelesLietuviskos
             //a(href=pathIrQueryPaieskuPagalRegexBeReiksmesParametro+'/^\\s*'+raide+'/i')
             a(href='/' + '?raide=' + raide)
               .btn.btn-default(type='button')= raide

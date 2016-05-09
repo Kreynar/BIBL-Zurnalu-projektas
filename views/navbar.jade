@@ -6,15 +6,15 @@
       button.navbar-toggle.collapsed(type='button' data-toggle='collapse' data-target='#navbar' aria-expanded='false' aria-controls='navbar')
         span (not sure, ismegint)Toggle navigation
         span.icon-bar (not sure, ismegint)kazkas kito
-      a.navbar-brand(href='/'): b(style='color:white')= pavadinimasSvetaines
+      a.navbar-brand(href='/'): b(style='color:white')= pp.pavadinimasSvetaines
     #navbar.navbar-collapse.collapse
       .navbar-form.navbar-right
-        - if (arAdmin) {
+        - if (pp.arAdmin) {
           form(action='#')
             button.btn.btn-success(type='submit') Atsijungti
-        -}
-        - else {
-          form(action=)
+        - }
+        - else if (!pp.arAdmin) {
+          form(action=pp.vv.pathLogin)
             .form-group(style='margin-right:5px')
               input.form-control(type='text' placeholder='El. paštas' name='username')
             .form-group(style='margin-right:5px')
@@ -24,7 +24,7 @@
                 input(type='checkbox' value='prisimintiVartotoja' name='checkboxPrisimintiVartotoja')
                 | Prisiminti
                 button.btn.btn-success(type='submit') Prisijungti
-        -}
+        - }
 
 
 
