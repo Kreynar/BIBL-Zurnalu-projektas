@@ -34,7 +34,10 @@ table#lenteleIrasuSaraso.table-responsivetable.table.table-striped.table-bordere
                 //-console.log('@@@@32');
                 //-console.log('@@@@33' + something);
                 //- console.log(something);
-              td!= vv.Autolinker.link(objektasDocumento[vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioArbaFieldo)])
+              - var pavadinimasStulpelio = vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioArbaFieldo);
+              //- console.log(objektasDocumento[pavadinimasStulpelio]);
+              td!= objektasDocumento[pavadinimasStulpelio]
+                //td!= vv.Autolinker.link(objektasDocumento[pavadinimasStulpelio])
                 //td!= vv.Autolinker.link('awdawd google.lt awdwad')
             - }
             - else {
