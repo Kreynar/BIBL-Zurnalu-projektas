@@ -9,22 +9,22 @@
       a.navbar-brand(href='/'): b(style='color:white')= vv.pavadinimasSvetaines
     #navbar.navbar-collapse.collapse
       .navbar-form.navbar-right
-        - if (pp.arAdmin) {
-          form(action='#')
-            button.btn.btn-success(type='submit') Atsijungti
-        - }
-        - else if (!pp.arAdmin) {
-          form(action=vv.pathLogin)
-            .form-group(style='margin-right:5px')
-              input.form-control(type='text' placeholder='El. paštas' name='username')
-            .form-group(style='margin-right:5px')
-              input.form-control(type='password' placeholder='Slaptažodis' name='password')
-            .checkbox(style='margin-right:5px')
-              label(style="color:white")
-                input(type='checkbox' value='prisimintiVartotoja' name='checkboxPrisimintiVartotoja')
-                | Prisiminti
-                button.btn.btn-success(type='submit') Prisijungti
-        - }
+          //- if (pp.arAdmin) {
+          //  form(action='#')
+          //    button.btn.btn-success(type='submit') Atsijungti
+          //- }
+          //- else if (!pp.arAdmin) {
+          //  form(action=vv.pathLogin)
+          //    .form-group(style='margin-right:5px')
+          //      input.form-control(type='text' placeholder='El. paštas' name='username')
+          //    .form-group(style='margin-right:5px')
+          //      input.form-control(type='password' placeholder='Slaptažodis' name='password')
+          //    .checkbox(style='margin-right:5px')
+          //      label(style="color:white")
+          //        input(type='checkbox' value='prisimintiVartotoja' name='checkboxPrisimintiVartotoja')
+          //        | Prisiminti
+          //        button.btn.btn-success(type='submit') Prisijungti
+          //- }
 
 
 

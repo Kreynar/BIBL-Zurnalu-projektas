@@ -29,29 +29,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(favicon(__dirname + '/public/images/favicon.ico'));
 
 
-// app.locals.pavadinimasSvetaines = variables.pavadinimasSvetaines;
-// app.locals.pristatymasSvetaines = variables.pristatymasSvetaines;
-// app.locals.getPavadinimaStulpelio = variables.getPavadinimaStulpelio;
-// app.locals.getPavadinimaFieldo = variables.getPavadinimaFieldo;
-// app.locals.getArRodomasStulpelisLenteleje = variables.getArRodomasStulpelisLenteleje;
-// app.locals.getArFiksuojamasFieldasDuomenuBazeje = variables.getArFiksuojamasFieldasDuomenuBazeje;
-// app.locals.getAliasArbaNumeriStulpelioArbaFieldo = variables.getAliasArbaNumeriStulpelioArbaFieldo;
-// app.locals.kiekisStulpeliuArbaFieldu = variables.kiekisStulpeliuArbaFieldu;
-// app.locals.masyvasRaidziuAbecelesLietuviskos = variables.masyvasRaidziuAbecelesLietuviskos;
-// app.locals.pathIndex = variables.pathIndex;
-// app.locals.pathZurnalai = variables.pathZurnalai;
-// app.locals.pathZurnalasNaujas = variables.pathZurnalasNaujas;
-// app.locals.pathZurnalasAnksciauSukurtas = variables.pathZurnalasAnksciauSukurtas;
-// app.locals.parametrasQueryPaieskuPagalRaide = variables.parametrasQueryPaieskuPagalRaide;
-// app.locals.parametrasQueryPaieskuPagalFraze = variables.parametrasQueryPaieskuPagalFraze;
-// app.locals.pathLeidejai = variables.pathLeidejai;
-// app.locals.pathLeidejasNaujas = variables.pathLeidejasNaujas;
-// app.locals.pathLeidejasAnksciauSukurtas = variables.pathLeidejasAnksciauSukurtas;
-// app.locals.pathDuomenuBazes = variables.pathDuomenuBazes;
-// app.locals.pathDuomenuBazeNauja = variables.pathDuomenuBazeNauja;
-// app.locals.pathDuomenuBazeAnksciauSukurta = variables.pathDuomenuBazeAnksciauSukurta;
-// app.locals.Autolinker = variables.Autolinker;
-// app.locals.$salygaPaieskosTikNeistrintuIrasu = variables.$salygaPaieskosTikNeistrintuIrasu;
 
 app.locals.vv = variables;
 
@@ -107,7 +84,7 @@ app.use('/', function(req, res, next) {
 // will print stacktrace
 if (app.get('env') === 'development') {
   app.use('/', function(err, req, res, next) {
-    console.log('@@@@@@@93 renderinam ir siunciam clientui puslapi su pranesimu apie klaida');
+    console.log('@@@@@@@93 in app.js: renderinam ir siunciam clientui puslapi su pranesimu apie klaida');
     var objektasKintamujuPerduodamasIJade = collections.getObjektaKintamujuPerduodamaIJade(req, res, next);
     objektasKintamujuPerduodamasIJade.pp.message = err.message;
     objektasKintamujuPerduodamasIJade.pp.error = err;
@@ -124,7 +101,7 @@ if (app.get('env') === 'development') {
 // production error handler
 // no stacktraces leaked to user
 app.use('/', function(err, req, res, next) {
-  console.log('@@@@@@@106');
+  // console.log('@@@@@@@106  in app.js: ');
   var objektasKintamujuPerduodamasIJade = collections.getObjektaKintamujuPerduodamaIJade(req, res, next);
   objektasKintamujuPerduodamasIJade.pp.message = err.message;
   objektasKintamujuPerduodamasIJade.pp.error = err;

@@ -120,7 +120,7 @@ router.getObjektaSort = function(req, res, next) {
 router.getPavadinimaPuslapioRenderinamo = function(req, res, next) {
   var pavadinimasPuslapioRenderinamo;
   if (req.params.id) {
-    pavadinimasPuslapioRenderinamo = '../views/puslapisIrasuModifikavimo.jade';
+    pavadinimasPuslapioRenderinamo = '../views/puslapisIrasoModifikavimo.jade';
   }
   else {
     pavadinimasPuslapioRenderinamo = '../views/puslapisIrasuLenteles.jade';
@@ -148,12 +148,6 @@ router.getPavadinimaCollection = function(req, res, next) {
   }
 };
 
-router.getObjektaKintamujuPerduodamaIJade = function(req, res, next) {
-  var arAdmin = (req.baseUrl == variables.pathAdmin) ? true : false;
-  return { 'pp' : {
-                  'pavadinimasCollection' : getPavadinimaCollection(req, res, next)
-                  , 'arAdmin' : arAdmin } };
-};
 
 router.getObjektaKintamujuPerduodamaIJade = function(req, res, next) {
   var arAdmin = (req.baseUrl == variables.pathAdmin) ? true : false;
@@ -359,65 +353,95 @@ router.atvaizduotiPuslapyjeLoginFailed = function(req, res, next) {
 };
 
 
-router.get(variables.pathIndex, router.redirectIndexIZurnalai);
-router.get(variables.pathZurnalai, router.getIrasusIsDbIrAtvaizduotiPuslapyje);
+// router.get(variables.pathIndex, router.redirectIndexIZurnalai);
+// router.get(variables.pathZurnalai, router.getIrasusIsDbIrAtvaizduotiPuslapyje);
 
-// router.use('/', function(req, res, next) {
-//   console.log('@@@@348');
-//
-//   /* Login sistema is bedos laikina >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
-//   if (req.baseUrl == variables.pathLogin) {
-//
-//     console.log('@@@@351');
-//     router.use(apdorotiLoginAttempt(req, res, next));
-//
+
+// router.use('/:admin', function(req, res, next) {
+//   if ('/'+req.params.admin == variables.pathAdmin) {
+//     req.baseUrl = 
 //   }
-//
-//   else if (req.baseUrl == variables.pathLoginFailed) {
-//     console.log('@@@@355');
-//     router.use(atvaizduotiPuslapyjeLoginFailed(req, res, next));
-//   }
-//   /* Login sistema is bedos laikina <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
-//
-//   else if (req.baseUrl != variables.pathAdmin) {
-//     console.log('@@@@361');
-//     // router.get(variables.pathIndex, function(req, res, next) {
-//     //   console.log('@@@@@@370');
-//     // });
-//     router.get(variables.pathIndex, redirectIndexIZurnalai(req, res, next));
-//     router.get(variables.pathZurnalai, getIrasusIsDbIrAtvaizduotiPuslapyje(req, res, next));
-//   }
-//   else if (req.baseUrl == variables.pathAdmin) {
-//     console.log('@@@@366');
-//
-//     /* '/' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
-//     router.get(variables.pathIndex, redirectIndexIZurnalai(req, res, next));
-//
-//     /* '/zurnalai' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
-//     router.get(variables.pathZurnalai, getIrasusIsDbIrAtvaizduotiPuslapyje(req, res, next));
-//     router.delete(variables.pathZurnalai, trintiIrasus(req, res, next));
-//     router.get(variables.pathZurnalasNaujas, pateiktiFormaIrasoRedagavimo(req, res, next));
-//     router.get(variables.pathZurnalasAnksciauSukurtas, getIrasusIsDbIrAtvaizduotiPuslapyje(req, res, next));
-//     router.post(variables.pathZurnalasNaujas, sukurtiNaujaArbaPakeistiSenaIrasa(req, res, next));
-//     router.post(variables.pathZurnalasAnksciauSukurtas, sukurtiNaujaArbaPakeistiSenaIrasa(req, res, next));
-//
-//     /* '/leidejai' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
-//     router.get(variables.pathLeidejai, getIrasusIsDbIrAtvaizduotiPuslapyje(req, res, next));
-//     router.delete(variables.pathLeidejai, trintiIrasus(req, res, next));
-//     router.get(variables.pathLeidejasNaujas, pateiktiFormaIrasoRedagavimo(req, res, next));
-//     router.get(variables.pathLeidejasAnksciauSukurtas, getIrasusIsDbIrAtvaizduotiPuslapyje(req, res, next));
-//     router.post(variables.pathLeidejasNaujas, sukurtiNaujaArbaPakeistiSenaIrasa(req, res, next));
-//     router.post(variables.pathLeidejasAnksciauSukurtas, sukurtiNaujaArbaPakeistiSenaIrasa(req, res, next));
-//
-//     /* '/duomenu-bazes' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
-//     router.get(variables.pathDuomenuBazes, getIrasusIsDbIrAtvaizduotiPuslapyje(req, res, next));
-//     router.delete(variables.pathDuomenuBazes, trintiIrasus(req, res, next));
-//     router.get(variables.pathDuomenuBazeNauja, pateiktiFormaIrasoRedagavimo(req, res, next));
-//     router.get(variables.pathDuomenuBazeAnksciauSukurta, getIrasusIsDbIrAtvaizduotiPuslapyje(req, res, next));
-//     router.post(variables.pathDuomenuBazeNauja, sukurtiNaujaArbaPakeistiSenaIrasa(req, res, next));
-//     router.post(variables.pathDuomenuBazeAnksciauSukurta, sukurtiNaujaArbaPakeistiSenaIrasa(req, res, next));
-//   } 
 // });
+
+// router.use('/:*', function(req, res, next){
+//   console.log('@@@361', req.params[0]);
+// });
+//
+// router.use('/:a', function(req, res, next){
+//   console.log('@@@365', req.params.a);
+// });
+
+router.use(variables.pathAdmin, function(req, res, next) {
+  next();
+});
+
+router.use('/', function(req, res, next){
+  console.log('@@@369', req.baseUrl);
+});
+
+// router.use('/', function(req, res, next){
+//   console.log('@@@369');
+// });
+
+
+
+router.use('/', function(req, res, next) {
+
+
+
+  // /* Login sistema is bedos laikina >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+  // if (req.baseUrl == variables.pathLogin) {
+  //
+  //   console.log('@@@@351');
+  //   router.use(apdorotiLoginAttempt(req, res, next));
+  //
+  // }
+  //
+  // else if (req.baseUrl == variables.pathLoginFailed) {
+  //   console.log('@@@@355');
+  //   router.use(atvaizduotiPuslapyjeLoginFailed(req, res, next));
+  // }
+  // /* Login sistema is bedos laikina <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
+
+  // else if (req.baseUrl != variables.pathAdmin) {
+  //   console.log('@@@@361');
+  //   // router.get(variables.pathIndex, function(req, res, next) {
+  //   //   console.log('@@@@@@370');
+  //   // });
+  //   router.get(variables.pathIndex, redirectIndexIZurnalai(req, res, next));
+  //   router.get(variables.pathZurnalai, getIrasusIsDbIrAtvaizduotiPuslapyje(req, res, next));
+  // }
+  // else if (req.baseUrl == variables.pathAdmin) {
+  //   console.log('@@@@366');
+  //
+  //   /* '/' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+  //   router.get(variables.pathIndex, redirectIndexIZurnalai(req, res, next));
+  //
+  //   /* '/zurnalai' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+  //   router.get(variables.pathZurnalai, getIrasusIsDbIrAtvaizduotiPuslapyje(req, res, next));
+  //   router.delete(variables.pathZurnalai, trintiIrasus(req, res, next));
+  //   router.get(variables.pathZurnalasNaujas, pateiktiFormaIrasoRedagavimo(req, res, next));
+  //   router.get(variables.pathZurnalasAnksciauSukurtas, getIrasusIsDbIrAtvaizduotiPuslapyje(req, res, next));
+  //   router.post(variables.pathZurnalasNaujas, sukurtiNaujaArbaPakeistiSenaIrasa(req, res, next));
+  //   router.post(variables.pathZurnalasAnksciauSukurtas, sukurtiNaujaArbaPakeistiSenaIrasa(req, res, next));
+  //
+  //   /* '/leidejai' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+  //   router.get(variables.pathLeidejai, getIrasusIsDbIrAtvaizduotiPuslapyje(req, res, next));
+  //   router.delete(variables.pathLeidejai, trintiIrasus(req, res, next));
+  //   router.get(variables.pathLeidejasNaujas, pateiktiFormaIrasoRedagavimo(req, res, next));
+  //   router.get(variables.pathLeidejasAnksciauSukurtas, getIrasusIsDbIrAtvaizduotiPuslapyje(req, res, next));
+  //   router.post(variables.pathLeidejasNaujas, sukurtiNaujaArbaPakeistiSenaIrasa(req, res, next));
+  //   router.post(variables.pathLeidejasAnksciauSukurtas, sukurtiNaujaArbaPakeistiSenaIrasa(req, res, next));
+  //
+  //   /* '/duomenu-bazes' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+  //   router.get(variables.pathDuomenuBazes, getIrasusIsDbIrAtvaizduotiPuslapyje(req, res, next));
+  //   router.delete(variables.pathDuomenuBazes, trintiIrasus(req, res, next));
+  //   router.get(variables.pathDuomenuBazeNauja, pateiktiFormaIrasoRedagavimo(req, res, next));
+  //   router.get(variables.pathDuomenuBazeAnksciauSukurta, getIrasusIsDbIrAtvaizduotiPuslapyje(req, res, next));
+  //   router.post(variables.pathDuomenuBazeNauja, sukurtiNaujaArbaPakeistiSenaIrasa(req, res, next));
+  //   router.post(variables.pathDuomenuBazeAnksciauSukurta, sukurtiNaujaArbaPakeistiSenaIrasa(req, res, next));
+  // }
+});
 
 
 
