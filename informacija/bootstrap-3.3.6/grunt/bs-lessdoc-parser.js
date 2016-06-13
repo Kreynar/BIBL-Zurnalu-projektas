@@ -19,7 +19,7 @@ function markdown2html(markdownString) {
 
 /*
 Mini-language:
-  //== This is a normal heading, which starts a section. Sections group variables together.
+  //== This is a normal heading, which starts a section. Sections group vv together.
   //## Optional description for the heading
 
   //=== This is a subheading.
@@ -27,7 +27,7 @@ Mini-language:
   //** Optional description for the following variable. You **can** use Markdown in descriptions to discuss `<html>` stuff.
   @foo: #fff;
 
-  //-- This is a heading for a section whose variables shouldn't be customizable
+  //-- This is a heading for a section whose vv shouldn't be customizable
 
   All other lines are ignored completely.
 */
@@ -55,7 +55,7 @@ Section.prototype.addSubSection = function (subsection) {
 function SubSection(heading) {
   this.heading = heading.trim();
   this.id = this.heading.replace(/\s+/g, '-').toLowerCase();
-  this.variables = [];
+  this.vv = [];
 }
 
 SubSection.prototype.addVar = function (variable) {

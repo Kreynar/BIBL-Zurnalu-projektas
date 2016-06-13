@@ -3,6 +3,7 @@
 
 #panelePaiesku.panel.panel-default(style='padding:10px; margin-bottom:0;')
   .container-fluid
+    - var pathname = pp.req.baseUrl + pp.req.path;
     #panelePagalAbecelePaieskos.panel.panel-defaul(style='margin-bottom:0')
       .panel-body(align='center')
         span(style='font-size:20px; margin-right:20px'): b Pasirinkite:
@@ -10,7 +11,8 @@
           a(href='/'): .btn.btn-default(type='button'): b Visi
           each raide in vv.masyvasRaidziuAbecelesLietuviskos
             //a(href=pathIrQueryPaieskuPagalRegexBeReiksmesParametro+'/^\\s*'+raide+'/i')
-            a(href='/' + '?raide=' + raide)
+            //a(href='/' + '?raide=' + raide)
+            a(href= pathname + '?raide=' + raide)
               .btn.btn-default(type='button')= raide
     #panelePagalFrazePaieskos.panel.panel-default(style='margin-bottom:0')
       .panel-body
@@ -18,7 +20,7 @@
           label.col-sm-3(style='font-size:20px; text-align:right;' for='textareaPaieskaPagalFraze'): b Įrašykite ieškomą tekstą:
           .col-sm-6
             textarea#textareaPaieskaPagalFraze.form-control(type='text' style='')
-          a#aPaieskaPagalFraze.btn.btn-default.col-sm-1(href='/'+'?fraze=') Ieškoti
+          a#aPaieskaPagalFraze.btn.btn-default.col-sm-1(href=pathname+'?fraze=') Ieškoti
 
 
 - if (typeof jQuery == 'undefined') {

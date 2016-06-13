@@ -21,7 +21,7 @@ module.exports = function (grunt) {
   var generateGlyphiconsData = require('./grunt/bs-glyphicons-data-generator.js');
   var BsLessdocParser = require('./grunt/bs-lessdoc-parser.js');
   var getLessVarsData = function () {
-    var filePath = path.join(__dirname, 'less/variables.less');
+    var filePath = path.join(__dirname, 'less/vv.less');
     var fileContent = fs.readFileSync(filePath, { encoding: 'utf8' });
     var parser = new BsLessdocParser(fileContent);
     return { sections: parser.parseFile() };
@@ -337,8 +337,8 @@ module.exports = function (grunt) {
         data: getLessVarsData
       },
       customizerVars: {
-        src: 'docs/_jade/customizer-variables.jade',
-        dest: 'docs/_includes/customizer-variables.html'
+        src: 'docs/_jade/customizer-vv.jade',
+        dest: 'docs/_includes/customizer-vv.html'
       },
       customizerNav: {
         src: 'docs/_jade/customizer-nav.jade',

@@ -102,7 +102,7 @@ window.onload = function () { // wait for load in a dumb way because B-0
   function getCustomizerData() {
     var vars = {}
 
-    $('#less-variables-section input')
+    $('#less-vv-section input')
       .each(function () {
         $(this).val() && (vars[$(this).prev().text()] = $(this).val())
       })
@@ -244,9 +244,9 @@ window.onload = function () { // wait for load in a dumb way because B-0
       // will be 'undefined'.
       if (fileInclude || fileInclude == null)    lessSource += __less[filename]
 
-      // Custom variables are added after Bootstrap variables so the custom
+      // Custom vv are added after Bootstrap vv so the custom
       // ones take precedence.
-      if (filename === 'variables.less' && vars) lessSource += generateCustomLess(vars)
+      if (filename === 'vv.less' && vars) lessSource += generateCustomLess(vars)
     })
 
     lessSource = lessSource.replace(/@import[^\n]*/gi, '') // strip any imports
@@ -256,7 +256,7 @@ window.onload = function () { // wait for load in a dumb way because B-0
   function compileLESS(lessSource, baseFilename, intoResult) {
     var promise = $.Deferred()
     var parser = new less.Parser({
-      paths: ['variables.less', 'mixins.less'],
+      paths: ['vv.less', 'mixins.less'],
       optimization: 0,
       filename: baseFilename + '.css'
     })
@@ -294,7 +294,7 @@ window.onload = function () { // wait for load in a dumb way because B-0
     var result = {}
     var vars = {}
 
-    $('#less-variables-section input')
+    $('#less-vv-section input')
       .each(function () {
         $(this).val() && (vars[$(this).prev().text()] = $(this).val())
       })
@@ -409,7 +409,7 @@ window.onload = function () { // wait for load in a dumb way because B-0
 
   var $inputsComponent = $('#less-section input')
   var $inputsPlugin    = $('#plugin-section input')
-  var $inputsVariables = $('#less-variables-section input')
+  var $inputsVariables = $('#less-vv-section input')
 
   $('#less-section .toggle').on('click', function (e) {
     e.preventDefault()
@@ -421,7 +421,7 @@ window.onload = function () { // wait for load in a dumb way because B-0
     $inputsPlugin.prop('checked', !$inputsPlugin.is(':checked'))
   })
 
-  $('#less-variables-section .toggle').on('click', function (e) {
+  $('#less-vv-section .toggle').on('click', function (e) {
     e.preventDefault()
     $inputsVariables.val('')
   })

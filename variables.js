@@ -223,17 +223,3 @@ module.exports = ({
 
 }).inicializuotiObjekta();
 
-
-
- 
-
-
-
-
-
-
-
-
-
-
-

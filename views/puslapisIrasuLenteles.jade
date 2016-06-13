@@ -13,7 +13,9 @@ block CONTENT
 
   include panelePaiesku.jade
 
-  include panelesIrasoModifikavimo
+  - if (pp.req.baseUrl == vv.pathAdmin) {
+    include panelesIrasoModifikavimo.jade
+  - }
 
   include lenteleIrasuSaraso.jade
 
