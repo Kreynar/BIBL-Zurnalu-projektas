@@ -230,18 +230,18 @@ ff.getKiekiStulpeliuIrFieldu = function(req, res, next) {
     return kiekisStulpeliuIrFieldu;
 };
 
-ff.getDocumentNaujoIraso = function(req, res, next) {
+ff.getDocumentIraso = function(req, res, next) {
     var pavadinimasCollection = ff.getPavadinimaCollection(req, res, next);
     var kiekisStulpeliuIrFieldu = ff.getKiekiStulpeliuIrFieldu(req, res, next);
-    var documentNaujoIraso = {};
+    var documentIraso = {};
     for (var nr = 0; nr < kiekisStulpeliuIrFieldu; nr++) {
         if (vv.getArFiksuojamasFieldasDuomenuBazeje(pavadinimasCollection, nr)
             && vv.getArRodomasStulpelisLenteleje(pavadinimasCollection, nr)) {
-            documentNaujoIraso[vv.getPavadinimaFieldo(pavadinimasCollection, nr)]
+            documentIraso[vv.getPavadinimaFieldo(pavadinimasCollection, nr)]
                 = ( req.body[vv.getPavadinimaFieldo(pavadinimasCollection, nr)] ).trim();
         }
     }
-    return documentNaujoIraso;
+    return documentIraso;
 };
 
 
@@ -249,55 +249,82 @@ ff.sukurtiNaujaArbaPakeistiSenaIrasa = function(req, res, next) {
     console.log('@@@sukurtiNaujaArbaPakeistiSenaIrasa');
     var MongoClient = mongodb.MongoClient;
     var objektasQuery = ff.getObjektaQueryPagalId(req, res, next);
-
-    if (req.params.id == 'naujas') {
-
-    }
-    else if (req.params.id != 'naujas') {
-
-    }
-
-
-    var idIraso = req.params.id || '';
-    var documentNaujoIraso = ff.getDocumentNaujoIraso(req, res, next);
+    var documentIraso = ff.getDocumentIraso(req, res, next);
     var pavadinimasCollection = ff.getPavadinimaCollection(req, res, next);
-    var objektasQuery = ff.getObjektaQueryPagalId(req, res, next);
-    var objektasUpdate = { '$set' : documentNaujoIraso };
-    var pathSuBaseUrlICollection = ff.getPathSuBaseUrlICollection(req, res, next);
+    var objektasUpdate = { '$set' : documentIraso };
+                // if (req.params.id == 'naujas') {
+                //
+                // }
+                // else if (req.params.id != 'naujas') {
+                //
+                // }
     MongoClient.connect(vv.urlOfDatabase, function(err, db) {
         if (err) {
             next(vv.getObjektaErrorTechniniaiNesklandumai(err));
         }
         else {
             var collection = db.collection(pavadinimasCollection);
-            if (idIraso) {
-                try {
-                    collection.updateOne(objektasQuery, objektasUpdate, {'upsert' : false},  function(err, result) {
-                        if (err) {
-                            next(vv.getObjektaErrorTechniniaiNesklandumai(err));
-                        }
-                        else {
-                            res.redirect(pathSuBaseUrlICollection);
-                        }
-                    });
-                }
-                catch (err) {
-                    next(vv.getObjektaError404(err));
-                }
-            }
-            else {
-                collection.insertOne(documentNaujoIraso, function(err, result) {
-                    db.close();
+            try {
+                collection.updateOne(objektasQuery, objektasUpdate, {'upsert': true}, function (err, result) {
                     if (err) {
                         next(vv.getObjektaErrorTechniniaiNesklandumai(err));
                     }
                     else {
-                        res.redirect(pathSuBaseUrlICollection);
+                        res.redirect(req.baseUrl + '/' + pavadinimasCollection);
                     }
+                    db.close();
                 });
+            }
+            catch (err) {
+                db.close();
+                next(vv.getObjektaErrorTechniniaiNesklandumai(err));
             }
         }
     });
+
+            //
+            //
+            //             var idIraso = req.params.id || '';
+            //             var documentNaujoIraso = ff.getDocumentIraso(req, res, next);
+            //             var pavadinimasCollection = ff.getPavadinimaCollection(req, res, next);
+            //             var objektasQuery = ff.getObjektaQueryPagalId(req, res, next);
+            //             var objektasUpdate = { '$set' : documentNaujoIraso };
+            //             var pathSuBaseUrlICollection = ff.getPathSuBaseUrlICollection(req, res, next);
+            // //-------
+            // MongoClient.connect(vv.urlOfDatabase, function(err, db) {
+            //     if (err) {
+            //         next(vv.getObjektaErrorTechniniaiNesklandumai(err));
+            //     }
+            //     else {
+            //         var collection = db.collection(pavadinimasCollection);
+            //         if (idIraso) {
+            //             try {
+            //                 collection.updateOne(objektasQuery, objektasUpdate, {'upsert' : false},  function(err, result) {
+            //                     if (err) {
+            //                         next(vv.getObjektaErrorTechniniaiNesklandumai(err));
+            //                     }
+            //                     else {
+            //                         res.redirect(pathSuBaseUrlICollection);
+            //                     }
+            //                 });
+            //             }
+            //             catch (err) {
+            //                 next(vv.getObjektaError404(err));
+            //             }
+            //         }
+            //         else {
+            //             collection.insertOne(documentNaujoIraso, function(err, result) {
+            //                 db.close();
+            //                 if (err) {
+            //                     next(vv.getObjektaErrorTechniniaiNesklandumai(err));
+            //                 }
+            //                 else {
+            //                     res.redirect(pathSuBaseUrlICollection);
+            //                 }
+            //             });
+            //         }
+            //     }
+            // });
 };
 
 ff.pateiktiFormaIrasoRedagavimo = function(req, res, next) {
