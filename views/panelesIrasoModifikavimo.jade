@@ -10,7 +10,7 @@ style.
 
 #paneleMygtukoNaujasIrasas.panel-default.panel(style='margin-bottom:0')
   .container
-    a(href=vv.pathZurnalasNaujas)
+    a(href=pp.req.baseUrl+vv.pathZurnalasNaujas)
       .btn.btn-success.col-sm-offset-1.col-sm-10(type='button') Pridėti naują
 //.nav-wrapper
 #paneleKeitimoIrTrynimoIrasu.panel.panel-default
@@ -33,7 +33,7 @@ style.
   script(type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
 - }
 
-script(type='text/javascript' src='bootstrap-3.3.6-dist/js/bootstrap.min.js')
+script(type='text/javascript' src='/bootstrap-3.3.6-dist/js/bootstrap.min.js')
 script.
   $(document).ready(function() {
 
@@ -59,7 +59,7 @@ script.
         objektasUrlIrasoKeitimo.href = window.location.href;
         objektasUrlIrasoKeitimo.search = '';
         objektasUrlIrasoKeitimo.hash = '';
-        objektasUrlIrasoKeitimo.pathname = '/' + masyvasIdDocumentuPazymetu[0];
+        objektasUrlIrasoKeitimo.pathname = objektasUrlIrasoKeitimo.pathname + "/" + masyvasIdDocumentuPazymetu[0];
         window.location.href = objektasUrlIrasoKeitimo.href;
       }
       else {

@@ -79,27 +79,11 @@ module.exports = ({
         this.getInfoApieStulpeliArbaFielda = function(pavadinimasCollection, aliasArbaNumerisStulpelioArbaFieldo, numberOfTypeOfInformation) {
             var metadataOfCollection = this.getMetadataOfCollection(pavadinimasCollection);
             var masyvasAliasIsMetadata = Object.keys(metadataOfCollection);
-            if (numberOfTypeOfInformation) {
-                if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'string') {
-                    return metadataOfCollection[aliasArbaNumerisStulpelioArbaFieldo][numberOfTypeOfInformation];
-                }
-                else if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'number') {
-                    return metadataOfCollection[masyvasAliasIsMetadata[aliasArbaNumerisStulpelioArbaFieldo]][numberOfTypeOfInformation];
-                }
+            if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'string') {
+                return metadataOfCollection[aliasArbaNumerisStulpelioArbaFieldo][numberOfTypeOfInformation];
             }
-            else {
-                if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'string') {
-                    var numerisStulpelioArbaFieldo = -1;
-                    for (var i = 0; i < masyvasAliasIsMetadata.length; i++) {
-                        if (aliasArbaNumerisStulpelioArbaFieldo == masyvasAliasIsMetadata[i]) {
-                            numerisStulpelioArbaFieldo = i;
-                        }
-                    }
-                    return numerisStulpelioArbaFieldo;
-                }
-                else if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'number') {
-                    return masyvasAliasIsMetadata[aliasArbaNumerisStulpelioArbaFieldo];
-                }
+            else if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'number') {
+                return metadataOfCollection[masyvasAliasIsMetadata[aliasArbaNumerisStulpelioArbaFieldo]][numberOfTypeOfInformation];
             }
         };
 
@@ -120,7 +104,22 @@ module.exports = ({
         };
 
         this.getAliasArbaNumeriStulpelioArbaFieldo = function (pavadinimasCollection, aliasArbaNumerisStulpelioArbaFieldo) {
-            return this.getInfoApieStulpeliArbaFielda(pavadinimasCollection, aliasArbaNumerisStulpelioArbaFieldo);
+            var metadataOfCollection = this.getMetadataOfCollection(pavadinimasCollection);
+            var masyvasAliasIsMetadata = Object.keys(metadataOfCollection);
+            var numerisStulpelioArbaFieldo = -1;
+            var aliasStulpelioArbaFieldo = "";
+            if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'string') {
+                for (var i = 0; i < masyvasAliasIsMetadata.length; i++) {
+                    if (aliasArbaNumerisStulpelioArbaFieldo == masyvasAliasIsMetadata[i]) {
+                        numerisStulpelioArbaFieldo = i;
+                        return numerisStulpelioArbaFieldo;
+                    }
+                }
+            }
+            else if (typeof aliasArbaNumerisStulpelioArbaFieldo == 'number') {
+                aliasStulpelioArbaFieldo = masyvasAliasIsMetadata[aliasArbaNumerisStulpelioArbaFieldo];
+                return aliasStulpelioArbaFieldo;
+            }
         };
 
         this.getKiekiStulpeliuIrFieldu = function(pavadinimasCollection) {
@@ -212,7 +211,7 @@ module.exports = ({
         this.pranesimas404 = 'Ieškomas puslapis nerastas';
         this.pranesimasFrazePaieskosNegera = 'Įvyko klaida. Pamėginkite pakeisti paieškos frazę.';
         this.pranesimasTechniniaiNesklandumai = 'Techninis nesklandumas. Pamėginkite vėliau.';
-        this.pranesimasNeteisingasVardasArbaSlaptazodis = 'Prisijungti nepavyko. Neteisingas vartotojo vardas ir/arba slaptažodis.'
+        this.pranesimasNeteisingasVardasArbaSlaptazodis = 'Prisijungti nepavyko. Neteisingas vartotojo vardas ir/arba slaptažodis.';
 
         this.Autolinker = require( 'autolinker' );
 

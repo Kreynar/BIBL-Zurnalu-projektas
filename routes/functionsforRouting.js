@@ -91,7 +91,7 @@ ff.getObjektaQuery = function(req, res, next) {
     var objektasQuery;
     if (req.params.id) {
         try {
-            objektasQuery = ff.getObjektaQueryPagalId(req.params.id);
+            objektasQuery = ff.getObjektaQueryPagalId(req, res, next);
         }
         catch (err) {
             next(vv.getObjektaError404(err));
@@ -115,7 +115,8 @@ ff.getObjektaSort = function(req, res, next) {
         objektasSort = {'pavadinimas1':1}; // Cia gali keistis stulpelis, pagal kuri sortinam
     }
     else {
-        next(vv.getObjektaError404());
+        objektasSort = {};
+        // next(vv.getObjektaError404());
     }
     return objektasSort;
 };
@@ -123,7 +124,7 @@ ff.getObjektaSort = function(req, res, next) {
 ff.getPavadinimaPuslapioRenderinamo = function(req, res, next) {
     var pavadinimasPuslapioRenderinamo;
     if (req.params.id) {
-        pavadinimasPuslapioRenderinamo = '../views/puslapisIrasoModifikavimo.jade';
+        pavadinimasPuslapioRenderinamo = '../views/puslapisIrasuModifikavimo.jade';
     }
     else {
         pavadinimasPuslapioRenderinamo = '../views/puslapisIrasuLenteles.jade';
@@ -164,11 +165,15 @@ ff.getObjektaKintamujuPerduodamaIJade = function(req, res, next) {
 
 ff.getIrasusIsDbIrAtvaizduotiPuslapyje = function(req, res, next) {
     console.log('@@@@@156 getIrasusIsDbIrAtvaizduotiPuslapyje');
+    console.log('@@@@@', req.params);
+    console.log('@@@@@', req.params.id);
     var MongoClient = mongodb.MongoClient;
-    var idIraso = req.params.id || '';
-    var objektasSort = ff.getObjektaSort(req, res, next);
     var pavadinimasPuslapioRenderinamo = ff.getPavadinimaPuslapioRenderinamo(req, res, next);
-    var objektasQuery = ff.getObjektaQuery(req, res, next);
+    if (req.params.id != 'naujas') {
+        var idIraso = req.params.id || '';
+        var objektasSort = ff.getObjektaSort(req, res, next);
+        var objektasQuery = ff.getObjektaQuery(req, res, next);
+    }
     var pavadinimasCollection = ff.getPavadinimaCollection(req, res, next);
     var collection;
     var objektasKintamujuPerduodamuIJade = ff.getObjektaKintamujuPerduodamaIJade(req, res, next);
@@ -178,33 +183,43 @@ ff.getIrasusIsDbIrAtvaizduotiPuslapyje = function(req, res, next) {
             next(vv.getObjektaErrorTechniniaiNesklandumai(err));
         }
         else {
-            console.log(JSON.stringify(objektasQuery, null, 2));
-            collection = db.collection(pavadinimasCollection);
-            // console.log(JSON.stringify(objektasQuery, null, 4));
-            collection.find(objektasQuery).sort(objektasSort).toArray(function(err, masyvasIrasu) {
-                if (err) {
-                    next(vv.getObjektaErrorTechniniaiNesklandumai(err));
-                }
-                else if (idIraso) {
-                    if (!masyvasIrasu) {
-                        next(vv.getObjektaError404());
+            if (req.params.id != 'naujas') {
+                console.log(JSON.stringify(objektasQuery, null, 2));
+                collection = db.collection(pavadinimasCollection);
+                collection.find(objektasQuery).sort(objektasSort).toArray(function (err, masyvasIrasu) {
+                    if (err) {
+                        next(vv.getObjektaErrorTechniniaiNesklandumai(err));
                     }
-                    else if (masyvasIrasu.length == 0) {
-                        next(vv.getObjektaError404());
+                    else if (idIraso) {
+                        if (!masyvasIrasu) {
+                            next(vv.getObjektaError404());
+                        }
+                        else if (masyvasIrasu.length == 0) {
+                            next(vv.getObjektaError404());
+                        }
+                        objektasKintamujuPerduodamuIJade.pp.headeris = 'Įrašo keitimas';
+                        objektasKintamujuPerduodamuIJade.pp.documentIraso = masyvasIrasu[0];
                     }
-                    objektasKintamujuPerduodamuIJade.pp.headeris = 'Įrašo kūrimas/keitimas';
-                    objektasKintamujuPerduodamuIJade.pp.documentIraso = masyvasIrasu[0];
-                }
-                else {
-                    objektasKintamujuPerduodamuIJade.pp.masyvasDocumentu = masyvasIrasu;
-                }
-                console.log('@@@@@@186', pavadinimasPuslapioRenderinamo);
+                    else {
+                        objektasKintamujuPerduodamuIJade.pp.masyvasDocumentu = masyvasIrasu;
+                    }
+                    console.log('@@@@@@186', pavadinimasPuslapioRenderinamo);
+                    res.render(pavadinimasPuslapioRenderinamo, objektasKintamujuPerduodamuIJade);
+                    // <<<<<<<<<<<
+                    db.close(function () {
+                        console.log('Tiketina, kad ivykdyta db.close()')
+                    });
+                });
+            }
+            if (req.params.id == 'naujas') {
+                objektasKintamujuPerduodamuIJade.pp.headeris = 'Naujas įrašas';
+                console.log('@@@@@@212', pavadinimasPuslapioRenderinamo);
                 res.render(pavadinimasPuslapioRenderinamo, objektasKintamujuPerduodamuIJade);
                 // <<<<<<<<<<<
-                db.close(function() {
+                db.close(function () {
                     console.log('Tiketina, kad ivykdyta db.close()')
                 });
-            });
+            }
         }
     });
 };
@@ -231,7 +246,18 @@ ff.getDocumentNaujoIraso = function(req, res, next) {
 
 
 ff.sukurtiNaujaArbaPakeistiSenaIrasa = function(req, res, next) {
+    console.log('@@@sukurtiNaujaArbaPakeistiSenaIrasa');
     var MongoClient = mongodb.MongoClient;
+    var objektasQuery = ff.getObjektaQueryPagalId(req, res, next);
+
+    if (req.params.id == 'naujas') {
+
+    }
+    else if (req.params.id != 'naujas') {
+
+    }
+
+
     var idIraso = req.params.id || '';
     var documentNaujoIraso = ff.getDocumentNaujoIraso(req, res, next);
     var pavadinimasCollection = ff.getPavadinimaCollection(req, res, next);
@@ -348,8 +374,8 @@ ff.getPathSuBaseUrlICollection = function(req, res, next, pathBeBaseUrlICollecti
 //     }
 // };
 
-ff.redirectIZurnalaiUseri = function(req, res, next) {
-  res.redirect(vv.pathZurnalai);
+ff.redirectIZurnalai = function(req, res, next) {
+  res.redirect(req.baseUrl + vv.pathZurnalai);
 };
 
 

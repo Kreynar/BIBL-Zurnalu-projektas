@@ -11,20 +11,18 @@ block CONTENT
     .container-fluid
       h1.col-sm-offset-5= headeris
       br
-      form.form-horizontal.col-sm-offset-1.col-sm-8(name='naujasirasas' method='post' action=vv.pathPostNaujaIrasa)
-        - for (var numerisStulpelioIrFieldo = 0; numerisStulpelioIrFieldo < pp.vv.getKiekiStulpeliuIrFieldu(); numerisStulpelioIrFieldo++) {
+      form.form-horizontal.col-sm-offset-1.col-sm-8(name='irasas_naujas_arba_modifikuotas' method='post' action=pp.req.baseUrl+'/'+pp.pavadinimasCollection)
+        - for (var numerisStulpelioIrFieldo = 0; numerisStulpelioIrFieldo < vv.getKiekiStulpeliuIrFieldu(pp.pavadinimasCollection); numerisStulpelioIrFieldo++) {
           .form-group
-            -
-              if (vv.getArRodomasStulpelisLenteleje(vv.pavadinimasCollection, numerisStulpelioIrFieldo)
-              && vv.getArFiksuojamasFieldasDuomenuBazeje(vv.pavadinimasCollection, numerisStulpelioIrFieldo)) {
-                label.col-sm-2.control-label(for=pp.vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo)) #{vv.getPavadinimaStulpelio(pp.pavadinimasCollection, numerisStulpelioIrFieldo)}
+            - if (vv.getArRodomasStulpelisLenteleje(pp.pavadinimasCollection, numerisStulpelioIrFieldo) && vv.getArFiksuojamasFieldasDuomenuBazeje(pp.pavadinimasCollection, numerisStulpelioIrFieldo)) {
+                label.col-sm-2.control-label(for=vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo)) #{vv.getPavadinimaStulpelio(pp.pavadinimasCollection, numerisStulpelioIrFieldo)}
                 .col-sm-10
                   -if (pp.documentIraso) {
                     textarea.form-control(type='text' id=vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo) name=vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo)).
                       #{(pp.documentIraso[vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo)] ? pp.documentIraso[vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo)] : '')}
                   -}
                   -else {
-                    textarea.form-control(type='text' id=vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo) name=vv.getPavadinimaFieldo(vv.pavadinimasCollection, numerisStulpelioIrFieldo))
+                    textarea.form-control(type='text' id=vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo) name=vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo))
                   -}
             - }
         - }
@@ -33,7 +31,7 @@ block CONTENT
             .col-sm-6
               button(type='submit').btn.btn-success.form-control Įrašyti
             .col-sm-6
-              a(href='/').btn.btn-default.form-control Atsisakyti
+              a(href=pp.req.baseUrl+'/'+pp.pavadinimasCollection).btn.btn-default.form-control Atsisakyti
 
 //- if (typeof jQuery == 'undefined') {
 //  script(type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')

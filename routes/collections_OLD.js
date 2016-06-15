@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var ff = require('functionsForRouting.js');
+var ff = require('functionsforRouting.js');
 var vv = require('../variables.js');
 
             // router.get(vv.pathIndex, router.redirectIndexIZurnalai);

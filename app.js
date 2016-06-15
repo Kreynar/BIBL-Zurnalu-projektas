@@ -13,7 +13,7 @@ var routesForAdmin = require('./routes/forAdmin');
 // var users = require('./routes/users');
 
 var vv = require('./variables.js');
-var ff = require('./routes/functionsForRouting.js');
+var ff = require('./routes/functionsforRouting.js');
 
 var app = express();
 
@@ -27,7 +27,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'resourcesStaticForFrontend_aka_public')));
 
 app.use(favicon(__dirname + '/resourcesStaticForFrontend_aka_public/images/favicon.ico'));
 
@@ -37,7 +37,7 @@ app.locals.vv = vv;
 
 
 
-app.use(vv.pathAdmin, function() { console.log('@40 keliaujam i routesForAdmin'); }, routesForAdmin);
+app.use(vv.pathAdmin, routesForAdmin);
 // app.use('/', function(next) { console.log('keliaujam i routesForUser'); next(routesForUser);});
 app.use('/', routesForUser);
 
