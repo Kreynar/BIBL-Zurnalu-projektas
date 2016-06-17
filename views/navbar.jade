@@ -8,6 +8,12 @@
         span.icon-bar (not sure, ismegint)kazkas kito
       a.navbar-brand(href=pp.req.baseUrl+'/'): b(style='color:white')= vv.pavadinimasSvetaines
     #navbar.navbar-collapse.collapse
+      - if (pp.req.baseUrl == vv.pathAdmin) {
+        ul.nav.navbar-nav
+          li#mygtukasZurnalai: a(href=vv.pathAdmin+vv.pathZurnalai) Žurnalai
+          li#mygtukasLeidejai: a(href=vv.pathAdmin+vv.pathLeidejai) Leidėjai
+          li#mygtukasDuomenuBazes: a(href=vv.pathAdmin+vv.pathDuomenuBazes) Duomenų bazės
+      - }
       .navbar-form.navbar-right
           //- if (pp.arAdmin) {
           //  form(action='#')

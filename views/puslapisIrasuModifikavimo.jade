@@ -15,31 +15,41 @@ block CONTENT
         - for (var numerisStulpelioIrFieldo = 0; numerisStulpelioIrFieldo < vv.getKiekiStulpeliuIrFieldu(pp.pavadinimasCollection); numerisStulpelioIrFieldo++) {
           .form-group
             - if (vv.getArRodomasStulpelisLenteleje(pp.pavadinimasCollection, numerisStulpelioIrFieldo) && vv.getArFiksuojamasFieldasDuomenuBazeje(pp.pavadinimasCollection, numerisStulpelioIrFieldo)) {
-                label.col-sm-2.control-label(for=vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo)) #{vv.getPavadinimaStulpelio(pp.pavadinimasCollection, numerisStulpelioIrFieldo)}
+              - var pavadinimasFieldo = vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo);
+              - var pavadinimasStulpelio = vv.getPavadinimaStulpelio(pp.pavadinimasCollection, numerisStulpelioIrFieldo);
+              label.col-sm-2.control-label(for=pavadinimasFieldo) #{pavadinimasStulpelio}
                 .col-sm-10
-                  -if (pp.documentIraso) {
-                    textarea.form-control(type='text' id=vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo) name=vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo)).
-                      #{(pp.documentIraso[vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo)] ? pp.documentIraso[vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo)] : '')}
-                  -}
-                  -else {
-                    textarea.form-control(type='text' id=vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo) name=vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo))
-                  -}
+                        //-if (pp.documentIraso) {
+                        //  textarea.form-control(type='text' id=vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo) name=vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo)).
+                        //    #{(pp.documentIraso[vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo)] ? pp.documentIraso[vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo)] : '')}
+                        //-}
+                        //-else {
+                        //  textarea.form-control(type='text' id=vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo) name=vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo))
+                        //-}
+                textarea.form-control.textAreaDocumento(type='text' id=pavadinimasFieldo name=pavadinimasFieldo)
+                  - if (pp.documentIraso) {
+                    #{(pp.documentIraso[pavadinimasFieldo] ? pp.documentIraso[pavadinimasFieldo] : '')}
+                  - }
             - }
         - }
         .col-sm-offset-2
           .form-group
             .col-sm-6
-              button(type='submit').btn.btn-success.form-control Įrašyti
+              //button(type='submit')#mygtukasIrasyti.btn.btn-success.form-control Įrašyti
+              button#mygtukasIrasyti.btn.btn-success.form-control Įrašyti
             .col-sm-6
               a(href=pp.req.baseUrl+'/'+pp.pavadinimasCollection).btn.btn-default.form-control Atsisakyti
 
-//- if (typeof jQuery == 'undefined') {
-//  script(type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
-//- }
-//script.
-//  $(document).ready(function(){
-//    console.log(documentIraso);
-//  });
+
+- if (typeof jQuery == 'undefined') {
+  script(type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
+- }
+script.
+  $(document).ready(function(){
+    $('#mygtukasIrasyti').click(function() {
+      var masyvasDocumento;
+    });
+  });
 
 
 

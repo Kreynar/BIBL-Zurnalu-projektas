@@ -32,21 +32,24 @@ script.
     console.log('@@@@@@@33');
 
     var ieskotiPagalFraze = function() {
-      var frazePaieskos = $('#textareaPaieskaPagalFraze').val();
+      var frazePaieskos = $('#textareaPaieskaPagalFraze').val() || '';
       console.log('@@@@@@@38');
-      if (frazePaieskos) {
-        frazePaieskos = $.trim(frazePaieskos);
-        if (frazePaieskos) {
-          var pathIrQuery = $('#aPaieskaPagalFraze').attr('href') + frazePaieskos;
-          window.location.href = pathIrQuery;
-        }
-        else {
-          $('#textareaPaieskaPagalFraze').focus();
-        }
-      }
-      else {
-        $('#textareaPaieskaPagalFraze').focus();
-      }
+      frazePaieskos = $.trim(frazePaieskos);
+      var pathIrQuery = $('#aPaieskaPagalFraze').attr('href') + frazePaieskos;
+      window.location.href = pathIrQuery;
+      //      if (frazePaieskos) {
+      //        frazePaieskos = $.trim(frazePaieskos);
+      //        if (frazePaieskos) {
+      //          var pathIrQuery = $('#aPaieskaPagalFraze').attr('href') + frazePaieskos;
+      //          window.location.href = pathIrQuery;
+      //        }
+      //        else {
+      //          $('#textareaPaieskaPagalFraze').focus();
+      //        }
+      //      }
+      //      else {
+      //        $('#textareaPaieskaPagalFraze').focus();
+      //      }
     };
 
     $('#aPaieskaPagalFraze').click(function (event) {

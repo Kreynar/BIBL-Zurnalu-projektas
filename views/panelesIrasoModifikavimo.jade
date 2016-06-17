@@ -10,7 +10,7 @@ style.
 
 #paneleMygtukoNaujasIrasas.panel-default.panel(style='margin-bottom:0')
   .container
-    a(href=pp.req.baseUrl+vv.pathZurnalasNaujas)
+    a(href=pp.req.baseUrl+pp.req.path+vv.pathNaujas)
       .btn.btn-success.col-sm-offset-1.col-sm-10(type='button') Pridėti naują
 //.nav-wrapper
 #paneleKeitimoIrTrynimoIrasu.panel.panel-default
@@ -84,6 +84,7 @@ script.
         //var arTikraiTrinti = confirm('Ar tikrai norite trinti', masyvasIdDocumentuPazymetu.length, 'įrašą (-us)?');
         if (confirm('Ar tikrai norite trinti ' + masyvasIdDocumentuPazymetu.length + '@@@' + ' įrašą (-us)?')) {
           //alert($(location).attr('href'));
+          console.log('@@@87' + window.location.href);
           $.ajax({
             type: "DELETE",
             dataType: 'json',

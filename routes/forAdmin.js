@@ -10,12 +10,23 @@ var vv = require('../variables.js');
 
 
 routesForAdmin.get('/', ff.redirectIZurnalai);
-routesForAdmin.get(vv.pathZurnalai, ff.getIrasusIsDbIrAtvaizduotiPuslapyje);
-routesForAdmin.get(vv.pathZurnalai+'/:id', ff.getIrasusIsDbIrAtvaizduotiPuslapyje);
-routesForAdmin.post(vv.pathZurnalai, ff.sukurtiNaujaArbaPakeistiSenaIrasa);
+
+routesForAdmin.get('/:collection', ff.getIrasusIsDbIrAtvaizduotiPuslapyje);
+routesForAdmin.get('/:collection'+'/:id', ff.getIrasusIsDbIrAtvaizduotiPuslapyje);
+routesForAdmin.post('/:collection', ff.sukurtiNaujaArbaPakeistiSenaIrasa);
+routesForAdmin.delete('/:collection', ff.trintiIrasus);
 
 
 
+// routesForAdmin.get(vv.pathZurnalai, ff.getIrasusIsDbIrAtvaizduotiPuslapyje);
+// routesForAdmin.get(vv.pathZurnalai+'/:id', ff.getIrasusIsDbIrAtvaizduotiPuslapyje);
+// routesForAdmin.post(vv.pathZurnalai, ff.sukurtiNaujaArbaPakeistiSenaIrasa);
+// routesForAdmin.delete(vv.pathZurnalai, ff.trintiIrasus);
+//
+// routesForAdmin.get(vv.pathLeidejai, ff.getIrasusIsDbIrAtvaizduotiPuslapyje);
+// routesForAdmin.get(vv.pathLeidejai+'/:id', ff.getIrasusIsDbIrAtvaizduotiPuslapyje);
+//
+// routesForAdmin.get(vv.pathDuomenuBazes, ff.getIrasusIsDbIrAtvaizduotiPuslapyje);
 
 module.exports = routesForAdmin;
 

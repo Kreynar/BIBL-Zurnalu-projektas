@@ -11,7 +11,7 @@ var vv = require('../variables.js');
 
 /* Useriu (ne Admin) route handlinimas  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
 routesForUser.get('/', ff.redirectIZurnalai);
-routesForUser.get(vv.pathZurnalai, ff.getIrasusIsDbIrAtvaizduotiPuslapyje);
+routesForUser.get('/:collection', ff.getIrasusIsDbIrAtvaizduotiPuslapyje);
 
 
 /* Useriu (ne Admin) route handlinimas  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */

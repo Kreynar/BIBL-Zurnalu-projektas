@@ -9,6 +9,7 @@ var ff = {};
 
 
 ff.trintiIrasus = function(req, res, next) {
+    console.log('@@@trintiIrasus');
     var pavadinimasCollection = ff.getPavadinimaCollection(req, res, next);
     var MongoClient = mongodb.MongoClient;
     MongoClient.connect(vv.urlOfDatabase, function(err, db) {
@@ -17,6 +18,7 @@ ff.trintiIrasus = function(req, res, next) {
         }
         else {
             var masyvasIdDocumentuPazymetu = req.body.masyvasIdDocumentuPazymetu;
+            console.log('@@@@20', masyvasIdDocumentuPazymetu[0], masyvasIdDocumentuPazymetu[1], masyvasIdDocumentuPazymetu[2]);
             masyvasIdDocumentuPazymetu = JSON.parse(masyvasIdDocumentuPazymetu);
             for (var i = 0;  i < masyvasIdDocumentuPazymetu.length; i++) {
                 masyvasIdDocumentuPazymetu[i] = new mongodb.ObjectId(masyvasIdDocumentuPazymetu[i]);
@@ -33,6 +35,7 @@ ff.trintiIrasus = function(req, res, next) {
                 function(err, result) {
                     if (err) {
                         next(vv.getObjektaErrorTechniniaiNesklandumai(err));
+                        db.close();
                     }
                     else {
                         res.send({ 'statusas' : 'ok' });
@@ -133,18 +136,13 @@ ff.getPavadinimaPuslapioRenderinamo = function(req, res, next) {
 };
 
 ff.getPavadinimaCollection = function(req, res, next) {
-    var pathBeBaseICollection = ff.getPathBeBaseUrlICollection(req, res, next);
-    if (pathBeBaseICollection == vv.pathZurnalai) {
-        return 'zurnalai';
-    }
-    else if (pathBeBaseICollection == vv.pathLeidejai) {
-        return 'leidejai';
-    }
-    else if (pathBeBaseICollection == vv.pathDuomenuBazes) {
-        return 'duomenubazes';
+    var pathCollection = '/'+req.params.collection;
+    if (pathCollection == vv.pathZurnalai || pathCollection == vv.pathLeidejai || pathCollection == vv.pathDuomenuBazes) {
+        return req.params.collection;
     }
     else {
-        return 'zurnalai';
+        // return null;
+        next(vv.getObjektaError404());
         // /*
         //  Dizaine nenumatyta kol kas kitokiu base pathu = uzmountintu pathu (per app.use(pathas, ...)
         //  */
@@ -167,6 +165,7 @@ ff.getIrasusIsDbIrAtvaizduotiPuslapyje = function(req, res, next) {
     console.log('@@@@@156 getIrasusIsDbIrAtvaizduotiPuslapyje');
     console.log('@@@@@', req.params);
     console.log('@@@@@', req.params.id);
+    var pavadinimasCollection = ff.getPavadinimaCollection(req, res, next);
     var MongoClient = mongodb.MongoClient;
     var pavadinimasPuslapioRenderinamo = ff.getPavadinimaPuslapioRenderinamo(req, res, next);
     if (req.params.id != 'naujas') {
@@ -174,7 +173,6 @@ ff.getIrasusIsDbIrAtvaizduotiPuslapyje = function(req, res, next) {
         var objektasSort = ff.getObjektaSort(req, res, next);
         var objektasQuery = ff.getObjektaQuery(req, res, next);
     }
-    var pavadinimasCollection = ff.getPavadinimaCollection(req, res, next);
     var collection;
     var objektasKintamujuPerduodamuIJade = ff.getObjektaKintamujuPerduodamaIJade(req, res, next);
     console.log('@@172');
@@ -341,65 +339,43 @@ ff.pateiktiFormaIrasoRedagavimo = function(req, res, next) {
     res.render(pavadinimasPuslapioRenderinamo, objektasKintamujuPerduodamuIJade);
 };
 
-ff.getPathBeBaseUrlICollection = function(req, res, next) {
-    if (req.path.length >= vv.pathZurnalai.length) {
-        if (req.path.substring(0, vv.pathZurnalai.length) == vv.pathZurnalai) {
-            return vv.pathZurnalai;
-        }
-    }
-    else if (req.path.length >= vv.pathLeidejai.length) {
-        if (req.path.substring(0, vv.pathLeidejai.length) == vv.pathLeidejai) {
-            return vv.pathLeidejai;
-        }
-    }
-    else if (req.path.length >= vv.pathDuomenuBazes.length) {
-        if (req.path.substring(0, vv.pathDuomenuBazes.length) == vv.pathDuomenuBazes) {
-            return vv.pathDuomenuBazes;
-        }
-    }
-};
-
-ff.getPathSuBaseUrlICollection = function(req, res, next, pathBeBaseUrlICollectionKonkretu) {
-    if (pathBeBaseUrlICollectionKonkretu) {
-        if (req.baseUrl != vv.pathAdmin) {
-            return pathBeBaseUrlICollectionKonkretu;
-        }
-        else if (req.baseUrl == vv.pathAdmin) {
-            return req.baseUrl + pathBeBaseUrlICollectionKonkretu;
-        }
-    }
-    else {
-        if (req.baseUrl != vv.pathAdmin) {
-            return ff.getPathBeBaseUrlICollection(req, res, next);
-        }
-        else if (req.baseUrl == vv.pathAdmin) {
-            return req.baseUrl + ff.getPathBeBaseUrlICollection(req, res, next);
-        }
-    }
-};
-
-// ff.redirectIndexIZurnalai = function(req, res, next) {
-//     console.log('@@@@@316 redirectIndexIZurnalai');
-//     /*
-//      Patikrina, ar HTTP request path'o tik pradzia lygi vv.pathIndex, ar visas request path'as lygus vv.pathIndex.
-//      */
-//     var pathSuBaseUrlIZurnalai = getPathSuBaseUrlICollection(req, res, next, vv.pathZurnalai);
-//     console.log('@@@@@321', pathSuBaseUrlIZurnalai);
-//     console.log('@@@@@321');
-//
-//
-//     // ???? Kas cia v
-//     if (req.path == vv.pathIndex) {
-//         console.log('@@@@@324 res.redirect(vv.pathZurnalai);');
-//         res.redirect(pathSuBaseUrlIZurnalai);
-//         // res.send('Indexx');
-//         // res.redirect(vv.pathZurnalai);
+// ff.getPathBeBaseUrlICollection = function(req, res, next) {
+//     if (req.path.length >= vv.pathZurnalai.length) {
+//         if (req.path.substring(0, vv.pathZurnalai.length) == vv.pathZurnalai) {
+//             return vv.pathZurnalai;
+//         }
 //     }
-//     else {
-//         console.log('@@@@@329');
-//         next();
+//     else if (req.path.length >= vv.pathLeidejai.length) {
+//         if (req.path.substring(0, vv.pathLeidejai.length) == vv.pathLeidejai) {
+//             return vv.pathLeidejai;
+//         }
+//     }
+//     else if (req.path.length >= vv.pathDuomenuBazes.length) {
+//         if (req.path.substring(0, vv.pathDuomenuBazes.length) == vv.pathDuomenuBazes) {
+//             return vv.pathDuomenuBazes;
+//         }
 //     }
 // };
+//
+// ff.getPathSuBaseUrlICollection = function(req, res, next, pathBeBaseUrlICollectionKonkretu) {
+//     if (pathBeBaseUrlICollectionKonkretu) {
+//         if (req.baseUrl != vv.pathAdmin) {
+//             return pathBeBaseUrlICollectionKonkretu;
+//         }
+//         else if (req.baseUrl == vv.pathAdmin) {
+//             return req.baseUrl + pathBeBaseUrlICollectionKonkretu;
+//         }
+//     }
+//     else {
+//         if (req.baseUrl != vv.pathAdmin) {
+//             return ff.getPathBeBaseUrlICollection(req, res, next);
+//         }
+//         else if (req.baseUrl == vv.pathAdmin) {
+//             return req.baseUrl + ff.getPathBeBaseUrlICollection(req, res, next);
+//         }
+//     }
+// };
+
 
 ff.redirectIZurnalai = function(req, res, next) {
   res.redirect(req.baseUrl + vv.pathZurnalai);

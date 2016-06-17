@@ -71,7 +71,7 @@ module.exports = ({
             else if (nameOfCollection == 'leidejai') {
                 return metadataLeideju;
             }
-            else if (nameOfCollection == 'duomenubazes') {
+            else if (nameOfCollection == 'duomenu-bazes') {
                 return metadataDuomenuBaziu;
             }
         };
@@ -130,7 +130,7 @@ module.exports = ({
             else if (pavadinimasCollection == 'leidejai') {
                 kiekisStulpeliuIrFieldu = Object.keys(metadataLeideju).length;
             }
-            else if (pavadinimasCollection == 'duomenubazes') {
+            else if (pavadinimasCollection == 'duomenu-bazes') {
                 kiekisStulpeliuIrFieldu = Object.keys(metadataDuomenuBaziu).length;
             }
             else {
@@ -193,18 +193,21 @@ module.exports = ({
         this.pathLoginFailed = '/prisijungimo-klaida';
         this.pathAdmin = '/mabpcadmin'; /* Bus naudojamas, kol nebus prisiloginimo sukurta */
         this.pathIndex = '/';
-        this.pathZurnalai = '/zurnalai';
-        this.pathZurnalasNaujas = this.pathZurnalai + '/naujas';
-        this.pathZurnalasAnksciauSukurtas = this.pathZurnalai + '/:id';
+        this.pathNaujas = '/naujas';
         this.parametrasQueryPaieskuPagalRaide = 'raide';
         this.parametrasQueryPaieskuPagalFraze = 'fraze';
 
+        this.pathZurnalai = '/zurnalai';
+        this.pathZurnalasNaujas = this.pathZurnalai + this.pathNaujas;
+        this.pathZurnalasAnksciauSukurtas = this.pathZurnalai + '/:id';
+
+
         this.pathLeidejai = '/leidejai';
-        this.pathLeidejasNaujas = this.pathLeidejai + '/naujas';
+        this.pathLeidejasNaujas = this.pathLeidejai + this.pathNaujas;
         this.pathLeidejasAnksciauSukurtas = this.pathLeidejai + '/:id';
 
         this.pathDuomenuBazes = '/duomenu-bazes';
-        this.pathDuomenuBazeNauja = this.pathDuomenuBazes + '/naujas';
+        this.pathDuomenuBazeNauja = this.pathDuomenuBazes + this.pathNaujas;
         this.pathDuomenuBazeAnksciauSukurta = this.pathDuomenuBazes + '/:id';
 
 
