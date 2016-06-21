@@ -11,12 +11,14 @@ block CONTENT
     .container-fluid
       h1.col-sm-offset-5= headeris
       br
-      form.form-horizontal.col-sm-offset-1.col-sm-8(name='irasas_naujas_arba_modifikuotas' method='post' action=pp.req.baseUrl+'/'+pp.pavadinimasCollection)
+      //form.form-horizontal.col-sm-offset-1.col-sm-8(name='irasas_naujas_arba_modifikuotas' method='post' action=pp.req.baseUrl+'/'+pp.pavadinimasCollection)
+      form.form-horizontal.col-sm-offset-1.col-sm-8
         - for (var numerisStulpelioIrFieldo = 0; numerisStulpelioIrFieldo < vv.getKiekiStulpeliuIrFieldu(pp.pavadinimasCollection); numerisStulpelioIrFieldo++) {
-          .form-group
-            - if (vv.getArRodomasStulpelisLenteleje(pp.pavadinimasCollection, numerisStulpelioIrFieldo) && vv.getArFiksuojamasFieldasDuomenuBazeje(pp.pavadinimasCollection, numerisStulpelioIrFieldo)) {
-              - var pavadinimasFieldo = vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo);
-              - var pavadinimasStulpelio = vv.getPavadinimaStulpelio(pp.pavadinimasCollection, numerisStulpelioIrFieldo);
+          //.form-group
+          - if (vv.getArRodomasStulpelisLenteleje(pp.pavadinimasCollection, numerisStulpelioIrFieldo) && vv.getArFiksuojamasFieldasDuomenuBazeje(pp.pavadinimasCollection, numerisStulpelioIrFieldo)) {
+            - var pavadinimasFieldo = vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo);
+            - var pavadinimasStulpelio = vv.getPavadinimaStulpelio(pp.pavadinimasCollection, numerisStulpelioIrFieldo);
+            .form-group
               label.col-sm-2.control-label(for=pavadinimasFieldo) #{pavadinimasStulpelio}
                 .col-sm-10
                         //-if (pp.documentIraso) {
@@ -26,11 +28,17 @@ block CONTENT
                         //-else {
                         //  textarea.form-control(type='text' id=vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo) name=vv.getPavadinimaFieldo(pp.pavadinimasCollection, numerisStulpelioIrFieldo))
                         //-}
-                textarea.form-control.textAreaDocumento(type='text' id=pavadinimasFieldo name=pavadinimasFieldo)
+              .col-sm-10
+                textarea.form-control.textAreaFieldo(type='text' id=pavadinimasFieldo name=pavadinimasFieldo)
                   - if (pp.documentIraso) {
-                    #{(pp.documentIraso[pavadinimasFieldo] ? pp.documentIraso[pavadinimasFieldo] : '')}
+                    - if (pp.documentIraso[pavadinimasFieldo]) {
+                      = pp.documentIraso[pavadinimasFieldo]
+                    - }
                   - }
-            - }
+                  - else {
+                    = ''
+                  -}
+          - }
         - }
         .col-sm-offset-2
           .form-group
@@ -41,15 +49,50 @@ block CONTENT
               a(href=pp.req.baseUrl+'/'+pp.pavadinimasCollection).btn.btn-default.form-control Atsisakyti
 
 
-- if (typeof jQuery == 'undefined') {
-  script(type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
-- }
-script.
-  $(document).ready(function(){
-    $('#mygtukasIrasyti').click(function() {
-      var masyvasDocumento;
+  - if (typeof jQuery == 'undefined') {
+    script(type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
+  - };
+  - var metodasHttp = (pp.req.params.id == 'naujas') ? 'POST' : 'PUT';
+  - var urlRelativeToHostname = pp.req.baseUrl+'/'+pp.pavadinimasCollection;
+  - urlRelativeToHostname = (pp.req.params.id == 'naujas') ? urlRelativeToHostname : (urlRelativeToHostname+'/'+pp.req.params.id);
+  script.
+    $(document).ready(function(){
+      $('#mygtukasIrasyti').click(function(event) {
+        event.preventDefault();
+        var objectasDocumento = {};
+        $(".textAreaFieldo").each(function () {
+          var $this = $(this);
+          console.log('@@@65'+$this.attr('id'));
+          console.log('@@@66'+$this.val());
+          objectasDocumento[$this.attr('id')] = ($this.val() || '');
+        });
+        console.log('@@@67',objectasDocumento);
+        console.log('@@@68 '+!{JSON.stringify(urlRelativeToHostname)});
+        //console.log('@@@69 '+!{JSON.stringify(objectasDocumento)});
+        $.ajax({
+          type: !{JSON.stringify(metodasHttp)},
+          dataType: 'json',
+          url: !{JSON.stringify(urlRelativeToHostname)},
+          async: false,
+          data: {
+            documentIraso: JSON.stringify(objectasDocumento)
+            //documentIraso: objectasDocumento
+          },
+          success: function (dataStringified) {
+            console.log(dataStringified);
+            var dataParsed = JSON.parse(dataStringified);
+            if (dataParsed.status == 200) {
+              //location.reload();
+              location.href = dataParsed.url;
+            }
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.log('@@@@@@@@98', textStatus, errorThrown);
+            console.log('@@@@@@@@99', jqXHR);
+          }
+        });
+      });
     });
-  });
 
 
 

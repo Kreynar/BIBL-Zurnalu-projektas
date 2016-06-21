@@ -93,9 +93,8 @@ script.
             data: {
               masyvasIdDocumentuPazymetu : JSON.stringify(masyvasIdDocumentuPazymetu)
             },
-            success: function (data) {
-              console.log(data.statusas);
-              if (data.statusas == 'ok') {
+            success: function (data, textStatus) {
+              if (textStatus == 'success') {
                 location.reload();
               }
             },

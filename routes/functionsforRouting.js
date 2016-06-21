@@ -15,6 +15,7 @@ ff.trintiIrasus = function(req, res, next) {
     MongoClient.connect(vv.urlOfDatabase, function(err, db) {
         if (err) {
             next(vv.getObjektaErrorTechniniaiNesklandumai(err));
+            db.close();
         }
         else {
             var masyvasIdDocumentuPazymetu = req.body.masyvasIdDocumentuPazymetu;
@@ -38,7 +39,7 @@ ff.trintiIrasus = function(req, res, next) {
                         db.close();
                     }
                     else {
-                        res.send({ 'statusas' : 'ok' });
+                        res.end('{"success" : "Updated Successfully", "status" : 200}');
                         db.close();
                     }
                 }
@@ -136,6 +137,7 @@ ff.getPavadinimaPuslapioRenderinamo = function(req, res, next) {
 };
 
 ff.getPavadinimaCollection = function(req, res, next) {
+    console.log('@@@139',req.params, req.params.collection);
     var pathCollection = '/'+req.params.collection;
     if (pathCollection == vv.pathZurnalai || pathCollection == vv.pathLeidejai || pathCollection == vv.pathDuomenuBazes) {
         return req.params.collection;
@@ -179,6 +181,7 @@ ff.getIrasusIsDbIrAtvaizduotiPuslapyje = function(req, res, next) {
     MongoClient.connect(vv.urlOfDatabase, function(err, db) {
         if (err) {
             next(vv.getObjektaErrorTechniniaiNesklandumai(err));
+            db.close();
         }
         else {
             if (req.params.id != 'naujas') {
@@ -187,13 +190,16 @@ ff.getIrasusIsDbIrAtvaizduotiPuslapyje = function(req, res, next) {
                 collection.find(objektasQuery).sort(objektasSort).toArray(function (err, masyvasIrasu) {
                     if (err) {
                         next(vv.getObjektaErrorTechniniaiNesklandumai(err));
+                        db.close();
                     }
                     else if (idIraso) {
                         if (!masyvasIrasu) {
                             next(vv.getObjektaError404());
+                            db.close();
                         }
                         else if (masyvasIrasu.length == 0) {
                             next(vv.getObjektaError404());
+                            db.close();
                         }
                         objektasKintamujuPerduodamuIJade.pp.headeris = 'Įrašo keitimas';
                         objektasKintamujuPerduodamuIJade.pp.documentIraso = masyvasIrasu[0];
@@ -204,19 +210,15 @@ ff.getIrasusIsDbIrAtvaizduotiPuslapyje = function(req, res, next) {
                     console.log('@@@@@@186', pavadinimasPuslapioRenderinamo);
                     res.render(pavadinimasPuslapioRenderinamo, objektasKintamujuPerduodamuIJade);
                     // <<<<<<<<<<<
-                    db.close(function () {
-                        console.log('Tiketina, kad ivykdyta db.close()')
-                    });
+                    db.close();
                 });
             }
-            if (req.params.id == 'naujas') {
+            else if (req.params.id == 'naujas') {
                 objektasKintamujuPerduodamuIJade.pp.headeris = 'Naujas įrašas';
                 console.log('@@@@@@212', pavadinimasPuslapioRenderinamo);
                 res.render(pavadinimasPuslapioRenderinamo, objektasKintamujuPerduodamuIJade);
                 // <<<<<<<<<<<
-                db.close(function () {
-                    console.log('Tiketina, kad ivykdyta db.close()')
-                });
+                db.close();
             }
         }
     });
@@ -230,45 +232,58 @@ ff.getKiekiStulpeliuIrFieldu = function(req, res, next) {
 
 ff.getDocumentIraso = function(req, res, next) {
     var pavadinimasCollection = ff.getPavadinimaCollection(req, res, next);
+    console.log('@@@234',pavadinimasCollection);
     var kiekisStulpeliuIrFieldu = ff.getKiekiStulpeliuIrFieldu(req, res, next);
+    console.log('@@@235',kiekisStulpeliuIrFieldu);
     var documentIraso = {};
+    console.log('@@@237');
+    console.log('@@@243', req.body.documentIraso);
+    var documentIrasoIsFrontend = JSON.parse(req.body.documentIraso);
     for (var nr = 0; nr < kiekisStulpeliuIrFieldu; nr++) {
         if (vv.getArFiksuojamasFieldasDuomenuBazeje(pavadinimasCollection, nr)
             && vv.getArRodomasStulpelisLenteleje(pavadinimasCollection, nr)) {
+            console.log('@@@242',vv.getPavadinimaFieldo(pavadinimasCollection, nr));
             documentIraso[vv.getPavadinimaFieldo(pavadinimasCollection, nr)]
-                = ( req.body[vv.getPavadinimaFieldo(pavadinimasCollection, nr)] ).trim();
+                = ( documentIrasoIsFrontend[vv.getPavadinimaFieldo(pavadinimasCollection, nr)] ).trim();
+                //= ( req.body.documentIraso[vv.getPavadinimaFieldo(pavadinimasCollection, nr)] ).trim();
         }
     }
     return documentIraso;
 };
 
 
-ff.sukurtiNaujaArbaPakeistiSenaIrasa = function(req, res, next) {
-    console.log('@@@sukurtiNaujaArbaPakeistiSenaIrasa');
+ff.updateSenaIrasa = function(req, res, next) {
+    console.log('@@@247 updateNaujaIrasa');
     var MongoClient = mongodb.MongoClient;
     var objektasQuery = ff.getObjektaQueryPagalId(req, res, next);
+    console.log('@@@251');
     var documentIraso = ff.getDocumentIraso(req, res, next);
+    console.log('@@@253');
     var pavadinimasCollection = ff.getPavadinimaCollection(req, res, next);
+    console.log('@@@255');
     var objektasUpdate = { '$set' : documentIraso };
+    var urlToRedirectAfterSuccess = req.baseUrl+'/'+req.params.collection;
                 // if (req.params.id == 'naujas') {
                 //
                 // }
                 // else if (req.params.id != 'naujas') {
                 //
                 // }
+    console.log('@@@260');
     MongoClient.connect(vv.urlOfDatabase, function(err, db) {
         if (err) {
             next(vv.getObjektaErrorTechniniaiNesklandumai(err));
+            db.close();
         }
         else {
             var collection = db.collection(pavadinimasCollection);
             try {
-                collection.updateOne(objektasQuery, objektasUpdate, {'upsert': true}, function (err, result) {
+                collection.updateOne(objektasQuery, objektasUpdate, {'upsert': false}, function (err, result) {
                     if (err) {
                         next(vv.getObjektaErrorTechniniaiNesklandumai(err));
                     }
                     else {
-                        res.redirect(req.baseUrl + '/' + pavadinimasCollection);
+                        res.json(JSON.stringify({"success" : "Updated Successfully", "status" : 200, "url" : urlToRedirectAfterSuccess}));
                     }
                     db.close();
                 });
@@ -279,50 +294,41 @@ ff.sukurtiNaujaArbaPakeistiSenaIrasa = function(req, res, next) {
             }
         }
     });
+};
 
-            //
-            //
-            //             var idIraso = req.params.id || '';
-            //             var documentNaujoIraso = ff.getDocumentIraso(req, res, next);
-            //             var pavadinimasCollection = ff.getPavadinimaCollection(req, res, next);
-            //             var objektasQuery = ff.getObjektaQueryPagalId(req, res, next);
-            //             var objektasUpdate = { '$set' : documentNaujoIraso };
-            //             var pathSuBaseUrlICollection = ff.getPathSuBaseUrlICollection(req, res, next);
-            // //-------
-            // MongoClient.connect(vv.urlOfDatabase, function(err, db) {
-            //     if (err) {
-            //         next(vv.getObjektaErrorTechniniaiNesklandumai(err));
-            //     }
-            //     else {
-            //         var collection = db.collection(pavadinimasCollection);
-            //         if (idIraso) {
-            //             try {
-            //                 collection.updateOne(objektasQuery, objektasUpdate, {'upsert' : false},  function(err, result) {
-            //                     if (err) {
-            //                         next(vv.getObjektaErrorTechniniaiNesklandumai(err));
-            //                     }
-            //                     else {
-            //                         res.redirect(pathSuBaseUrlICollection);
-            //                     }
-            //                 });
-            //             }
-            //             catch (err) {
-            //                 next(vv.getObjektaError404(err));
-            //             }
-            //         }
-            //         else {
-            //             collection.insertOne(documentNaujoIraso, function(err, result) {
-            //                 db.close();
-            //                 if (err) {
-            //                     next(vv.getObjektaErrorTechniniaiNesklandumai(err));
-            //                 }
-            //                 else {
-            //                     res.redirect(pathSuBaseUrlICollection);
-            //                 }
-            //             });
-            //         }
-            //     }
-            // });
+ff.insertNaujaIrasa  = function(req, res, next) {
+    console.log('@@@329 insertSenaIrasa');
+    var MongoClient = mongodb.MongoClient;
+    console.log('@@@331');
+    var documentIraso = ff.getDocumentIraso(req, res, next);
+    console.log('@@@332',JSON.stringify(documentIraso));
+    var pavadinimasCollection = ff.getPavadinimaCollection(req, res, next);
+    var objektasInsert = documentIraso;
+    var urlToRedirectAfterSuccess = req.baseUrl+'/'+req.params.collection;
+    MongoClient.connect(vv.urlOfDatabase, function(err, db) {
+        if (err) {
+            next(vv.getObjektaErrorTechniniaiNesklandumai(err));
+            db.close();
+        }
+        else {
+            var collection = db.collection(pavadinimasCollection);
+            try {
+                collection.insertOne(objektasInsert, function (err, result) {
+                    if (err) {
+                        next(vv.getObjektaErrorTechniniaiNesklandumai(err));
+                    }
+                    else {
+                        res.json(JSON.stringify({"success" : "Inserted Successfully", "status" : 200, "url" : urlToRedirectAfterSuccess}));
+                    }
+                    db.close();
+                });
+            }
+            catch (err) {
+                db.close();
+                next(vv.getObjektaErrorTechniniaiNesklandumai(err));
+            }
+        }
+    });
 };
 
 ff.pateiktiFormaIrasoRedagavimo = function(req, res, next) {

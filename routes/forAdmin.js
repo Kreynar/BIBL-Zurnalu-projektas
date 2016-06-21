@@ -13,14 +13,15 @@ routesForAdmin.get('/', ff.redirectIZurnalai);
 
 routesForAdmin.get('/:collection', ff.getIrasusIsDbIrAtvaizduotiPuslapyje);
 routesForAdmin.get('/:collection'+'/:id', ff.getIrasusIsDbIrAtvaizduotiPuslapyje);
-routesForAdmin.post('/:collection', ff.sukurtiNaujaArbaPakeistiSenaIrasa);
+routesForAdmin.post('/:collection', ff.insertNaujaIrasa); /* POST /collection = INSERT nauja irasa i DB*/
+routesForAdmin.put('/:collection'+'/:id', ff.updateSenaIrasa); /* PUT /collection/<id> = UPDATE sena irasa DB*/
 routesForAdmin.delete('/:collection', ff.trintiIrasus);
 
 
 
 // routesForAdmin.get(vv.pathZurnalai, ff.getIrasusIsDbIrAtvaizduotiPuslapyje);
 // routesForAdmin.get(vv.pathZurnalai+'/:id', ff.getIrasusIsDbIrAtvaizduotiPuslapyje);
-// routesForAdmin.post(vv.pathZurnalai, ff.sukurtiNaujaArbaPakeistiSenaIrasa);
+// routesForAdmin.post(vv.pathZurnalai, ff.insertNaujaIrasa);
 // routesForAdmin.delete(vv.pathZurnalai, ff.trintiIrasus);
 //
 // routesForAdmin.get(vv.pathLeidejai, ff.getIrasusIsDbIrAtvaizduotiPuslapyje);
