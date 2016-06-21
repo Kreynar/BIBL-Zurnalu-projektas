@@ -53,6 +53,7 @@ var metadataDuomenuBaziu = {
     , nr :                         [true,                 false,         'Nr.',                     '']
     , pavadinimas1 :               [true,                 true,          'Pavadinimas',            'pavadinimas1']
     , pavadinimas2 :               [true,                 true,          'Kitas pavadinimas',      'pavadinimas2']
+    , nuoroda :                    [true,                 true,          'Nuoroda',                'nuoroda']
     , pastabos :                   [true,                 true,          'Pastabos',               'pastabos']
 };
 
