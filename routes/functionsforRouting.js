@@ -192,19 +192,20 @@ ff.getIrasusIsDbIrAtvaizduotiPuslapyje = function(req, res, next) {
                         next(vv.getObjektaErrorTechniniaiNesklandumai(err));
                         db.close();
                     }
+                    else if (!masyvasIrasu) {
+                        next(vv.getObjektaError404());
+                        db.close();
+                    }
+                    else if (masyvasIrasu.length == 0) {
+                        next(vv.getObjektaError404());
+                        db.close();
+                    }
                     else if (idIraso) {
-                        if (!masyvasIrasu) {
-                            next(vv.getObjektaError404());
-                            db.close();
-                        }
-                        else if (masyvasIrasu.length == 0) {
-                            next(vv.getObjektaError404());
-                            db.close();
-                        }
                         objektasKintamujuPerduodamuIJade.pp.headeris = 'Įrašo keitimas';
-                        objektasKintamujuPerduodamuIJade.pp.documentIraso = masyvasIrasu[0];
+                        objektasKintamujuPerduodamuIJade.pp.documentIraso = masyvasIrasu[0];                        
                     }
                     else {
+                        objektasKintamujuPerduodamuIJade.pp.headeris = 'Įrašų lentelė';
                         objektasKintamujuPerduodamuIJade.pp.masyvasDocumentu = masyvasIrasu;
                     }
                     console.log('@@@@@@186', pavadinimasPuslapioRenderinamo);

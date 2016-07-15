@@ -140,6 +140,13 @@ module.exports = ({
             return kiekisStulpeliuIrFieldu;
         };
 
+        this.getArRodomasStulpelisIrasoModifikavimoPuslapyje = function(pavadinimasCollection, aliasArbaNumerisStulpelioArbaFieldo) {
+            var arRodomasStulpelisLenteleje = getArRodomasStulpelisLenteleje(pavadinimasCollection, aliasArbaNumerisStulpelioArbaFieldo);
+            var getArFiksuojamasFieldasDuomenuBazeje = getArFiksuojamasFieldasDuomenuBazeje(pavadinimasCollection, aliasArbaNumerisStulpelioArbaFieldo);
+            var arRodomasStulpelisNaujoIrasoPuslapyje = (arRodomasStulpelisLenteleje || getArFiksuojamasFieldasDuomenuBazeje);
+            return arRodomasStulpelisNaujoIrasoPuslapyje;
+        };
+
         this.logIConsoleErrorOriginalu = function(errorObjektasOriginalus) {
             if (errorObjektasOriginalus) {
                 console.log(errorObjektasOriginalus);
