@@ -3,6 +3,7 @@
  */
 
 var mongodb = require('mongodb');
+var validate = require("validate.js");
 var vv = require('../variables.js');
 var ff = {};
 
@@ -192,35 +193,77 @@ ff.getIrasusIsDbIrAtvaizduotiPuslapyje = function(req, res, next) {
                         next(vv.getObjektaErrorTechniniaiNesklandumai(err));
                         db.close();
                     }
-                    else if (!masyvasIrasu) {
-                        next(vv.getObjektaError404());
-                        db.close();
-                    }
-                    else if (masyvasIrasu.length == 0) {
+                    else if (validate.isEmpty(masyvasIrasu) || !validate.isArray(masyvasIrasu)) {  // Butinai turi but [ ]
                         next(vv.getObjektaError404());
                         db.close();
                     }
                     else if (idIraso) {
+                        /* IF perduota f-ja, tai ja vykdyt, ELSE v vykdyt*/
                         objektasKintamujuPerduodamuIJade.pp.headeris = 'Įrašo keitimas';
-                        objektasKintamujuPerduodamuIJade.pp.documentIraso = masyvasIrasu[0];                        
+                        objektasKintamujuPerduodamuIJade.pp.documentIraso = masyvasIrasu[0];
+
+
+
                     }
                     else {
                         objektasKintamujuPerduodamuIJade.pp.headeris = 'Įrašų lentelė';
                         objektasKintamujuPerduodamuIJade.pp.masyvasDocumentu = masyvasIrasu;
+                        console.log('@@@@@@186', pavadinimasPuslapioRenderinamo);
+                        res.render(pavadinimasPuslapioRenderinamo, objektasKintamujuPerduodamuIJade);
+                        db.close();
                     }
-                    console.log('@@@@@@186', pavadinimasPuslapioRenderinamo);
-                    res.render(pavadinimasPuslapioRenderinamo, objektasKintamujuPerduodamuIJade);
-                    // <<<<<<<<<<<
-                    db.close();
                 });
             }
-            else if (req.params.id == 'naujas') {
+            else if (idIraso == 'naujas') {
                 objektasKintamujuPerduodamuIJade.pp.headeris = 'Naujas įrašas';
                 console.log('@@@@@@212', pavadinimasPuslapioRenderinamo);
+
+                /* IF perduota funkcija, tai jua vykdyt, ELSE vykdyt v*/
+
                 res.render(pavadinimasPuslapioRenderinamo, objektasKintamujuPerduodamuIJade);
                 // <<<<<<<<<<<
                 db.close();
             }
+        }
+    });
+};
+
+ff.atvaizduotiIrasuLentelesPuslapi = function(req, res, next) {
+    ff.getIrasusIsDbIrAtvaizduotiPuslapyje(req, res, next);
+};
+
+ff.atvaizduotiIrasuModifikavimoPuslapi = function(req, res, next) {
+    var pavadinimasCollection = ff.getPavadinimaCollection(req, res, next);
+    if (pavadinimasCollection != 'zurnalai') {
+        ff.getIrasusIsDbIrAtvaizduotiPuslapyje(req, res, next);
+    }
+    else if (pavadinimasCollection == 'zurnalai') {
+        var getSarasaDuombaziuIrLeideju = function(db) {
+            var collectionDuombazes = db.collection('duomenu-bazes');
+            var collectionLeidejai = db.collection('leidejai');
+            var objectasPavadinimuStulpeliuIeskomuDuombaziu = { '_id':true, 'pavadinimas1':true, 'nuoroda':true  };
+            var objectasPavadinimuFielduIeskomuLeideju = { '_id':true, 'pavadinimas1':true };
+            collectionDuombazes.find(vv.$salygaPaieskosTikNeistrintuIrasu, objectasPavadinimuStulpeliuIeskomuDuombaziu)
+                .toArray(function callbackDuombaziuFind (err, masyvasDocumentuDuombaziu) {
+                    if ()
+                }
+            );
+
+        };
+        ff.getIrasusIsDbIrAtvaizduotiPuslapyje(req, res, next, getSarasaDuombaziuIrLeideju);
+    }
+};
+
+ff.getMasyvaIrasu = function(pavadinimas) {
+    var collection;
+    var MongoClient = mongodb.MongoClient;
+    MongoClient.connect(vv.urlOfDatabase, function(err, db) {
+        if (err) {
+            next(vv.getObjektaErrorTechniniaiNesklandumai(err));
+            db.close();
+        }
+        else {
+            collection = db.collection('');
         }
     });
 };
@@ -332,19 +375,19 @@ ff.insertNaujaIrasa  = function(req, res, next) {
     });
 };
 
-ff.pateiktiFormaIrasoRedagavimo = function(req, res, next) {
-    var pavadinimasPuslapioRenderinamo = ff.getPavadinimaPuslapioRenderinamo(req, res, next);
-    var objektasQuery = ff.getObjektaQuery(req, res, next);
-    var pavadinimasCollection = ff.getPavadinimaCollection(req, res, next);
-    var collectionIrasu;
-    var objektasKintamujuPerduodamuIJade = ff.getObjektaKintamujuPerduodamaIJade(req, res, next);
-
-    // Cia dar reikia pergalvot logika ir paeditint, paadint koda.
-
-    res.render('formaIrasoRedagavimo', { 'headeris' : 'Naujas įrašas' } );
-
-    res.render(pavadinimasPuslapioRenderinamo, objektasKintamujuPerduodamuIJade);
-};
+// ff.pateiktiFormaIrasoRedagavimo = function(req, res, next) {
+//     var pavadinimasPuslapioRenderinamo = ff.getPavadinimaPuslapioRenderinamo(req, res, next);
+//     var objektasQuery = ff.getObjektaQuery(req, res, next);
+//     var pavadinimasCollection = ff.getPavadinimaCollection(req, res, next);
+//     var collectionIrasu;
+//     var objektasKintamujuPerduodamuIJade = ff.getObjektaKintamujuPerduodamaIJade(req, res, next);
+//
+//     // Cia dar reikia pergalvot logika ir paeditint, paadint koda.
+//
+//     res.render('formaIrasoRedagavimo', { 'headeris' : 'Naujas įrašas' } );
+//
+//     res.render(pavadinimasPuslapioRenderinamo, objektasKintamujuPerduodamuIJade);
+// };
 
 // ff.getPathBeBaseUrlICollection = function(req, res, next) {
 //     if (req.path.length >= vv.pathZurnalai.length) {

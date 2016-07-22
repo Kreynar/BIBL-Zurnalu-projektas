@@ -34,9 +34,9 @@ block CONTENT
             .form-inline.col-md-4#pirmasStulpelisLaukuZurnaloIraso
               +getLaukusIraso(masyvasPavadinimuFielduZurnaloBeDbIrLeidejo)
             .form-inline.col-md-4#antrasStulpelisLaukuZurnaloIraso
-              +getLaukusIraso(masyvasPavadinimuFielduDbIrLeidejo)
+              +getLaukusIraso(['db'])
             .form-inline.col-md-4#antrasStulpelisLaukuZurnaloIraso
-              +getLaukusIraso(masyvasPavadinimuFielduDbIrLeidejo)
+              +getLaukusIraso(['leidejas'])
           default
             .form-inline.col-md-12#vienintelisStulpelisLaukuLeidejoArbaDuombazesIraso
               +getLaukusIraso
@@ -70,7 +70,7 @@ block CONTENT
                       +getLabelIrTextareaIraso(pavadinimasFieldo, pavadinimasStulpelio)
                     -}
                     -else if (pavadinimasFieldo == 'db' || ) {
-
+                      @@@@@@@@@@@@@@@
                     -}
                   -}
                 -}

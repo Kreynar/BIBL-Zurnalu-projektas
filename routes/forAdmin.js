@@ -11,8 +11,8 @@ var vv = require('../variables.js');
 
 routesForAdmin.get('/', ff.redirectIZurnalai);
 
-routesForAdmin.get('/:collection', ff.getIrasusIsDbIrAtvaizduotiPuslapyje);
-routesForAdmin.get('/:collection'+'/:id', ff.getIrasusIsDbIrAtvaizduotiPuslapyje);
+routesForAdmin.get('/:collection', ff.atvaizduotiIrasuLentelesPuslapi);
+routesForAdmin.get('/:collection'+'/:id', ff.atvaizduotiIrasuModifikavimoPuslapi);
 routesForAdmin.post('/:collection', ff.insertNaujaIrasa); /* POST /collection = INSERT nauja irasa i DB*/
 routesForAdmin.put('/:collection'+'/:id', ff.updateSenaIrasa); /* PUT /collection/<id> = UPDATE sena irasa DB*/
 routesForAdmin.delete('/:collection', ff.trintiIrasus);
