@@ -3,16 +3,38 @@
  */
 
 var mongodb = require('mongodb');
+var MongoClient = mongodb.MongoClient;
 var validate = require("validate.js");
 var vv = require('../variables.js');
+
+/* Caolan's Async library. http://caolan.github.io/async/index.html */
+var async = require('async');
 var ff = {};
 
 
+function prisijungtiPrieMongoDb() {
+    MongoClient.connect(vv.urlOfDatabase, function(err, db) {
+}
+
+ff.trintiIrasusAsyncJs = async.waterfall(
+    [
+    prisijungtiPrieMongoDb  // MongoClient.connect
+    , pazymetiIrasusKaipIstrintus // db.collection(pavadinimasCollection).updateMany(
+    ]
+    , function uzbaigtiTrynimoOperacija() {
+        db.close();
+        if (err) {
+            next(err);
+        }
+        else {
+            res.end('{"success" : "Updated Successfully", "status" : 200}');
+        }
+    }
+);
 
 ff.trintiIrasus = function(req, res, next) {
     console.log('@@@trintiIrasus');
     var pavadinimasCollection = ff.getPavadinimaCollection(req, res, next);
-    var MongoClient = mongodb.MongoClient;
     MongoClient.connect(vv.urlOfDatabase, function(err, db) {
         if (err) {
             next(vv.getObjektaErrorTechniniaiNesklandumai(err));
@@ -169,7 +191,6 @@ ff.getIrasusIsDbIrAtvaizduotiPuslapyje = function(req, res, next) {
     console.log('@@@@@', req.params);
     console.log('@@@@@', req.params.id);
     var pavadinimasCollection = ff.getPavadinimaCollection(req, res, next);
-    var MongoClient = mongodb.MongoClient;
     var pavadinimasPuslapioRenderinamo = ff.getPavadinimaPuslapioRenderinamo(req, res, next);
     if (req.params.id != 'naujas') {
         var idIraso = req.params.id || '';
@@ -254,20 +275,6 @@ ff.atvaizduotiIrasuModifikavimoPuslapi = function(req, res, next) {
     }
 };
 
-ff.getMasyvaIrasu = function(pavadinimas) {
-    var collection;
-    var MongoClient = mongodb.MongoClient;
-    MongoClient.connect(vv.urlOfDatabase, function(err, db) {
-        if (err) {
-            next(vv.getObjektaErrorTechniniaiNesklandumai(err));
-            db.close();
-        }
-        else {
-            collection = db.collection('');
-        }
-    });
-};
-
 ff.getKiekiStulpeliuIrFieldu = function(req, res, next) {
     var pavadinimasCollection = ff.getPavadinimaCollection(req, res, next);
     var kiekisStulpeliuIrFieldu = vv.getKiekiStulpeliuIrFieldu(pavadinimasCollection);
@@ -298,7 +305,6 @@ ff.getDocumentIraso = function(req, res, next) {
 
 ff.updateSenaIrasa = function(req, res, next) {
     console.log('@@@247 updateNaujaIrasa');
-    var MongoClient = mongodb.MongoClient;
     var objektasQuery = ff.getObjektaQueryPagalId(req, res, next);
     console.log('@@@251');
     var documentIraso = ff.getDocumentIraso(req, res, next);
@@ -322,12 +328,18 @@ ff.updateSenaIrasa = function(req, res, next) {
         else {
             var collection = db.collection(pavadinimasCollection);
             try {
-                collection.updateOne(objektasQuery, objektasUpdate, {'upsert': false}, function (err, result) {
+                collection.updateOne(objektasQuery, objektasUpdate, {'upsert': false}, function (err, result) { //
                     if (err) {
                         next(vv.getObjektaErrorTechniniaiNesklandumai(err));
                     }
                     else {
-                        res.json(JSON.stringify({"success" : "Updated Successfully", "status" : 200, "url" : urlToRedirectAfterSuccess}));
+                        try {
+                            var stringJSON = JSON.stringify({"success" : "Updated Successfully", "status" : 200, "url" : urlToRedirectAfterSuccess});
+                            res.json(stringJSON);
+                        }
+                        catch(exception) {
+                            next(exception);
+                        }
                     }
                     db.close();
                 });
@@ -342,7 +354,6 @@ ff.updateSenaIrasa = function(req, res, next) {
 
 ff.insertNaujaIrasa  = function(req, res, next) {
     console.log('@@@329 insertSenaIrasa');
-    var MongoClient = mongodb.MongoClient;
     console.log('@@@331');
     var documentIraso = ff.getDocumentIraso(req, res, next);
     console.log('@@@332',JSON.stringify(documentIraso));

@@ -52,6 +52,7 @@ app.use('/', function(req, res, next) {
 if (app.get('env') === 'development') {
   app.use('/', function(err, req, res, next) {
     console.log('@@@@@@@93 in app.js: renderinam ir siunciam clientui puslapi su pranesimu apie klaida');
+    console.log(err.stack);
     var objektasKintamujuPerduodamasIJade = ff.getObjektaKintamujuPerduodamaIJade(req, res, next);
     objektasKintamujuPerduodamasIJade.pp.message = err.message;
     objektasKintamujuPerduodamasIJade.pp.error = err;
