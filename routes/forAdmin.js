@@ -8,14 +8,38 @@ var ff = require('../routes/functionsforRouting.js');
 var vv = require('../variables.js');
 
 
-
+/*
+ GET    /<collection>
+ */
 routesForAdmin.get('/', ff.redirectIZurnalai);
 
-routesForAdmin.get('/:collection', ff.atvaizduotiIrasuLentelesPuslapi);
-routesForAdmin.get('/:collection'+'/:id', ff.atvaizduotiIrasuModifikavimoPuslapi);
-routesForAdmin.post('/:collection', ff.insertNaujaIrasa); /* POST /collection = INSERT nauja irasa i DB*/
-routesForAdmin.put('/:collection'+'/:id', ff.updateSenaIrasa); /* PUT /collection/<id> = UPDATE sena irasa DB*/
-routesForAdmin.delete('/:collection', ff.trintiIrasus);
+/*
+ GET    /<collection>
+ GET    /<collection>?raide=<raide>
+ GET    /<collection>?fraze=<fraze>
+ */
+routesForAdmin.get('/:collection', ff.pateiktiPuslapiIrasuSarasoLenteles);
+
+/*
+ GET    /<collection>/naujas
+ GET    /<collection>/<id>
+ */
+routesForAdmin.get('/:collection'+'/:id', ff.pateiktiPuslapiIrasuModifikavimo);
+
+/*
+POST    /<collection>               = INSERT nauja irasa i DB
+ */
+routesForAdmin.post('/:collection', ff.insertNaujaIrasa);
+
+/*
+ PUT    /<collection>/<id>            = UPDATE sena irasa DB
+ */
+routesForAdmin.put('/:collection'+'/:id', ff.updateSenaIrasa);
+
+/*
+ DELETE /<collection>                 gaunamas norimu trint sarasas in Ajax bodyje
+ */
+routesForAdmin.delete('/:collection', ff.trintiIrasusAsyncJs);
 
 
 

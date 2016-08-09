@@ -10,66 +10,114 @@ var vv = require('../variables.js');
 /* Caolan's Async library. http://caolan.github.io/async/index.html */
 var async = require('async');
 var ff = {};
+"use strict";
 
 
-function prisijungtiPrieMongoDb() {
-    MongoClient.connect(vv.urlOfDatabase, function(err, db) {
-}
+ff.getObjektaKintamuju = function getObjektaKintamuju(req, res, next) {
 
-ff.trintiIrasusAsyncJs = async.waterfall(
-    [
-    prisijungtiPrieMongoDb  // MongoClient.connect
-    , pazymetiIrasusKaipIstrintus // db.collection(pavadinimasCollection).updateMany(
-    ]
-    , function uzbaigtiTrynimoOperacija() {
-        db.close();
-        if (err) {
-            next(err);
-        }
-        else {
-            res.end('{"success" : "Updated Successfully", "status" : 200}');
-        }
-    }
-);
+    /* Objektas kintamuju.
+    Nusprendziau, kad geriau sukurt ir passint visom f-jom tik viena si objekta,
+    vietoj to, kad passinciau atskirai 76516843178 argumentu. */
+    var kk;
+    kk.req = req;
+    kk.res = res;
+    kk.next = next;
+    kk.pavadinimasCollection = ff.getPavadinimaCollection(kk);
+    return kk;
+};
 
-ff.trintiIrasus = function(req, res, next) {
-    console.log('@@@trintiIrasus');
-    var pavadinimasCollection = ff.getPavadinimaCollection(req, res, next);
-    MongoClient.connect(vv.urlOfDatabase, function(err, db) {
-        if (err) {
-            next(vv.getObjektaErrorTechniniaiNesklandumai(err));
-            db.close();
-        }
-        else {
-            var masyvasIdDocumentuPazymetu = req.body.masyvasIdDocumentuPazymetu;
-            console.log('@@@@20', masyvasIdDocumentuPazymetu[0], masyvasIdDocumentuPazymetu[1], masyvasIdDocumentuPazymetu[2]);
-            masyvasIdDocumentuPazymetu = JSON.parse(masyvasIdDocumentuPazymetu);
-            for (var i = 0;  i < masyvasIdDocumentuPazymetu.length; i++) {
-                masyvasIdDocumentuPazymetu[i] = new mongodb.ObjectId(masyvasIdDocumentuPazymetu[i]);
-            }
-            db.collection(pavadinimasCollection).updateMany(
-                {
-                    '_id' : {
-                        $in : masyvasIdDocumentuPazymetu
-                    }
-                },
-                {
-                    $set : { 'aristrintas' : true }
-                },
-                function(err, result) {
-                    if (err) {
-                        next(vv.getObjektaErrorTechniniaiNesklandumai(err));
-                        db.close();
-                    }
-                    else {
-                        res.end('{"success" : "Updated Successfully", "status" : 200}');
-                        db.close();
-                    }
-                }
-            );
-        }
+ff.prisijungtiPrieMongoDb = function prisijungtiPrieMongoDb(kk, kviestiFunkcijaSekancia) {
+    MongoClient.connect(vv.urlOfDatabase, function doAfterConnect(err, db) {
+        kk.db = db;
+        kviestiFunkcijaSekancia(err, kk)
     });
 };
+
+ff.trintiIrasusAsyncJs = function trintiIrasusAsyncJs(req, res, next) {
+
+    async.waterfall(
+        [
+            (callback) => {
+                var kk = ff.getObjektaKintamuju(req, res, next);
+                callback(null, kk);
+            }
+            , ff.prisijungtiPrieMongoDb  // MongoClient.connect
+            , pazymetiIrasusKaipIstrintus // db.collection(pavadinimasCollection).updateMany(
+        ]
+        , (err, kk) => {
+            db.close();
+            if (err) {
+                next(err);
+            }
+            else {
+                res.send('{"success" : "Updated Successfully", "status" : 200}');
+            }
+        }
+    );
+
+    function pazymetiIrasusKaipIstrintus(kk, kviestiFunkcijaSekancia) {
+        var masyvasIdDocumentuPazymetu = kk.req.body.masyvasIdDocumentuPazymetu;
+        var pavadinimasCollection = ff.getPavadinimaCollection(kk);
+
+        /* NEgaudomas galimas error, NES jis kiltu del programavimo klaidu cj. */
+        masyvasIdDocumentuPazymetu = JSON.parse(masyvasIdDocumentuPazymetu);
+        for (var i = 0;  i < masyvasIdDocumentuPazymetu.length; i++) {
+            masyvasIdDocumentuPazymetu[i] = new mongodb.ObjectId(masyvasIdDocumentuPazymetu[i]);
+        }
+        db.collection(pavadinimasCollection).updateMany(
+            {
+                '_id' : {
+                    $in : masyvasIdDocumentuPazymetu
+                }
+            }
+            , {
+                $set : { 'aristrintas' : true }
+            }
+            , function doAfterUpdateMany(err, result) {
+                kviestiFunkcijaSekancia(err, kk, result);
+            }
+        );
+    }
+};
+
+// ff.trintiIrasus = function(req, res, next) {
+//     console.log('@@@trintiIrasus');
+//     var pavadinimasCollection = ff.getPavadinimaCollection(req, res, next);
+//     MongoClient.connect(vv.urlOfDatabase, function(err, db) {
+//         if (err) {
+//             next(vv.getObjektaErrorTechniniaiNesklandumai(err));
+//             db.close();
+//         }
+//         else {
+//             var masyvasIdDocumentuPazymetu = req.body.masyvasIdDocumentuPazymetu;
+//             console.log('@@@@20', masyvasIdDocumentuPazymetu[0], masyvasIdDocumentuPazymetu[1], masyvasIdDocumentuPazymetu[2]);
+//             masyvasIdDocumentuPazymetu = JSON.parse(masyvasIdDocumentuPazymetu);
+//             for (var i = 0;  i < masyvasIdDocumentuPazymetu.length; i++) {
+//                 masyvasIdDocumentuPazymetu[i] = new mongodb.ObjectId(masyvasIdDocumentuPazymetu[i]);
+//             }
+//             db.collection(pavadinimasCollection).updateMany(
+//                 {
+//                     '_id' : {
+//                         $in : masyvasIdDocumentuPazymetu
+//                     }
+//                 },
+//                 {
+//                     $set : { 'aristrintas' : true }
+//                 },
+//                 function(err, result) {
+//                     if (err) {
+//                         next(vv.getObjektaErrorTechniniaiNesklandumai(err));
+//                         db.close();
+//                     }
+//                     else {
+//                         res.end('{"success" : "Updated Successfully", "status" : 200}');
+//                         db.close();
+//                     }
+//                 }
+//             );
+//         }
+//     });
+// };
 
 ff.getObjektaQueryPagalRaideArbaFraze = function(req, res, next) {
     var $salygaPaieskosPagalRaideArbaFraze = {};
@@ -114,31 +162,31 @@ ff.getObjektaQueryPagalId = function(req, res, next) {
     return objektasQuery;
 };
 
-ff.getObjektaQuery = function(req, res, next) {
+ff.getObjektaQuery = function(kk) {
     var objektasQuery;
-    if (req.params.id) {
+    if (kk.req.params.id) {
         try {
-            objektasQuery = ff.getObjektaQueryPagalId(req, res, next);
+            objektasQuery = ff.getObjektaQueryPagalId(kk.req, kk.res, kk.next);
         }
         catch (err) {
-            next(vv.getObjektaError404(err));
+            kk.next(vv.getObjektaError404(err));
         }
     }
     else {
-        objektasQuery = ff.getObjektaQueryPagalRaideArbaFraze(req, res, next);
+        objektasQuery = ff.getObjektaQueryPagalRaideArbaFraze(kk.req, kk.res, kk.next);
     }
     return objektasQuery;
 };
 
-ff.getObjektaSort = function(req, res, next) {
+ff.getObjektaSort = function(kk) {
     var objektasSort;
-    if (req.path == vv.pathZurnalai) {
+    if (kk.req.path === vv.pathZurnalai) {
         objektasSort = {'pavadinimas1':1};
     }
-    else if (req.path == vv.pathLeidejai) {
+    else if (kk.req.path === vv.pathLeidejai) {
         objektasSort = {'pavadinimas1':1}; // Cia gali keistis stulpelis, pagal kuri sortinam
     }
-    else if (req.path == vv.pathDuomenuBazes) {
+    else if (kk.req.path === vv.pathDuomenuBazes) {
         objektasSort = {'pavadinimas1':1}; // Cia gali keistis stulpelis, pagal kuri sortinam
     }
     else {
@@ -148,9 +196,9 @@ ff.getObjektaSort = function(req, res, next) {
     return objektasSort;
 };
 
-ff.getPavadinimaPuslapioRenderinamo = function(req, res, next) {
+ff.getPavadinimaPuslapioRenderinamo = function(kk) {
     var pavadinimasPuslapioRenderinamo;
-    if (req.params.id) {
+    if (kk.req.params.id) {
         pavadinimasPuslapioRenderinamo = '../views/puslapisIrasuModifikavimo.jade';
     }
     else {
@@ -159,19 +207,24 @@ ff.getPavadinimaPuslapioRenderinamo = function(req, res, next) {
     return pavadinimasPuslapioRenderinamo;
 };
 
-ff.getPavadinimaCollection = function(req, res, next) {
-    console.log('@@@139',req.params, req.params.collection);
-    var pathCollection = '/'+req.params.collection;
-    if (pathCollection == vv.pathZurnalai || pathCollection == vv.pathLeidejai || pathCollection == vv.pathDuomenuBazes) {
-        return req.params.collection;
+ff.getPavadinimaCollection = function(kintamieji) {
+    var collection = kintamieji.req.params.collection;
+    if (validate.isString(collection)) {
+        if ('/'+collection === vv.pathZurnalai
+                || '/'+collection === vv.pathLeidejai
+                || '/'+collection === vv.pathDuomenuBazes) {
+            return collection;
+        }
+        else {
+            var err = new Error('Not Found');
+            err.status(404);
+            return kintamieji.next(err);
+        }
     }
     else {
-        // return null;
-        next(vv.getObjektaError404());
-        // /*
-        //  Dizaine nenumatyta kol kas kitokiu base pathu = uzmountintu pathu (per app.use(pathas, ...)
-        //  */
-        // next(vv.getObjektaErrorTechniniaiNesklandumai());
+
+        /* Throw'inam, NES tai butu programavimo klaida.*/
+        throw new Error('Collection nera arba tai ne string\'as');
     }
 };
 
@@ -186,19 +239,52 @@ ff.getObjektaKintamujuPerduodamaIJade = function(req, res, next) {
     };
 };
 
-ff.getIrasusIsDbIrAtvaizduotiPuslapyje = function(req, res, next) {
-    console.log('@@@@@156 getIrasusIsDbIrAtvaizduotiPuslapyje');
-    console.log('@@@@@', req.params);
-    console.log('@@@@@', req.params.id);
-    var pavadinimasCollection = ff.getPavadinimaCollection(req, res, next);
-    var pavadinimasPuslapioRenderinamo = ff.getPavadinimaPuslapioRenderinamo(req, res, next);
-    if (req.params.id != 'naujas') {
-        var idIraso = req.params.id || '';
-        var objektasSort = ff.getObjektaSort(req, res, next);
-        var objektasQuery = ff.getObjektaQuery(req, res, next);
+ff.pateiktiPuslapiIrasuSarasoLenteles = function (req, res, next) {
+
+    async.waterfall(
+        [
+            (callback) => ff.getObjektaKintamuju(req, res, next)
+            , ff.prisijungtiPrieMongoDb
+            , getMasyvaIrasu
+        ]
+        , function doAfterWaterfall(err) {
+            next(err);
+            db.close();
+        }
+    );
+
+    function getMasyvaIrasu(kk, callback) {
+        kk.objektasSort = ff.getObjektaSort(kk);
+        kk.objektasQuery = ff.getObjektaQuery(kk);
+        kk.collection = kk.db.collection(kk.pavadinimasCollection);
+        kk.collection.find(kk.objektasQuery).sort(kk.objektasSort).toArray(
+            (err, masyvasIrasu) => {
+                kk.masyvasIrasu = masyvasIrasu;
+                callback(err, kk);
+            }
+        );
     }
-    var collection;
-    var objektasKintamujuPerduodamuIJade = ff.getObjektaKintamujuPerduodamaIJade(req, res, next);
+
+    function pateiktiPuslapiKlientui(kk, callback) {
+        kk.objektasKintamujuPerduodamIJade.pp.headeris = 'Įrašų lentelė';
+        kk.objektasKintamujuPerduodamuIJade.pp.masyvasDocumentu = kk.masyvasIrasu;
+        kk.pavadinimasPuslapioRenderinamo = ff.getPavadinimaPuslapioRenderinamo(kk);
+        res.render(pavadinimasPuslapioRenderinamo, kk.objektasKintamujuPerduodamuIJade);
+        db.close();
+    }
+};
+
+ff.getIrasusIsDbIrAtvaizduotiPuslapyjeAsyncJs = function(req, res, next) {
+        var kk = ff.getObjektaReqResNext(req, res, next); /* Objektas kintamuju. */
+        kk.pavadinimasCollection = ff.getPavadinimaCollection(kk);
+        var pavadinimasPuslapioRenderinamo = ff.getPavadinimaPuslapioRenderinamo(kk);
+        if (req.params.id !== 'naujas') {
+            var idIraso = req.params.id || '';
+            var objektasSort = ff.getObjektaSort(req, res, next);
+            var objektasQuery = ff.getObjektaQuery(req, res, next);
+        }
+        var collection;
+        var objektasKintamujuPerduodamuIJade = ff.getObjektaKintamujuPerduodamaIJade(req, res, next);
     console.log('@@172');
     MongoClient.connect(vv.urlOfDatabase, function(err, db) {
         if (err) {
@@ -214,10 +300,10 @@ ff.getIrasusIsDbIrAtvaizduotiPuslapyje = function(req, res, next) {
                         next(vv.getObjektaErrorTechniniaiNesklandumai(err));
                         db.close();
                     }
-                    else if (validate.isEmpty(masyvasIrasu) || !validate.isArray(masyvasIrasu)) {  // Butinai turi but [ ]
-                        next(vv.getObjektaError404());
-                        db.close();
-                    }
+                    // else if (validate.isEmpty(masyvasIrasu) || !validate.isArray(masyvasIrasu)) {  // Butinai turi but [ ]
+                    //     next(vv.getObjektaError404());
+                    //     db.close();
+                    // }
                     else if (idIraso) {
                         /* IF perduota f-ja, tai ja vykdyt, ELSE v vykdyt*/
                         objektasKintamujuPerduodamuIJade.pp.headeris = 'Įrašo keitimas';
@@ -249,8 +335,112 @@ ff.getIrasusIsDbIrAtvaizduotiPuslapyje = function(req, res, next) {
     });
 };
 
-ff.atvaizduotiIrasuLentelesPuslapi = function(req, res, next) {
-    ff.getIrasusIsDbIrAtvaizduotiPuslapyje(req, res, next);
+
+
+// ff.getIrasusIsDbIrAtvaizduotiPuslapyje = function(req, res, next) {
+//     var pavadinimasCollection = ff.getPavadinimaCollection(req, res, next);
+//     var pavadinimasPuslapioRenderinamo = ff.getPavadinimaPuslapioRenderinamo(req, res, next);
+//     if (req.params.id != 'naujas') {
+//         var idIraso = req.params.id || '';
+//         var objektasSort = ff.getObjektaSort(req, res, next);
+//         var objektasQuery = ff.getObjektaQuery(req, res, next);
+//     }
+//     var collection;
+//     var objektasKintamujuPerduodamuIJade = ff.getObjektaKintamujuPerduodamaIJade(req, res, next);
+//     console.log('@@172');
+//     MongoClient.connect(vv.urlOfDatabase, function(err, db) {
+//         if (err) {
+//             next(vv.getObjektaErrorTechniniaiNesklandumai(err));
+//             db.close();
+//         }
+//         else {
+//             if (req.params.id != 'naujas') {
+//                 console.log(JSON.stringify(objektasQuery, null, 2));
+//                 collection = db.collection(pavadinimasCollection);
+//                 collection.find(objektasQuery).sort(objektasSort).toArray(function (err, masyvasIrasu) {
+//                     if (err) {
+//                         next(vv.getObjektaErrorTechniniaiNesklandumai(err));
+//                         db.close();
+//                     }
+//                     else if (validate.isEmpty(masyvasIrasu) || !validate.isArray(masyvasIrasu)) {  // Butinai turi but [ ]
+//                         next(vv.getObjektaError404());
+//                         db.close();
+//                     }
+//                     else if (idIraso) {
+//                         /* IF perduota f-ja, tai ja vykdyt, ELSE v vykdyt*/
+//                         objektasKintamujuPerduodamuIJade.pp.headeris = 'Įrašo keitimas';
+//                         objektasKintamujuPerduodamuIJade.pp.documentIraso = masyvasIrasu[0];
+//
+//
+//
+//                     }
+//                     else {
+//                         objektasKintamujuPerduodamuIJade.pp.headeris = 'Įrašų lentelė';
+//                         objektasKintamujuPerduodamuIJade.pp.masyvasDocumentu = masyvasIrasu;
+//                         console.log('@@@@@@186', pavadinimasPuslapioRenderinamo);
+//                         res.render(pavadinimasPuslapioRenderinamo, objektasKintamujuPerduodamuIJade);
+//                         db.close();
+//                     }
+//                 });
+//             }
+//             else if (idIraso == 'naujas') {
+//                 objektasKintamujuPerduodamuIJade.pp.headeris = 'Naujas įrašas';
+//                 console.log('@@@@@@212', pavadinimasPuslapioRenderinamo);
+//
+//                 /* IF perduota funkcija, tai jua vykdyt, ELSE vykdyt v*/
+//
+//                 res.render(pavadinimasPuslapioRenderinamo, objektasKintamujuPerduodamuIJade);
+//                 // <<<<<<<<<<<
+//                 db.close();
+//             }
+//         }
+//     });
+// };
+
+// ff.atvaizduotiIrasuLentelesPuslapi = function(req, res, next) {
+//     ff.getIrasusIsDbIrAtvaizduotiPuslapyje(req, res, next);
+// };
+
+ff.pateiktiPuslapiIrasuModifikavimo = function(req, res, next) {
+
+    ff.pateiktiPuslapiZurnaluIrasuModifikavimo
+
+    async.waterfall(
+        [
+            (callback) => {
+                var kk = ff.getObjektaKintamuju(req, res, next);
+                callback(null, kk);
+            }
+            , ff.prisijungtiPrieMongoDb
+        ]
+        , (err) => {}
+    );
+
+
+    async.waterfall(
+        [
+            (callback) => {
+                var kk = ff.getObjektaKintamuju(req, res, next);
+                callback(null, kk);
+            }
+            , ff.prisijungtiPrieMongoDb  // MongoClient.connect
+            , pazymetiIrasusKaipIstrintus // db.collection(pavadinimasCollection).updateMany(
+        ]
+        , (err, kk) => {
+            db.close();
+            if (err) {
+                next(err);
+            }
+            else {
+                res.send('{"success" : "Updated Successfully", "status" : 200}');
+            }
+        }
+    );
+
+};
+
+ff.pateiktiPuslapiZurnaluIrasuModifikavimo = function(req, res, next) {
+
 };
 
 ff.atvaizduotiIrasuModifikavimoPuslapi = function(req, res, next) {
