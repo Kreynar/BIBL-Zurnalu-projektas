@@ -246,6 +246,7 @@ ff.pateiktiPuslapiIrasuSarasoLenteles = function (req, res, next) {
             (callback) => ff.getObjektaKintamuju(req, res, next)
             , ff.prisijungtiPrieMongoDb
             , getMasyvaIrasu
+            , pateiktiPuslapiKlientui
         ]
         , function doAfterWaterfall(err) {
             next(err);
@@ -401,20 +402,66 @@ ff.getIrasusIsDbIrAtvaizduotiPuslapyjeAsyncJs = function(req, res, next) {
 //     ff.getIrasusIsDbIrAtvaizduotiPuslapyje(req, res, next);
 // };
 
-ff.pateiktiPuslapiIrasuModifikavimo = function(req, res, next) {
 
-    ff.pateiktiPuslapiZurnaluIrasuModifikavimo
+/*
+Iraso modifikavimo puslapio reikalingi variantai:
+1. naujas zurnalas -
+NEreikia get'int to iraso is DB   IR   reikia get'int is DB visusOrSmth leidejus ir duombazes    IR    reikia sudetingesnio interface
+2. esamas zurnalas -
+reikia get is DB zurnalo irasa    IR   reikia get'int is DB visusOrSmth leidejus ir duombazes    IR    reikia sudetingesnio interface
+3. naujas leidejasArDb -
+NEreikia get is DB to iraso ir apskritai nieko
+4. esamas leidejasArDb -
+reikia get is DB ta irasa ir daugiau nieko
+ */
+ff.pateiktiPuslapiModifikavimoIraso = function(req, res, next) {
+    var kk = ff.getObjektaKintamuju(req, res, next);
+    if (req.params.id === 'naujas') {
+        /* Nereikia iraso get'int is DB */
+        // call f-ja, kuri sugeneruoja puslapi is template ir render
+    }
+    if (req.params.id !== 'naujas') {
+        if (kk.pavadinimasCollection === 'zurnalai') {
 
+        }
+        else if (kk.pavadinimasCollection !== 'zurnalai') {
+
+        }
+    }
+
+    // GALBUT i ATSKIRA FUNKCIJA IMEST SITA KODA v
     async.waterfall(
         [
-            (callback) => {
-                var kk = ff.getObjektaKintamuju(req, res, next);
-                callback(null, kk);
-            }
+            (callback) => ff.prisijungtiPrieMongoDb(kk, callback)
             , ff.prisijungtiPrieMongoDb
         ]
         , (err) => {}
     );
+
+    function getDocumentIraso(kk, callback) {
+        kk.objektasSort = ff.getObjektaSort(kk);
+        kk.objektasQuery = ff.getObjektaQuery(kk);
+        kk.collection = kk.db.collection(kk.pavadinimasCollection);
+        kk.collection.find(kk.objektasQuery).sort(kk.objektasSort).toArray(
+            (err, masyvasIrasu) => {
+                kk.masyvasIrasu = masyvasIrasu;
+                callback(err, kk);
+            }
+        );
+    }
+
+
+
+    if (kk.pavadinimasCollection === 'zurnalai') {
+        ff.pateiktiPuslapiModifikavimoIraso_Zurnalu(kk);
+    }
+    else if (kk.pavadinimasCollection === 'leidejai' || kk.pavadinimasCollection === 'duomenu-bazes') {
+        ff.pateiktiPuslapiModifikavimoIraso_LeidejuArbaDuombaziu(kk);
+    }
+
+
+
+
 
 
     async.waterfall(
@@ -439,7 +486,22 @@ ff.pateiktiPuslapiIrasuModifikavimo = function(req, res, next) {
 
 };
 
-ff.pateiktiPuslapiZurnaluIrasuModifikavimo = function(req, res, next) {
+ff.pateiktiPuslapiModifikavimoIraso_Zurnalu = function(kk) {
+
+    async.waterfall(
+        [
+            (callback) => ff.prisijungtiPrieMongoDb(kk, callback)
+            ,
+        ]
+        , function doAfterWaterfall(err) {
+            next(err);
+            db.close();
+        }
+    );
+
+};
+
+ff.pateiktiPuslapiModifikavimoIraso_LeidejuArbaDuombaziu = function(kk) {
 
 };
 
@@ -471,7 +533,7 @@ ff.getKiekiStulpeliuIrFieldu = function(req, res, next) {
     return kiekisStulpeliuIrFieldu;
 };
 
-ff.getDocumentIraso = function(req, res, next) {
+ff.getDocumentIrasoIsFrontend = function(req, res, next) {
     var pavadinimasCollection = ff.getPavadinimaCollection(req, res, next);
     console.log('@@@234',pavadinimasCollection);
     var kiekisStulpeliuIrFieldu = ff.getKiekiStulpeliuIrFieldu(req, res, next);
@@ -497,7 +559,7 @@ ff.updateSenaIrasa = function(req, res, next) {
     console.log('@@@247 updateNaujaIrasa');
     var objektasQuery = ff.getObjektaQueryPagalId(req, res, next);
     console.log('@@@251');
-    var documentIraso = ff.getDocumentIraso(req, res, next);
+    var documentIraso = ff.getDocumentIrasoIsFrontend(req, res, next);
     console.log('@@@253');
     var pavadinimasCollection = ff.getPavadinimaCollection(req, res, next);
     console.log('@@@255');
@@ -545,7 +607,7 @@ ff.updateSenaIrasa = function(req, res, next) {
 ff.insertNaujaIrasa  = function(req, res, next) {
     console.log('@@@329 insertSenaIrasa');
     console.log('@@@331');
-    var documentIraso = ff.getDocumentIraso(req, res, next);
+    var documentIraso = ff.getDocumentIrasoIsFrontend(req, res, next);
     console.log('@@@332',JSON.stringify(documentIraso));
     var pavadinimasCollection = ff.getPavadinimaCollection(req, res, next);
     var objektasInsert = documentIraso;

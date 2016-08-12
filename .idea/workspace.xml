@@ -2,12 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="39ccb0e1-dc02-4ee5-a716-d24d43224f07" name="Default" comment="w/e">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dictionaries/gircys.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/watcherTasks.xml" afterPath="$PROJECT_DIR$/.idea/watcherTasks.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/forAdmin.js" afterPath="$PROJECT_DIR$/routes/forAdmin.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/functionsforRouting.js" afterPath="$PROJECT_DIR$/routes/functionsforRouting.js" />
@@ -30,52 +24,74 @@
     <favorites_list name="untitled1" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="functionsforRouting.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/routes/functionsforRouting.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="389">
-              <caret line="415" column="21" selection-start-line="415" selection-start-column="21" selection-end-line="415" selection-end-column="21" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="194">
-              <caret line="55" column="16" selection-start-line="55" selection-start-column="14" selection-end-line="55" selection-end-column="16" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="forAdmin.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/routes/forAdmin.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="279">
-              <caret line="26" column="77" selection-start-line="26" selection-start-column="45" selection-end-line="26" selection-end-column="77" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="variables.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/variables.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="162" column="8" selection-start-line="162" selection-start-column="8" selection-end-line="162" selection-end-column="8" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="vertical" split-proportion="0.58435756">
+      <split-first>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file leaf-file-name="functionsforRouting.js" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/routes/functionsforRouting.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-195">
+                  <caret line="248" column="37" selection-start-line="248" selection-start-column="37" selection-end-line="248" selection-end-column="37" />
+                  <folding>
+                    <element signature="n#!!doc" expanded="true" />
+                    <element signature="e#12242#12312#0" expanded="false" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/app.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="194">
+                  <caret line="55" column="16" selection-start-line="55" selection-start-column="14" selection-end-line="55" selection-end-column="16" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="forAdmin.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/routes/forAdmin.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="304">
+                  <caret line="24" column="26" selection-start-line="24" selection-start-column="26" selection-end-line="24" selection-end-column="26" />
+                  <folding>
+                    <element signature="n#!!doc" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="variables.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/variables.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-868">
+                  <caret line="162" column="8" selection-start-line="162" selection-start-column="8" selection-end-line="162" selection-end-column="8" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file leaf-file-name="functionsforRouting.js" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/routes/functionsforRouting.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="142">
+                  <caret line="424" column="0" selection-start-line="424" selection-start-column="0" selection-end-line="424" selection-end-column="0" />
+                  <folding>
+                    <element signature="n#!!doc" expanded="true" />
+                    <element signature="e#12242#12312#0" expanded="false" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -330,7 +346,7 @@
     <property name="js-jscs-nodeInterpreter" value="C:\Program Files\nodejs\node.exe" />
     <property name="last_opened_file_path" value="E:/NodeJs/node.exe" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="Settings.JavaScript" />
+    <property name="settings.editor.selected.configurable" value="editing.templates" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="editor.config.accepted" value="true" />
@@ -459,7 +475,7 @@
       <workItem from="1466077512236" duration="29138000" />
       <workItem from="1466488165574" duration="31491000" />
       <workItem from="1468214833560" duration="48604000" />
-      <workItem from="1470058853168" duration="37377000" />
+      <workItem from="1470058853168" duration="44149000" />
     </task>
     <task id="LOCAL-00001" summary="pridejau Lenteles css">
       <created>1456419251676</created>
@@ -514,7 +530,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="698913000" />
+    <option name="totallyTimeSpent" value="705685000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -529,7 +545,7 @@
     <frame x="-8" y="-8" width="1696" height="1026" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14242607" sideWeight="0.4640523" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.063971035" sideWeight="0.4640523" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3273743" sideWeight="0.47440633" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2875817" sideWeight="0.23852243" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15778364" sideWeight="0.53594774" order="2" side_tool="true" content_ui="tabs" />
@@ -864,14 +880,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/variables.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="162" column="8" selection-start-line="162" selection-start-column="8" selection-end-line="162" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/mongodb/lib/mongo_client.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="212">
@@ -880,10 +888,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/variables.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-868">
+          <caret line="162" column="8" selection-start-line="162" selection-start-column="8" selection-end-line="162" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/routes/forAdmin.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="279">
-          <caret line="26" column="77" selection-start-line="26" selection-start-column="45" selection-end-line="26" selection-end-column="77" />
+        <state relative-caret-position="304">
+          <caret line="24" column="26" selection-start-line="24" selection-start-column="26" selection-end-line="24" selection-end-column="26" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
@@ -892,10 +908,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/functionsforRouting.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="389">
-          <caret line="415" column="21" selection-start-line="415" selection-start-column="21" selection-end-line="415" selection-end-column="21" />
+        <state relative-caret-position="142">
+          <caret line="424" column="0" selection-start-line="424" selection-start-column="0" selection-end-line="424" selection-end-column="0" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
+            <element signature="e#12242#12312#0" expanded="false" />
           </folding>
         </state>
       </provider>

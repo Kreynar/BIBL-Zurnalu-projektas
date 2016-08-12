@@ -24,7 +24,7 @@ routesForAdmin.get('/:collection', ff.pateiktiPuslapiIrasuSarasoLenteles);
  GET    /<collection>/naujas
  GET    /<collection>/<id>
  */
-routesForAdmin.get('/:collection'+'/:id', ff.pateiktiPuslapiIrasuModifikavimo);
+routesForAdmin.get('/:collection'+'/:id', ff.pateiktiPuslapiModifikavimoIraso);
 
 /*
 POST    /<collection>               = INSERT nauja irasa i DB
