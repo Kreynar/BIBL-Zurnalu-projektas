@@ -416,27 +416,47 @@ reikia get is DB ta irasa ir daugiau nieko
  */
 ff.pateiktiPuslapiModifikavimoIraso = function(req, res, next) {
     var kk = ff.getObjektaKintamuju(req, res, next);
-    if (req.params.id === 'naujas') {
-        /* Nereikia iraso get'int is DB */
-        // call f-ja, kuri sugeneruoja puslapi is template ir render
-    }
-    if (req.params.id !== 'naujas') {
-        if (kk.pavadinimasCollection === 'zurnalai') {
-
-        }
-        else if (kk.pavadinimasCollection !== 'zurnalai') {
-
-        }
-    }
 
     // GALBUT i ATSKIRA FUNKCIJA IMEST SITA KODA v
     async.waterfall(
         [
             (callback) => ff.prisijungtiPrieMongoDb(kk, callback)
-            , ff.prisijungtiPrieMongoDb
+            , (kk, callback) => {
+                if (req.params.id === 'naujas') {
+                    callback(null, kk);
+                }
+                else if (req.params.id !== 'naujas') {
+                    getDocumentIraso(kk, callback);
+                }
+            }
+            , (kk, callback) => {
+                if (kk.pavadinimasCollection === 'zurnalai') {
+                    getDocumentsVisusLeidejuIrDuombaziu(kk, callback);
+                }
+                else if (kk.pavadinimasCollection !== 'zurnalai') {
+                    callback(null, kk);
+                }
+            }
+            , ...
         ]
         , (err) => {}
     );
+
+    function getDocumentIraso(kk, callback) {
+        kk.objektasQuery = ff.getObjektaQuery(kk);
+        kk.collection = kk.db.collection(kk.pavadinimasCollection);
+        kk.collection.find(kk.objektasQuery).toArray(
+            (err, masyvasIrasu) => {
+                if (masyvasIrasu || masyvasIrasu[0]) {
+                    kk.documentIrasoModifikuosiamo = masyvasIrasu[0];
+                }
+                callback(err, kk);
+            }
+        );
+    }
+
+
+
 
     function getDocumentIraso(kk, callback) {
         kk.objektasSort = ff.getObjektaSort(kk);
